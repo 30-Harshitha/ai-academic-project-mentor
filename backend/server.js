@@ -1,24 +1,69 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const mysql = require('mysql2'); 
 
 const usersRoutes = require("./routes/users");
 const projectsRoutes = require("./routes/projects");
 
-// Import your database connection instance 
-// (Ensure the path matches where your db connection module or pool configur
-const mysql = require('mysql2'); // or 'mysql' depending on what you installed
-
-const db = mysql.createConnection(process.env.DATABASE_URL||{
+// Database Connection Setup
+// Uses cloud DATABASE_URL environment variable on Render, falls back to localhost for local work
+const db = mysql.createConnection(process.env.DATABASE_URL || {
     host: "localhost",
-    user: "root",       // Your MySQL username
-    password: "Harshitha@8088",       // Your MySQL password
-    database: "ai_project_mentor" // Your actual database schema name
+    user: "root",       
+    password: "Harshitha@8088",       
+    database: "ai_project_mentor" 
 });
 
 db.connect((err) => {
-    if (err) console.log("Database connection error: ", err);
-    else console.log("MySQL Database Connected!");
+    if (err) {
+        console.log("Database connection error: ", err);
+    } else {
+        console.log("MySQL Database Connected successfully!");
+
+        // SQL query string to build users table if missing
+        const createUsersTable = `
+            CREATE TABLE IF NOT EXISTS users (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                fullName VARCHAR(255) NOT NULL,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                phoneNumber VARCHAR(50),
+                dob DATE,
+                collegeName VARCHAR(255),
+                department VARCHAR(255),
+                year VARCHAR(50),
+                gender VARCHAR(50),
+                githubUrl VARCHAR(255),
+                linkedinUrl VARCHAR(255),
+                password VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
+        // SQL query string to build projects table if missing
+        const createProjectsTable = `
+            CREATE TABLE IF NOT EXISTS projects (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                studentEmail VARCHAR(255) NOT NULL,
+                projectTitle VARCHAR(255) NOT NULL,
+                description TEXT,
+                githubUrl VARCHAR(255),
+                status VARCHAR(50) DEFAULT 'Submitted',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `;
+
+        // Execute table initialization
+        db.query(createUsersTable, (err) => {
+            if (err) console.error("Error verifying/creating users table:", err);
+            else console.log("✅ Users table verified/ready.");
+        });
+
+        db.query(createProjectsTable, (err) => {
+            if (err) console.error("Error verifying/creating projects table:", err);
+            else console.log("✅ Projects table verified/ready.");
+        });
+    }
 });
 
 const app = express();
@@ -81,5 +126,5 @@ app.use((req, res) => {
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
