@@ -1,166 +1,229 @@
 const express = require("express");
-const cors = require("cors");
+const router = express.Router();
+const db = require("../server");
+const multer = require("multer");
 const path = require("path");
-const mysql = require('mysql2'); 
+const fs = require("fs");
 
-const app = express();
+// Ensure target upload directory exists securely at startup
+const uploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
-/* ==========================================================================
-   ⚙️ MIDDLEWARE & INITIALIZATION
-   ========================================================================== */
-app.use(cors());
-app.use(express.json());
-
-// Serve static frontend assets
-app.use(express.static(path.join(__dirname, "..")));
-app.use(express.static(path.join(__dirname, "../html")));
-
-// 🟢 ADDED: Serve the uploads folder publicly so the system can retrieve documents/images
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
-/* ==========================================================================
-   🗄️ DATABASE CONNECTION SETUP
-   ========================================================================== */
-// Appends Aiven SSL required flag if a cloud DATABASE_URL is present
-const dbUrl = process.env.DATABASE_URL 
-    ? (process.env.DATABASE_URL.includes("ssl-mode") ? process.env.DATABASE_URL : `${process.env.DATABASE_URL}?ssl-mode=REQUIRED`)
-    : null;
-
-const db = mysql.createConnection(dbUrl || {
-    host: "localhost",
-    user: "root",       
-    password: "Harshitha@8088",       
-    database: "ai_project_mentor" 
-});
-
-db.connect((err) => {
-    if (err) {
-        console.error("❌ Database connection error: ", err);
-    } else {
-        console.log("🚀 MySQL Database Connected successfully!");
-
-        // SQL query string to build users table if missing
-        const createUsersTable = `
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                fullName VARCHAR(255) NOT NULL,
-                email VARCHAR(255) UNIQUE NOT NULL,
-                phoneNumber VARCHAR(50),
-                dob DATE,
-                collegeName VARCHAR(255),
-                department VARCHAR(255),
-                year VARCHAR(50),
-                gender VARCHAR(50),
-                githubUrl VARCHAR(255),
-                linkedinUrl VARCHAR(255),
-                password VARCHAR(255) NOT NULL,
-                location VARCHAR(255),
-                programmingLanguages VARCHAR(255),
-                certifications VARCHAR(255),
-                experience VARCHAR(255),
-                skillsList TEXT,
-                avatarUrl TEXT,
-                assessmentScore INT,
-                assessmentLevel VARCHAR(50),
-                techSkills TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-
-        // SQL query string to build projects table if missing
-        const createProjectsTable = `
-            CREATE TABLE IF NOT EXISTS projects (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                studentName VARCHAR(255) DEFAULT 'Anonymous',
-                studentEmail VARCHAR(255) NOT NULL,
-                projectTitle VARCHAR(255) NOT NULL,
-                projectDomain VARCHAR(255),
-                projectCategory VARCHAR(255),
-                teamSize INT DEFAULT 1,
-                duration VARCHAR(100),
-                difficulty VARCHAR(100),
-                techStack TEXT,
-                projectDescription TEXT,
-                problemStatement TEXT,
-                expectedOutcome TEXT,
-                proposalFile VARCHAR(255),
-                imagesCount INT DEFAULT 0,
-                status VARCHAR(100) DEFAULT 'Submitted',
-                submittedOn VARCHAR(100),
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `;
-
-        // Execute table initialization queries
-        db.query(createUsersTable, (err) => {
-            if (err) console.error("Error verifying/creating users table:", err);
-            else console.log("✅ Users table verified/ready.");
-        });
-
-        db.query(createProjectsTable, (err) => {
-            if (err) console.error("Error verifying/creating projects table:", err);
-            else console.log("✅ Projects table verified/ready.");
-        });
+// Configure absolute storage resolution pathing
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, uploadDir); 
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "-" + file.originalname.replace(/\s+/g, "_"));
     }
 });
 
-// Export db instance BEFORE importing routes so routers can mount safely
-module.exports = db;
+const upload = multer({ storage: storage });
 
-/* ==========================================================================
-   🛣️ ROUTING SYSTEM MAPPING
-   ========================================================================== */
-const usersRoutes = require("./routes/users");
-const projectsRoutes = require("./routes/projects");
+const cpUpload = upload.fields([
+    { name: 'proposalFile', maxCount: 1 },
+    { name: 'imagesFiles', maxCount: 3 }
+]);
 
-// Default Root Route
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../html/register.html"));
-});
+// ==============================
+// 🚀 Submit Project (multipart/form-data)
+// ==============================
+router.post("/", cpUpload, (req, res) => {
+    try {
+        const body = req.body;
 
-/* ==========================================================================
-   📊 LIVE DASHBOARD METRICS API ENDPOINT
-   ========================================================================== */
-app.get('/api/dashboard-stats', (req, res) => {
-    const studentEmail = req.query.email;
-
-    if (!studentEmail) {
-        return res.status(400).json({ success: false, message: "Student Email context is required" });
-    }
-
-    const queryStr = "SELECT * FROM projects WHERE studentEmail = ? ORDER BY id DESC";
-
-    db.query(queryStr, [studentEmail], (err, results) => {
-        if (err) {
-            console.error("Database read optimization error:", err);
-            return res.status(500).json({ success: false, message: "Database read error occurred." });
+        if (!body || Object.keys(body).length === 0) {
+            return res.status(400).json({
+                success: false,
+                message: "Data parsing failed. Check multipart middleware configuration."
+            });
         }
 
+        // Safely pull file identifiers without runtime pointer exceptions
+        let proposalFile = "";
+        if (req.files && req.files['proposalFile'] && req.files['proposalFile'][0]) {
+            proposalFile = req.files['proposalFile'][0].filename;
+        }
+
+        let imagesCount = 0;
+        if (req.files && req.files['imagesFiles']) {
+            imagesCount = req.files['imagesFiles'].length;
+        }
+
+        const fallbackDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+        const submissionDate = body.submittedOn && body.submittedOn.trim() !== "" ? body.submittedOn : fallbackDate;
+
+        const sql = `
+        INSERT INTO projects
+        (
+            studentName, studentEmail, projectTitle, projectDomain, projectCategory,
+            teamSize, duration, difficulty, techStack, projectDescription,
+            problemStatement, expectedOutcome, proposalFile, imagesCount, status, submittedOn
+        )
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        `;
+
+        const values = [
+            body.studentName || "Anonymous",
+            body.studentEmail || "",
+            body.projectTitle || "Untitled Project",
+            body.projectDomain || "",
+            body.projectCategory || "",
+            parseInt(body.teamSize) || 1,
+            body.duration || "",
+            body.difficulty || "",
+            body.techStack || "[]", 
+            body.projectDescription || "",
+            body.problemStatement || "",
+            body.expectedOutcome || "",
+            proposalFile,
+            imagesCount,
+            body.status || "Submitted",
+            submissionDate
+        ];
+
+        db.query(sql, values, (err, result) => {
+            if (err) {
+                console.error("❌ MySQL Error:", err);
+                return res.status(500).json({ 
+                    success: false, 
+                    message: "Database insertion failure.", 
+                    error: err.message 
+                });
+            }
+            return res.json({
+                success: true,
+                message: "Project Submitted Successfully",
+                projectId: result.insertId
+            });
+        });
+
+    } catch (catchErr) {
+        console.error("❌ Controller Error Exception:", catchErr);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server processing failure.",
+            error: catchErr.message
+        });
+    }
+});
+
+// ==============================
+// 📋 Get My Projects
+// ==============================
+router.get("/student/:email", (req, res) => {
+    const email = req.params.email;
+    const sql = "SELECT * FROM projects WHERE studentEmail=? ORDER BY id DESC";
+
+    db.query(sql, [email], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Failed to load project listings." });
+        }
         res.json({
             success: true,
-            hasSubmissions: results.length > 0,
-            latestStatus: results.length > 0 ? results[0].status : "Not Submitted",
-            projects: results
+            projects: result
         });
     });
 });
 
-// Mount Sub-routers
-app.use("/api/users", usersRoutes);
-app.use("/api/projects", projectsRoutes);
+// ==============================
+// 👁️ Get Single Project
+// ==============================
+router.get("/view/:id", (req, res) => {
+    const id = req.params.id;
 
-// Catch-all Fallback for invalid paths
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: "Route not found"
+    db.query("SELECT * FROM projects WHERE id=?", [id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Failed to access single project metadata." });
+        }
+        if (result.length === 0) {
+            return res.json({
+                success: false,
+                message: "Project Not Found"
+            });
+        }
+        res.json({
+            success: true,
+            project: result[0]
+        });
     });
 });
 
-/* ==========================================================================
-   🌐 SERVER STARTUP
-   ========================================================================== */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+// ==============================
+// 🔄 Update Project
+// ==============================
+router.put("/:id", (req, res) => {
+    const id = req.params.id;
+    const {
+        projectTitle,
+        projectDomain,
+        projectCategory,
+        teamSize,
+        duration,
+        difficulty,
+        techStack,
+        projectDescription,
+        problemStatement,
+        expectedOutcome
+    } = req.body;
+
+    const sql = `
+    UPDATE projects
+    SET
+        projectTitle=?, projectDomain=?, projectCategory=?, teamSize=?, duration=?,
+        difficulty=?, techStack=?, projectDescription=?, problemStatement=?, expectedOutcome=?
+    WHERE id=?
+    `;
+
+    db.query(
+        sql,
+        [
+            projectTitle,
+            projectDomain,
+            projectCategory,
+            teamSize,
+            duration,
+            difficulty,
+            typeof techStack === 'string' ? techStack : JSON.stringify(techStack), 
+            projectDescription,
+            problemStatement,
+            expectedOutcome,
+            id
+        ],
+        (err) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Project update failed to persist." });
+            }
+            res.json({
+                success: true,
+                message: "Project Updated"
+            });
+        }
+    );
 });
+
+// ==============================
+// 🗑️ Delete Project
+// ==============================
+router.delete("/:id", (req, res) => {
+    const id = req.params.id;
+
+    db.query("DELETE FROM projects WHERE id=?", [id], (err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Unable to complete delete operations." });
+        }
+        res.json({
+            success: true,
+            message: "Project Deleted"
+        });
+    });
+});
+
+module.exports = router;
