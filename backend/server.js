@@ -9,7 +9,7 @@ const projectsRoutes = require("./routes/projects");
 // (Ensure the path matches where your db connection module or pool configur
 const mysql = require('mysql2'); // or 'mysql' depending on what you installed
 
-const db = mysql.createConnection({
+const db = mysql.createConnection(process.env.DATABASE_URL||{
     host: "localhost",
     user: "root",       // Your MySQL username
     password: "Harshitha@8088",       // Your MySQL password
