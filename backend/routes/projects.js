@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-// Correct path to get the database instance from server.js
-const db = require("../server"); 
+// Direct active link to your main server database module
+const db = require("../server");
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
@@ -12,6 +12,7 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// Configure absolute storage resolution pathing
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadDir); 
@@ -23,6 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+// Map frontend file fields 
 const cpUpload = upload.fields([
     { name: 'proposalFile', maxCount: 1 },
     { name: 'imagesFiles', maxCount: 3 }
@@ -42,7 +44,7 @@ router.post("/", cpUpload, (req, res) => {
             });
         }
 
-        // Safe field checking rules
+        // Safely pull file identifiers without runtime pointer exceptions
         let proposalFile = "";
         if (req.files && req.files['proposalFile'] && req.files['proposalFile'][0]) {
             proposalFile = req.files['proposalFile'][0].filename;

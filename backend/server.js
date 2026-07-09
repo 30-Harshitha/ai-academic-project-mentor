@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middleware (Must be defined before declaring routes)
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -27,7 +27,6 @@ db.connect((err) => {
     } else {
         console.log("🚀 MySQL Database Connected successfully!");
 
-        // SQL query string to build users table if missing
         const createUsersTable = `
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +54,6 @@ db.connect((err) => {
             );
         `;
 
-        // SQL query string to build projects table if missing
         const createProjectsTable = `
             CREATE TABLE IF NOT EXISTS projects (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -91,14 +89,14 @@ db.connect((err) => {
     }
 });
 
-// Export db connection instance BEFORE importing routes
+// Export db instance BEFORE importing routes so routers can mount safely
 module.exports = db;
 
-// Import Route Handlers
+// Import Routes
 const usersRoutes = require("./routes/users");
 const projectsRoutes = require("./routes/projects");
 
-// Serve frontend assets static delivery
+// Serve static assets
 app.use(express.static(path.join(__dirname, "..")));
 app.use(express.static(path.join(__dirname, "../html")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -108,18 +106,24 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../html/register.html"));
 });
 
-/* Dashboard Analytics Live Metric Query */
+/* ==========================================================================
+   📊 LIVE DASHBOARD METRICS API ENDPOINT
+   ========================================================================== */
 app.get('/api/dashboard-stats', (req, res) => {
     const studentEmail = req.query.email;
+
     if (!studentEmail) {
         return res.status(400).json({ success: false, message: "Student Email context is required" });
     }
+
     const queryStr = "SELECT * FROM projects WHERE studentEmail = ? ORDER BY id DESC";
+
     db.query(queryStr, [studentEmail], (err, results) => {
         if (err) {
-            console.error("Database error:", err);
+            console.error("Database read optimization error:", err);
             return res.status(500).json({ success: false, message: "Database read error occurred." });
         }
+
         res.json({
             success: true,
             hasSubmissions: results.length > 0,
@@ -129,16 +133,19 @@ app.get('/api/dashboard-stats', (req, res) => {
     });
 });
 
-// Bind routers to API end paths
+// API Endpoints Links
 app.use("/api/users", usersRoutes);
 app.use("/api/projects", projectsRoutes);
 
-// Fallback Route for Invalid Global Hits
+// Catch-all Fallback
 app.use((req, res) => {
-    res.status(404).json({ success: false, message: "Route not found" });
+    res.status(404).json({
+        success: false,
+        message: "Route not found"
+    });
 });
 
-// Start listening configuration
+// Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
