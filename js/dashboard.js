@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const user = await userResponse.json();
 
         // 2. Fetch live project database records directly for active stats
-        const projectsResponse = await fetch("http://localhost:5000/api/dashboard-stats?email=" + encodeURIComponent(currentUser.email));
+        const projectsResponse = await fetch("https://ai-academic-project-mentor.onrender.com/api/dashboard-stats?email=" + encodeURIComponent(currentUser.email));
         const dbStats = await projectsResponse.json();
 
         // Combine standard user data and database records to dynamically drive UI elements

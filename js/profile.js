@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const response = await fetch(
 
-                "http://localhost:5000/api/users/" +
+                "https://ai-academic-project-mentor.onrender.com/api/users/" +
                 currentUser.id
 
             );

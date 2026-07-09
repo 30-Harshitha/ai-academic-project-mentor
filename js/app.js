@@ -9,7 +9,7 @@
    GLOBAL VARIABLES
 ========================================== */
 
-const API_BASE_URL = "http://localhost:5000/api/auth";
+const API_BASE_URL = "https://ai-academic-project-mentor.onrender.com/api/auth";
 
 let currentUser = JSON.parse(
     localStorage.getItem("currentUser")
