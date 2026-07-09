@@ -1,17 +1,14 @@
-// ==========================================
-// routes/projects.js
-// ==========================================
-
 const express = require("express");
 const router = express.Router();
-const db = require("../db");
+// 1. Direct active link to your main server database module
+const db = require("../server");
 const multer = require("multer");
 const path = require("path");
 
 // Configure local storage rules
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, "uploads/"); // Make sure an 'uploads' folder exists in your backend root folder!
+        cb(null, "uploads/"); // Ensure an 'uploads' folder exists in your backend root folder!
     },
     filename: (req, file, cb) => {
         cb(null, Date.now() + "-" + file.originalname);
@@ -27,10 +24,9 @@ const cpUpload = upload.fields([
 ]);
 
 // ==============================
-// Submit Project (🟢 FIXED MULTIPART PARSING)
+// Submit Project
 // ==============================
 router.post("/", cpUpload, (req, res) => {
-    // fields parsed from multipart/form-data reside inside req.body
     const body = req.body;
 
     if (!body || Object.keys(body).length === 0) {
@@ -85,12 +81,12 @@ router.post("/", cpUpload, (req, res) => {
             proposalFile,
             imagesCount,
             body.status || "Submitted",
-            body.submittedOn || new Date().toLocaleString()
+            body.submittedOn || new Date().toISOString().slice(0, 19).replace('T', ' ')
         ],
         (err, result) => {
             if (err) {
                 console.error("❌ MySQL Error:", err);
-                return res.status(500).json({ success: false, error: err.message });
+                return res.status(500).json({ success: false, message: "Database insertion failure.", error: err.message });
             }
             res.json({
                 success: true,
@@ -102,14 +98,17 @@ router.post("/", cpUpload, (req, res) => {
 });
 
 // ==============================
-// Get My Projects (🟢 PATH VERIFIED TO AVOID COLLISION)
+// Get My Projects
 // ==============================
 router.get("/student/:email", (req, res) => {
     const email = req.params.email;
     const sql = "SELECT * FROM projects WHERE studentEmail=? ORDER BY id DESC";
 
     db.query(sql, [email], (err, result) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Failed to load project listings." });
+        }
         res.json(result);
     });
 });
@@ -121,7 +120,10 @@ router.get("/view/:id", (req, res) => {
     const id = req.params.id;
 
     db.query("SELECT * FROM projects WHERE id=?", [id], (err, result) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Failed to access single project metadata." });
+        }
         if (result.length === 0) {
             return res.json({
                 success: false,
@@ -182,7 +184,10 @@ router.put("/:id", (req, res) => {
             id
         ],
         (err) => {
-            if (err) return res.status(500).json(err);
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ success: false, message: "Project document modifications failed to persist." });
+            }
             res.json({
                 success: true,
                 message: "Project Updated"
@@ -198,7 +203,10 @@ router.delete("/:id", (req, res) => {
     const id = req.params.id;
 
     db.query("DELETE FROM projects WHERE id=?", [id], (err) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: "Unable to complete delete operations." });
+        }
         res.json({
             success: true,
             message: "Project Deleted"
