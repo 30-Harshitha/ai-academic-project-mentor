@@ -216,7 +216,7 @@ assessmentForm.addEventListener("submit", async function (e) {
 
         const response = await fetch(
 
-            "https://ai-academic-project-mentor.onrender.com/api/users/assessment",
+            "http://localhost:5000/api/users/assessment",
 
             {
 

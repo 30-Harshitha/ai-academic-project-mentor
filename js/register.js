@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         try {
 
             const response = await fetch(
-                "https://ai-academic-project-mentor.onrender.com/api/users/register",
+                "http://localhost:5000/api/users/register",
                 {
                     method: "POST",
 
