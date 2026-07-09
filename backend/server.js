@@ -3,12 +3,19 @@ const cors = require("cors");
 const path = require("path");
 const mysql = require('mysql2'); 
 
-const usersRoutes = require("./routes/users");
-const projectsRoutes = require("./routes/projects");
+const app = express();
+
+// Middleware (Must be before routes)
+app.use(cors());
+app.use(express.json());
 
 // Database Connection Setup
-// Uses cloud DATABASE_URL environment variable on Render, falls back to localhost for local work
-const db = mysql.createConnection(process.env.DATABASE_URL || {
+// Appends Aiven SSL required flag if a cloud DATABASE_URL is present
+const dbUrl = process.env.DATABASE_URL 
+    ? (process.env.DATABASE_URL.includes("ssl-mode") ? process.env.DATABASE_URL : `${process.env.DATABASE_URL}?ssl-mode=REQUIRED`)
+    : null;
+
+const db = mysql.createConnection(dbUrl || {
     host: "localhost",
     user: "root",       
     password: "Harshitha@8088",       
@@ -17,7 +24,7 @@ const db = mysql.createConnection(process.env.DATABASE_URL || {
 
 db.connect((err) => {
     if (err) {
-        console.log("Database connection error: ", err);
+        console.error("Database connection error: ", err);
     } else {
         console.log("MySQL Database Connected successfully!");
 
@@ -36,6 +43,15 @@ db.connect((err) => {
                 githubUrl VARCHAR(255),
                 linkedinUrl VARCHAR(255),
                 password VARCHAR(255) NOT NULL,
+                location VARCHAR(255),
+                programmingLanguages VARCHAR(255),
+                certifications VARCHAR(255),
+                experience VARCHAR(255),
+                skillsList TEXT,
+                avatarUrl TEXT,
+                assessmentScore INT,
+                assessmentLevel VARCHAR(50),
+                techSkills TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
@@ -66,19 +82,18 @@ db.connect((err) => {
     }
 });
 
-const app = express();
+// Export db instance BEFORE importing routes
+module.exports = db;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+// Import Routes
+const usersRoutes = require("./routes/users");
+const projectsRoutes = require("./routes/projects");
 
-// 1. Serve the parent 'client' directory so CSS, JS, and Image folders can still link fine
+// Serve static assets
 app.use(express.static(path.join(__dirname, "..")));
-
-// 2. Also expose the 'html' directory directly at the root URL path
 app.use(express.static(path.join(__dirname, "../html")));
 
-// Default Root Route - Automatically shifts to your register view
+// Default Root Route
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../html/register.html"));
 });
@@ -93,7 +108,6 @@ app.get('/api/dashboard-stats', (req, res) => {
         return res.status(400).json({ success: false, message: "Student Email context is required" });
     }
 
-    // Target your projects table inside MySQL
     const queryStr = "SELECT * FROM projects WHERE studentEmail = ? ORDER BY id DESC";
 
     db.query(queryStr, [studentEmail], (err, results) => {
@@ -111,7 +125,7 @@ app.get('/api/dashboard-stats', (req, res) => {
     });
 });
 
-// API Endpoints
+// API Endpoints Links
 app.use("/api/users", usersRoutes);
 app.use("/api/projects", projectsRoutes);
 
