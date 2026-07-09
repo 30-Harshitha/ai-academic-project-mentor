@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middleware (Must be before routes)
+// Middleware (Must be defined before declaring routes)
 app.use(cors());
 app.use(express.json());
 
@@ -56,20 +56,31 @@ db.connect((err) => {
             );
         `;
 
-        // SQL query string to build projects table if missing
+        // 🟢 FIXED: Updated schema layout mapping directly to all 17 multi-part upload form targets
         const createProjectsTable = `
             CREATE TABLE IF NOT EXISTS projects (
                 id INT AUTO_INCREMENT PRIMARY KEY,
+                studentName VARCHAR(255) DEFAULT 'Anonymous',
                 studentEmail VARCHAR(255) NOT NULL,
                 projectTitle VARCHAR(255) NOT NULL,
-                description TEXT,
-                githubUrl VARCHAR(255),
-                status VARCHAR(50) DEFAULT 'Submitted',
+                projectDomain VARCHAR(255),
+                projectCategory VARCHAR(255),
+                teamSize INT DEFAULT 1,
+                duration VARCHAR(100),
+                difficulty VARCHAR(100),
+                techStack TEXT,
+                projectDescription TEXT,
+                problemStatement TEXT,
+                expectedOutcome TEXT,
+                proposalFile VARCHAR(255),
+                imagesCount INT DEFAULT 0,
+                status VARCHAR(100) DEFAULT 'Submitted',
+                submittedOn VARCHAR(100),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `;
 
-        // Execute table initialization
+        // Execute table initialization queries
         db.query(createUsersTable, (err) => {
             if (err) console.error("Error verifying/creating users table:", err);
             else console.log("✅ Users table verified/ready.");
@@ -82,7 +93,7 @@ db.connect((err) => {
     }
 });
 
-// Export db instance BEFORE importing routes
+// Export db instance BEFORE importing routes so routers can mount safely
 module.exports = db;
 
 // Import Routes

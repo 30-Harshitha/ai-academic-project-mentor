@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Idea Submission Workspace</title>
   
-  <link href="https://fonts.googleapis.com/css2%family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   
@@ -87,9 +87,11 @@
         background-size: 16px;
     }
 
-    .drag-drop-area-os { border: 2px dashed var(--border); background-color: var(--bg-main); padding: 24px; border-radius: 10px; text-align: center; }
+    .drag-drop-area-os { border: 2px dashed var(--border); background-color: var(--bg-main); padding: 24px; border-radius: 10px; text-align: center; cursor: pointer; transition: 0.2s ease; }
+    .drag-drop-area-os.dragover { border-color: var(--accent); background-color: var(--accent-muted); }
     .drag-drop-icon-os { font-size: 24px; color: var(--accent); margin-bottom: 8px; }
     .btn-accent { background-color: var(--accent); color: #000000; font-weight: 700; border: none; padding: 14px 28px; border-radius: 8px; cursor: pointer; }
+    .btn-accent:hover { opacity: 0.9; color: #000; }
     .back-link { color: var(--text-muted); text-decoration: none; font-size: 14px; }
     .back-link:hover { color: var(--accent); }
     .modal-os-content { background-color: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: 14px; }
@@ -185,7 +187,7 @@
                   <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: block;">Upload Project Proposal Abstract (PDF) <span class="text-danger">*</span></label>
                   <div class="drag-drop-area-os" id="proposal-drag-area">
                     <i class="fas fa-file-pdf drag-drop-icon-os"></i>
-                    <p class="mb-1 text-white fw-bold drag-drop-label" style="font-size:13px;">Drag & Drop Proposal PDF here, or click to browse</p>
+                    <p class="mb-1 text-white fw-bold drag-drop-label" id="proposal-label">Drag & Drop Proposal PDF here, or click to browse</p>
                     <span class="text-muted small" style="font-size:12px;">Only document formats under 5MB allowed.</span>
                     <input type="file" id="proposalFile" accept="application/pdf" style="display: none;">
                   </div>
@@ -195,7 +197,7 @@
                   <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: block;">Upload Initial UI Wireframes / Architecture Diagram Images</label>
                   <div class="drag-drop-area-os" id="images-drag-area">
                     <i class="fas fa-images drag-drop-icon-os"></i>
-                    <p class="mb-1 text-white fw-bold drag-drop-label" style="font-size:13px;">Drag & Drop images here, or click to browse</p>
+                    <p class="mb-1 text-white fw-bold drag-drop-label" id="images-label">Drag & Drop images here, or click to browse</p>
                     <span class="text-muted small" style="font-size:12px;">Supports JPEG, PNG format up to 3 images.</span>
                     <input type="file" id="imagesFiles" accept="image/*" multiple style="display: none;">
                   </div>
@@ -253,7 +255,106 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/app.js"></script>
-  <script src="/js/submit-project.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("project-submit-form");
+        
+        // Setup Drag & Drop UI Triggers
+        const setupDragAndDrop = (areaId, inputId, labelId, prefixText) => {
+            const area = document.getElementById(areaId);
+            const input = document.getElementById(inputId);
+            const label = document.getElementById(labelId);
+
+            area.addEventListener("click", () => input.click());
+            area.addEventListener("dragover", (e) => { e.preventDefault(); area.classList.add("dragover"); });
+            area.addEventListener("dragleave", () => area.classList.remove("dragover"));
+            area.addEventListener("drop", (e) => {
+                e.preventDefault();
+                area.classList.remove("dragover");
+                if (e.dataTransfer.files.length) {
+                    input.files = e.dataTransfer.files;
+                    updateLabel();
+                }
+            });
+            input.addEventListener("change", () => updateLabel());
+
+            function updateLabel() {
+                if(input.files.length === 1) {
+                    label.innerText = `Selected: ${input.files[0].name}`;
+                } else if(input.files.length > 1) {
+                    label.innerText = `Selected: ${input.files.length} wireframe files`;
+                }
+            }
+        };
+
+        setupDragAndDrop("proposal-drag-area", "proposalFile", "proposal-label");
+        setupDragAndDrop("images-drag-area", "imagesFiles", "images-label");
+
+        // Handle Active Multi-Part Request Routing
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // Safety catch for Student Context
+            const studentEmail = localStorage.getItem("userEmail") || "teststudent@gmail.com";
+            const studentName = localStorage.getItem("userName") || "Student Developer";
+
+            const formData = new FormData();
+            formData.append("studentName", studentName);
+            formData.append("studentEmail", studentEmail);
+            formData.append("projectTitle", document.getElementById("projectTitle").value);
+            formData.append("projectDomain", document.getElementById("projectDomain").value);
+            formData.append("projectCategory", document.getElementById("projectCategory").value);
+            formData.append("teamSize", document.getElementById("teamSize").value);
+            formData.append("duration", document.getElementById("duration").value);
+            formData.append("difficulty", document.getElementById("difficulty").value);
+            formData.append("techStack", document.getElementById("techStack").value);
+            formData.append("projectDescription", document.getElementById("projectDesc").value);
+            formData.append("problemStatement", document.getElementById("problemStatement").value);
+            formData.append("expectedOutcome", document.getElementById("expectedOutcome").value);
+
+            // Handle file parsing streams safely
+            const pFile = document.getElementById("proposalFile").files[0];
+            if (pFile) {
+                formData.append("proposalFile", pFile);
+            } else {
+                alert("Please drop or select a valid proposal summary PDF document.");
+                return;
+            }
+
+            const imgField = document.getElementById("imagesFiles");
+            if(imgField.files.length > 0) {
+                for(let i=0; i < imgField.files.length; i++) {
+                    formData.append("imagesFiles", imgField.files[i]);
+                }
+            }
+
+            try {
+                // Pointing target directly to your production cluster instance
+                const response = await fetch("https://ai-academic-project-mentor.onrender.com/api/projects", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success || response.ok) {
+                    // Generate tracking indicator code
+                    const token = "SUB-" + Math.floor(100000 + Math.random() * 900000);
+                    document.getElementById("mock-submission-id").innerText = token;
+                    
+                    // Fire Success Modal
+                    const successModal = new Bootstrap.Modal(document.getElementById('submissionSuccessModal'));
+                    successModal.show();
+                } else {
+                    alert("Submission Rejected: " + (result.message || "Invalid schema formatting configuration"));
+                }
+            } catch (err) {
+                console.error("Transmission error:", err);
+                alert("Unable to connect to server.");
+            }
+        });
+    });
+  </script>
 </body>
 </html>
