@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-// 1. Direct active link to your main server database module
+// Direct active link to your main server database module
 const db = require("../server");
 const multer = require("multer");
 const path = require("path");
@@ -24,7 +24,7 @@ const cpUpload = upload.fields([
 ]);
 
 // ==============================
-// Submit Project
+// 🚀 Submit Project (multipart/form-data)
 // ==============================
 router.post("/", cpUpload, (req, res) => {
     const body = req.body;
@@ -98,7 +98,7 @@ router.post("/", cpUpload, (req, res) => {
 });
 
 // ==============================
-// Get My Projects
+// 📋 Get My Projects
 // ==============================
 router.get("/student/:email", (req, res) => {
     const email = req.params.email;
@@ -109,12 +109,16 @@ router.get("/student/:email", (req, res) => {
             console.error(err);
             return res.status(500).json({ success: false, message: "Failed to load project listings." });
         }
-        res.json(result);
+        // FIXED: Standardized payload shape with success envelopes matching your frontend structure
+        res.json({
+            success: true,
+            projects: result
+        });
     });
 });
 
 // ==============================
-// Get Single Project
+// 👁️ Get Single Project
 // ==============================
 router.get("/view/:id", (req, res) => {
     const id = req.params.id;
@@ -130,12 +134,15 @@ router.get("/view/:id", (req, res) => {
                 message: "Project Not Found"
             });
         }
-        res.json(result[0]);
+        res.json({
+            success: true,
+            project: result[0]
+        });
     });
 });
 
 // ==============================
-// Update Project
+// 🔄 Update Project
 // ==============================
 router.put("/:id", (req, res) => {
     const id = req.params.id;
@@ -197,7 +204,7 @@ router.put("/:id", (req, res) => {
 });
 
 // ==============================
-// Delete Project
+// 🗑️ Delete Project
 // ==============================
 router.delete("/:id", (req, res) => {
     const id = req.params.id;

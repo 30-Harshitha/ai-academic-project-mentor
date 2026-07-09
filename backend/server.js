@@ -5,11 +5,22 @@ const mysql = require('mysql2');
 
 const app = express();
 
-// Middleware (Must be defined before declaring routes)
+/* ==========================================================================
+   ⚙️ MIDDLEWARE & INITIALIZATION
+   ========================================================================== */
 app.use(cors());
 app.use(express.json());
 
-// Database Connection Setup
+// Serve static frontend assets
+app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, "../html")));
+
+// 🟢 ADDED: Serve the uploads folder publicly so the system can retrieve documents/images
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+/* ==========================================================================
+   🗄️ DATABASE CONNECTION SETUP
+   ========================================================================== */
 // Appends Aiven SSL required flag if a cloud DATABASE_URL is present
 const dbUrl = process.env.DATABASE_URL 
     ? (process.env.DATABASE_URL.includes("ssl-mode") ? process.env.DATABASE_URL : `${process.env.DATABASE_URL}?ssl-mode=REQUIRED`)
@@ -24,9 +35,9 @@ const db = mysql.createConnection(dbUrl || {
 
 db.connect((err) => {
     if (err) {
-        console.error("Database connection error: ", err);
+        console.error("❌ Database connection error: ", err);
     } else {
-        console.log("MySQL Database Connected successfully!");
+        console.log("🚀 MySQL Database Connected successfully!");
 
         // SQL query string to build users table if missing
         const createUsersTable = `
@@ -56,7 +67,7 @@ db.connect((err) => {
             );
         `;
 
-        // 🟢 FIXED: Updated schema layout mapping directly to all 17 multi-part upload form targets
+        // SQL query string to build projects table if missing
         const createProjectsTable = `
             CREATE TABLE IF NOT EXISTS projects (
                 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -96,13 +107,11 @@ db.connect((err) => {
 // Export db instance BEFORE importing routes so routers can mount safely
 module.exports = db;
 
-// Import Routes
+/* ==========================================================================
+   🛣️ ROUTING SYSTEM MAPPING
+   ========================================================================== */
 const usersRoutes = require("./routes/users");
 const projectsRoutes = require("./routes/projects");
-
-// Serve static assets
-app.use(express.static(path.join(__dirname, "..")));
-app.use(express.static(path.join(__dirname, "../html")));
 
 // Default Root Route
 app.get("/", (req, res) => {
@@ -136,11 +145,11 @@ app.get('/api/dashboard-stats', (req, res) => {
     });
 });
 
-// API Endpoints Links
+// Mount Sub-routers
 app.use("/api/users", usersRoutes);
 app.use("/api/projects", projectsRoutes);
 
-// Catch-all Fallback
+// Catch-all Fallback for invalid paths
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -148,7 +157,9 @@ app.use((req, res) => {
     });
 });
 
-// Start Server
+/* ==========================================================================
+   🌐 SERVER STARTUP
+   ========================================================================== */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
