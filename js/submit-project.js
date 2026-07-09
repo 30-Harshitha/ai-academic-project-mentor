@@ -181,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
             const formData = new FormData();
             const submissionId = "SUB-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 
-            // 🟢 FIXED: Key corrected to match back-end database property variables mapping
             formData.append("submissionId", submissionId);
             formData.append("studentName", currentUser.fullName || "");
             formData.append("studentEmail", currentUser.email || "");
@@ -208,17 +207,14 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                    // Replace your old local fetch URL with your production Render API string:
-const response = await fetch(
-    "https://ai-academic-project-mentor.onrender.com/api/projects",
-    {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newProject)
-    }
-);
+                // FIXED: Explicit Content-Type string dropped entirely. Passing standard formData object stream.
+                const response = await fetch(
+                    "https://ai-academic-project-mentor.onrender.com/api/projects",
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
 
                 const data = await response.json();
 
@@ -227,7 +223,6 @@ const response = await fetch(
                     return;
                 }
 
-                // Fire success popups or directly re-route
                 const mockSubIdEl = document.getElementById("mock-submission-id");
                 if (mockSubIdEl) mockSubIdEl.textContent = submissionId;
                 
