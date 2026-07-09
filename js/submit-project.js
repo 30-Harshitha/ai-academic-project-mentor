@@ -208,10 +208,17 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             try {
-                const response = await fetch("/api/projects", {
-                    method: "POST",
-                    body: formData
-                });
+                    // Replace your old local fetch URL with your production Render API string:
+const response = await fetch(
+    "https://ai-academic-project-mentor.onrender.com/api/projects",
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newProject)
+    }
+);
 
                 const data = await response.json();
 
