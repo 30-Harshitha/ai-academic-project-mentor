@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - AI Academic Project Mentor</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <style>
+    /* Inline enhancement for the newly integrated custom list layout to keep it visually uniform */
+    .custom-global-nav {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    .custom-global-nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .custom-global-nav li {
+      margin-bottom: 10px;
+    }
+    .custom-global-nav li:last-child {
+      margin-bottom: 0;
+    }
+    .custom-global-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 13.5px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+    .custom-global-nav a:hover {
+      color: #d4ff00; /* Neon yellow accent alignment */
+      transform: translateX(3px);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container-fluid px-4">
+      
+      <button class="sidebar-toggle-btn icon-badge-btn d-lg-none me-3 border-0" type="button" aria-label="Toggle Sidebar">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <a class="navbar-brand me-auto" href="/dashboard.html">
+        <div class="logo">
+          AI PROJECT <span>MENTOR</span>
+        </div>
+      </a>
+      
+      <div class="nav-actions d-flex align-items-center gap-3">
+        <a href="/notifications.html" class="icon-badge-btn" title="View Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="badge-count">3</span>
+        </a>
+        
+        <div class="dropdown">
+          <div class="user-profile-menu dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="" alt="Student Profile avatar" class="user-avatar currentUser-avatar">
+            <span class="d-none d-md-inline currentUser-name" style="font-weight: 500;">Loading...</span>
+          </div>
+          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark-os p-2 mt-2" aria-labelledby="navbarDropdown" style="min-width: 200px;">
+            <li><label class="dropdown-header font-weight-700 text-uppercase tracking-wider" style="font-size: 10px; color: var(--text-muted);">Account Center</label></li>
+            <li><a class="dropdown-item py-2 px-3 rounded text-gradient" href="/dashboard.html"><i class="fas fa-th-large me-2"></i>Dashboard</a></li>
+            <li><a class="dropdown-item py-2 px-3 rounded" href="/profile.html"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
+            <li><a class="dropdown-item py-2 px-3 rounded" href="/settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item py-2 px-3 rounded text-danger logout-action" href="/login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </nav>
+
+  <div class="dashboard-container">
+    
+    <div class="sidebar-custom">
+      <span class="sidebar-title">Global Route Map</span>
+      <nav class="custom-global-nav">
+          <ul>
+              <li><a href="/dashboard.html">🏠 Home Dashboard</a></li>
+              <li><a href="/submit-project.html">➕ Submit Project Idea</a></li>
+              <li><a href="/my-projects.html">📁 View My Projects</a></li>
+              <li><a href="/login.html" id="logout-btn">🚪 Logout</a></li>
+          </ul>
+      </nav>
+
+      <span class="sidebar-title">Core Panel</span>
+      <ul class="nav flex-column mb-auto">
+        <li class="nav-item">
+          <a class="nav-link nav-link-active" href="/dashboard.html">
+            <i class="fas fa-th-large"></i> Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/profile.html">
+            <i class="fas fa-user-edit"></i> Student Profile
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/assessment.html">
+            <i class="fas fa-tasks"></i> Skill Assessment
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/submit-project.html">
+            <i class="fas fa-lightbulb"></i> Idea Submission
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/recommendations.html">
+            <i class="fas fa-magic"></i> Project Matching
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/ai-mentor.html">
+            <i class="fas fa-robot"></i> AI Mentor Chat
+          </a>
+        </li>
+      </ul>
+      
+      <span class="sidebar-title">Account</span>
+      <ul class="nav flex-column mb-4">
+        <li class="nav-item">
+          <a class="nav-link" href="/notifications.html">
+            <i class="fas fa-bell"></i> Notifications
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/settings.html">
+            <i class="fas fa-cog"></i> Account Settings
+          </a>
+        </li>
+        <li class="nav-item pt-2 border-top mt-2" style="border-color: var(--border) !important;">
+          <a class="nav-link text-danger logout-action" href="/login.html">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <main class="main-content-dashboard">
+      
+      <div class="welcome-card card-os mb-4">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h2>Welcome Back, <span class="text-gradient currentUser-name">Student</span>!</h2>
+            <p style="color: var(--text-muted);">Empower your academic journey with customized templates. Let AI analyze your developer skill level map to guide project deliverables.</p>
+            
+            <div class="welcome-stats-os">
+              <div class="stat-item-os">
+                <span class="stat-val-os" id="overall-score-txt">--/100</span>
+                <span class="stat-label-os">Capability Score</span>
+              </div>
+              <div class="stat-item-os">
+                <span class="stat-val-os" id="skill-level-txt">Loading...</span>
+                <span class="stat-label-os">Proficiency Level</span>
+              </div>
+              <div class="stat-item-os">
+                <span class="stat-val-os" id="project-status-txt">Loading...</span>
+                <span class="stat-label-os">Project Status</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4 mt-4 mt-md-0">
+            <div class="p-4 rounded border" style="background: var(--bg-main); border-color: var(--border) !important;">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="small font-weight-600" style="color: var(--text-muted);">Overall Progress</span>
+                <span class="small font-weight-700 text-gradient">75%</span>
+              </div>
+              <div class="progress-track-os">
+                <div class="progress-bar-os" id="overall-progress-bar" style="width: 75%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-sm-6">
+          <div class="metric-grid-os" onclick="window.location.href='/profile.html'">
+            <div class="metric-icon-wrap">
+              <i class="fas fa-id-card"></i>
+            </div>
+            <div class="metric-info">
+              <h3>View</h3>
+              <p>My Profile Info</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="metric-grid-os" onclick="window.location.href='/assessment.html'">
+            <div class="metric-icon-wrap">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="metric-info">
+              <h3>Start</h3>
+              <p>Skill Audit Tests</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="metric-grid-os" onclick="window.location.href='/recommendations.html'">
+            <div class="metric-icon-wrap">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="metric-info">
+              <h3>12+</h3>
+              <p>AI Recommendations</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-3 col-sm-6">
+          <div class="metric-grid-os" onclick="window.location.href='/ai-mentor.html'">
+            <div class="metric-icon-wrap">
+              <i class="fas fa-robot"></i>
+            </div>
+            <div class="metric-info">
+              <h3>Online</h3>
+              <p>Chat with Sophia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row g-4 mb-4">
+        <div class="col-lg-7">
+          <div class="card-os h-100">
+            <h5 class="fw-bold mb-1"><i class="fas fa-chart-pie me-2 text-gradient"></i>Skill Proficiency Map</h5>
+            <p class="small mb-4" style="color: var(--text-muted);">Proficiency chart mapped dynamically across core technical sectors.</p>
+            <div class="chart-container-custom">
+              <canvas id="skillProgressChart"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="card-os h-100">
+            <h5 class="fw-bold mb-1"><i class="fas fa-chart-line me-2 text-gradient"></i>Project Task Progress</h5>
+            <p class="small mb-4" style="color: var(--text-muted);">Check off remaining task timelines before project defense.</p>
+            <div class="chart-container-custom" style="height: 250px;">
+              <canvas id="projectProgressChart"></canvas>
+            </div>
+            <div class="row text-center mt-4 pt-3 border-top" style="border-color: var(--border) !important;">
+              <div class="col-4">
+                <span class="d-block fw-bold text-success">12</span>
+                <span class="small" style="font-size:0.75rem; color: var(--text-muted);">Done Items</span>
+              </div>
+              <div class="col-4 border-start border-end" style="border-color: var(--border) !important;">
+                <span class="d-block fw-bold" style="color: var(--secondary-color);">5</span>
+                <span class="small" style="font-size:0.75rem; color: var(--text-muted);">Pending</span>
+              </div>
+              <div class="col-4">
+                <span class="d-block fw-bold text-warning">2</span>
+                <span class="small" style="font-size:0.75rem; color: var(--text-muted);">In Review</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card-os h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="fw-bold mb-0"><i class="fas fa-history me-2 text-gradient"></i>Recent Activities</h5>
+              <a href="#" class="small" style="color: var(--primary-color);">Clear Logs</a>
+            </div>
+            <div class="timeline-custom pt-2" id="activities-timeline-list">
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6">
+          <div class="card-os h-100">
+            <h5 class="fw-bold mb-1"><i class="fas fa-calendar-alt me-2 text-gradient"></i>Calendar & Workshops</h5>
+            <p class="small mb-4" style="color: var(--text-muted);">Select dates with dot indicators to check academic meeting schedules.</p>
+            
+            <div class="calendar-widget p-3 border rounded shadow-none" style="background: var(--bg-main); border-color: var(--border) !important;">
+              <div class="calendar-header d-flex justify-content-between align-items-center">
+                <span class="fw-bold" id="calendar-month-year" style="color: var(--secondary-color);">July 2026</span>
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-secondary-custom px-2 py-1" type="button"><i class="fas fa-chevron-left" style="font-size: 11px;"></i></button>
+                  <button class="btn btn-sm btn-secondary-custom px-2 py-1" type="button"><i class="fas fa-chevron-right" style="font-size: 11px;"></i></button>
+                </div>
+              </div>
+              <div class="calendar-grid-os mt-3" id="calendar-days-grid">
+                <div class="day-name-os">Su</div>
+                <div class="day-name-os">Mo</div>
+                <div class="day-name-os">Tu</div>
+                <div class="day-name-os">We</div>
+                <div class="day-name-os">Th</div>
+                <div class="day-name-os">Fr</div>
+                <div class="day-name-os">Sa</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </main>
+  </div>
+
+  <a href="/ai-mentor.html" class="fab-custom" title="Chat with AI Mentor">
+    <i class="fas fa-robot"></i>
+  </a>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script src="/js/app.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+/* Responsive Overrides Stylesheet */
+
+@media (max-width: 1200px) {
+  .welcome-card h2 {
+    font-size: 1.8rem;
+  }
+  .chat-layout {
+    grid-template-columns: 260px 1fr;
+    height: calc(100vh - 190px);
+  }
+}
+
+@media (max-width: 991.98px) {
+  /* Navigation collapse items custom styling */
+  .navbar-custom .navbar-collapse {
+    background: var(--bg-white);
+    padding: 20px;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
+    margin-top: 10px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+  }
+  
+  .navbar-custom .nav-link {
+    margin-bottom: 5px;
+  }
+  
+  /* Sidebar toggle triggers */
+  .sidebar-custom {
+    transform: translateX(-100%);
+    top: 72px;
+    z-index: 1050;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+  }
+  
+  .sidebar-custom.show {
+    transform: translateX(0);
+  }
+  
+  .main-content-dashboard {
+    margin-left: 0;
+    padding: 24px;
+    width: 100%;
+  }
+  
+  /* Show hamburger sidebar toggle */
+  .sidebar-toggle-btn {
+    display: flex !important;
+  }
+  
+  /* Welcome card adjust */
+  .welcome-card {
+    padding: 25px 30px;
+  }
+  
+  /* Chat interface sidebar slide responsiveness */
+  .chat-layout {
+    grid-template-columns: 1fr;
+  }
+  .chat-history-sidebar {
+    display: none; /* Can be toggled on mobile if needed */
+  }
+  .chat-history-sidebar.show-mobile {
+    display: flex;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: var(--bg-white);
+  }
+  
+  .auth-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .auth-banner-side {
+    padding: 40px;
+    min-height: 250px;
+  }
+  
+  .auth-form-side {
+    padding: 40px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .welcome-stats {
+    gap: 20px;
+  }
+  .welcome-card h2 {
+    font-size: 1.5rem;
+  }
+  .welcome-card p {
+    font-size: 0.95rem;
+  }
+  .metric-card {
+    padding: 16px;
+  }
+  .metric-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  .metric-details h3 {
+    font-size: 1.5rem;
+  }
+  
+  .chat-messages-container {
+    padding: 16px;
+  }
+  .msg-wrapper {
+    max-width: 85%;
+  }
+  
+  .chat-suggestions {
+    padding: 8px 16px 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chat-suggestions::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .suggestion-chip {
+    white-space: nowrap;
+  }
+  
+  .skill-rating-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575.98px) {
+  body {
+    font-size: 14px;
+  }
+  
+  .main-content-dashboard {
+    padding: 16px;
+  }
+  
+  .welcome-card {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .auth-banner-side {
+    display: none; /* Hide layout banner in small phones for performance & focus */
+  }
+  
+  .auth-form-side {
+    padding: 24px 16px;
+  }
+  
+  .social-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px;
+  }
+  
+  .navbar-brand span {
+    display: none; /* Hide tagline project name representation on tiny screens, keeping logo text clean */
+  }
+  
+  .btn-primary-custom, .btn-secondary-custom {
+    padding: 10px 22px;
+    font-size: 0.88rem;
+  }
+  
+  .skill-rating-group {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}

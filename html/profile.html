@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rich Profile Dashboard</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+        --bg-main: #0a0a0c;
+        --bg-card: #121214;
+        --accent: #d4ff00; /* Signature Neon Yellow */
+        --accent-muted: rgba(212, 255, 0, 0.1);
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+        --border: #27272a;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        padding-bottom: 60px;
+    }
+
+    /* Top App Header Layout */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        font-family: monospace;
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-size: 15px;
+        color: var(--text-main);
+        text-decoration: none;
+    }
+
+    .logo span {
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    .close-icon {
+        color: var(--text-main);
+        cursor: pointer;
+        font-size: 20px;
+        transition: color 0.2s;
+    }
+    .close-icon:hover { color: var(--accent); }
+
+    /* Structural Feature Cards */
+    .card-os {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+
+    .card-os h2, .card-os h5 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: var(--text-main);
+        letter-spacing: -0.5px;
+    }
+
+    /* Form Inputs Overhauls */
+    .form-group-custom {
+        margin-bottom: 18px;
+    }
+
+    .form-group-custom label {
+        display: block;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .form-control-os {
+        width: 100%;
+        background-color: var(--bg-main);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: var(--text-main);
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+    .form-control-os:focus {
+        outline: none;
+        border-color: var(--accent);
+        background-color: var(--bg-main);
+        color: #fff;
+    }
+
+    select.form-control-os {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 16px;
+    }
+
+    /* Drag Box File Area */
+    .drag-drop-area-os {
+        border: 2px dashed var(--border);
+        background-color: var(--bg-main);
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .drag-drop-area-os:hover {
+        border-color: var(--accent);
+    }
+    .drag-drop-icon-os {
+        font-size: 28px;
+        color: var(--accent);
+        margin-bottom: 10px;
+    }
+
+    /* Profile Avatar Ring */
+    .profile-photo-wrap-os {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        margin: 0 auto 16px auto;
+    }
+    .profile-photo-preview-os {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: var(--bg-main);
+        border: 2px solid var(--border);
+    }
+    .profile-photo-edit-btn-os {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: var(--accent);
+        color: #000;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    /* STUDENT/OS Navigation Links & Buttons */
+    .nav-link-os {
+        color: var(--text-muted);
+        text-decoration: none;
+        padding: 10px 14px;
+        border-radius: 6px;
+        display: block;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .nav-link-os.active, .nav-link-os:hover {
+        background-color: var(--accent-muted);
+        color: var(--accent);
+    }
+
+    .btn-accent {
+        background-color: var(--accent);
+        color: #000000;
+        font-weight: 700;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        transition: opacity 0.2s;
+    }
+    .btn-accent:hover { opacity: 0.95; }
+
+    .btn-outline-darkos {
+        background-color: transparent;
+        color: var(--text-main);
+        border: 1px solid var(--border);
+        font-weight: 600;
+        padding: 12px 24px;
+        border-radius: 8px;
+    }
+
+    footer {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 12px;
+        margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" style="max-width: 960px;">
+    
+    <header>
+      <a href="#" class="logo" onclick="history.back()">STUDENT/OS <span>v1.0</span></a>
+      <div class="close-icon" onclick="history.back()">✕</div>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="card-os text-center">
+            <div class="profile-photo-wrap-os">
+              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' %2s/%3E%3C/svg%3E" alt="Avatar" class="profile-photo-preview-os currentUser-avatar" id="profile-photo-preview-node">
+              <label for="avatarFileInput" class="profile-photo-edit-btn-os">
+                <i class="fas fa-camera"></i>
+              </label>
+              <input type="file" id="avatarFileInput" style="display:none;" accept="image/*">
+            </div>
+            
+            <h4 class="fw-bold mb-1 currentUser-name" style="font-size:18px;">Name Loading...</h4>
+            <p class="text-muted small mb-3" id="profile-dept-caption">Department Loading...</p>
+            
+            <div class="border-top border-secondary my-3 pt-3 text-start" style="font-size:13px;">
+              <div class="mb-2"><span class="text-muted">Status:</span> <span id="profile-year-caption" class="text-white"></span></div>
+              <div><span class="text-muted">University:</span> <span id="profile-college-caption" class="text-white"></span></div>
+            </div>
+          </div>
+
+          <div class="card-os p-2">
+            <nav class="d-flex flex-column gap-1">
+              <a href="#section-personal" class="nav-link-os active"><i class="fas fa-id-card me-2"></i>Personal Info</a>
+              <a href="#section-skills" class="nav-link-os"><i class="fas fa-brain me-2"></i>Skills & Resume</a>
+              <a href="#section-experience" class="nav-link-os"><i class="fas fa-briefcase me-2"></i>Experience Certs</a>
+            </nav>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <form id="profile-edit-form">
+            
+            <div class="card-os" id="section-personal">
+              <h5><i class="fas fa-id-card me-2" style="color:var(--accent)"></i>Personal Information</h5>
+              
+              <div class="row">
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileName">Full Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="profileName" required placeholder="Full Name">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileEmail">Email Address <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control-os" id="profileEmail" required placeholder="email@address.edu" readonly style="opacity: 0.6; cursor: not-allowed;">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profilePhone">Phone Number <span class="text-danger">*</span></label>
+                  <input type="tel" class="form-control-os" id="profilePhone" required placeholder="+91 xxxxx xxxxx">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileLocation">Current Location <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="profileLocation" required placeholder="e.g. Mumbai, India">
+                </div>
+                <div class="col-md-12 form-group-custom">
+                  <label for="profileCollege">College / University Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="profileCollege" required placeholder="University">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileDept">Department <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="profileDept" required placeholder="CSE / IT">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileYear">Current Year <span class="text-danger">*</span></label>
+                  <select class="form-control-os" id="profileYear" required>
+                    <option value="1st Year">1st Year</option>
+                    <option value="2nd Year">2nd Year</option>
+                    <option value="3rd Year">3rd Year</option>
+                    <option value="4th Year">4th Year</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-os" id="section-skills">
+              <h5><i class="fas fa-brain me-2" style="color:var(--accent)"></i>Technical Skills & Resume</h5>
+              
+              <div class="form-group-custom">
+                <label for="profileSkills">Skill Competencies (Separate with commas) <span class="text-danger">*</span></label>
+                <input type="text" class="form-control-os" id="profileSkills" placeholder="Python, SQL, HTML, CSS, Git">
+              </div>
+              
+              <div class="form-group-custom">
+                <label for="profileLanguages">Programming Languages <span class="text-danger">*</span></label>
+                <input type="text" class="form-control-os" id="profileLanguages" placeholder="Python, Java, JavaScript, C++">
+              </div>
+
+              <div class="form-group-custom">
+                <label>Upload Resume PDF <span class="text-danger">*</span></label>
+                <div class="drag-drop-area-os" id="resume-drag-area">
+                  <i class="fas fa-cloud-upload-alt drag-drop-icon-os"></i>
+                  <p class="mb-1 text-white fw-bold drag-drop-label" style="font-size:14px;">Drag and drop your resume file here</p>
+                  <span class="text-muted small" style="font-size:12px;">Only PDF formatting accepted. (Max 5MB)</span>
+                  <input type="file" id="resumeFileInput" style="display:none;" accept="application/pdf">
+                </div>
+              </div>
+            </div>
+
+            <div class="card-os" id="section-experience">
+              <h5><i class="fas fa-briefcase me-2" style="color:var(--accent)"></i>Internships & Certifications</h5>
+              
+              <div class="row">
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileCerts">Academic Certifications</label>
+                  <input type="text" class="form-control-os" id="profileCerts" placeholder="AWS Cloud, Google TensorFlow">
+                </div>
+                <div class="col-md-6 form-group-custom">
+                  <label for="profileExperience">Development Experience</label>
+                  <input type="text" class="form-control-os" id="profileExperience" placeholder="Web Development Intern @ XYZ Systems">
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-5">
+              <button type="button" class="btn btn-outline-darkos" onclick="history.back()">Back</button>
+              <button type="submit" class="btn btn-accent px-4">
+                Save & Update Details <i class="fas fa-save ms-2"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+    </div>
+
+    
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Direct Profile Form Session Mock Engine Loader
+      const user = JSON.parse(localStorage.getItem('currentUser')) || {
+         fullName: "Alex Morgan",
+         email: "alex@university.edu",
+         department: "Computer Science & Engineering",
+         collegeName: "Indian Institute of Technology",
+         year: "3rd Year"
+      };
+
+      // Populate input structural fields safely
+      document.getElementById('profileName').value = user.fullName || '';
+      document.getElementById('profileEmail').value = user.email || '';
+      document.getElementById('profilePhone').value = user.phoneNumber || user.phone || '+91 98765 43210';
+      document.getElementById('profileLocation').value = user.location || 'Mumbai, India';
+      document.getElementById('profileCollege').value = user.collegeName || '';
+      document.getElementById('profileDept').value = user.department || '';
+      document.getElementById('profileYear').value = user.year || '3rd Year';
+      
+      document.getElementById('profileSkills').value = user.skillsList || 'Python, Git, SQL, HTML, CSS';
+      document.getElementById('profileLanguages').value = user.programmingLanguages || 'Python, JavaScript, SQL';
+      document.getElementById('profileCerts').value = user.certifications || 'AWS Certified';
+      document.getElementById('profileExperience').value = user.experience || 'Software Intern';
+
+      // Set internal status displays labels
+      document.querySelector('.currentUser-name').textContent = user.fullName;
+      document.getElementById('profile-dept-caption').textContent = user.department;
+      document.getElementById('profile-year-caption').textContent = user.year;
+      document.getElementById('profile-college-caption').textContent = user.collegeName;
+
+      // Avatar local base64 mock storage converter handling pipeline 
+      const avatarInput = document.getElementById('avatarFileInput');
+      const avatarImg = document.getElementById('profile-photo-preview-node');
+      
+      if (avatarInput && avatarImg) {
+        avatarInput.addEventListener('change', function() {
+          const file = avatarInput.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              avatarImg.src = e.target.result;
+              user.avatarUrl = e.target.result;
+              localStorage.setItem('currentUser', JSON.stringify(user));
+            }
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // Resume direct component interaction logic binding
+      const resumeDrag = document.getElementById('resume-drag-area');
+      const resumeInput = document.getElementById('resumeFileInput');
+      if (resumeDrag && resumeInput) {
+        resumeDrag.addEventListener('click', () => resumeInput.click());
+        resumeInput.addEventListener('change', () => {
+          if (resumeInput.files.length > 0) {
+            const f = resumeInput.files[0];
+            const label = resumeDrag.querySelector('.drag-drop-label');
+            label.innerHTML = `Selected: ${f.name}`;
+          }
+        });
+      }
+
+      // Handle Event Interception
+      const form = document.getElementById('profile-edit-form');
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          alert('Academic Profile matrix saved to ecosystem environment memory tables registry array maps.');
+        });
+      }
+    });
+  </script>
+</body>
+</html>

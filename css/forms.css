@@ -1,0 +1,399 @@
+/* Auth Pages Styling (Login & Register) */
+.auth-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 0% 0%, rgba(37, 99, 235, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
+              var(--bg-light);
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: var(--bg-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  max-width: 1000px;
+  width: 100%;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.auth-banner-side {
+  background: var(--gradient-dark);
+  color: var(--bg-white);
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.auth-banner-side::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%2338bdf8' fill-opacity='0.05'%3E%3Ccircle cx='50' cy='50' r='40'/%3E%3C/g%3E%3C/svg%3E") repeat;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.auth-banner-content h2 {
+  color: var(--bg-white);
+  font-size: 2.2rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.auth-banner-content p {
+  color: #94A3B8;
+  font-size: 1rem;
+  margin-top: 15px;
+}
+
+.auth-banner-testimonial {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 15px;
+  margin-top: 30px;
+}
+
+.auth-banner-testimonial blockquote {
+  font-style: italic;
+  font-size: 0.92rem;
+  color: #CBD5E1;
+  margin-bottom: 5px;
+}
+
+.auth-banner-testimonial cite {
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.auth-form-side {
+  padding: 50px;
+}
+
+.auth-form-header h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-form-header p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  margin-bottom: 30px;
+}
+
+/* Custom form labels and inputs */
+.form-group-custom {
+  margin-bottom: 22px;
+  position: relative;
+}
+
+.form-label-custom {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-control-custom {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--border-radius-sm);
+  background: var(--bg-white);
+  border: 1.5px solid #E2E8F0;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: var(--text-dark);
+  transition: var(--transition-fast);
+}
+
+.form-control-custom:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  outline: none;
+}
+
+/* Social Logins */
+.social-login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--border-radius-sm);
+  border: 1.5px solid #E2E8F0;
+  background: var(--bg-white);
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: var(--transition-fast);
+  cursor: pointer;
+  width: 100%;
+}
+
+.social-login-btn:hover {
+  background: var(--bg-light);
+  border-color: #CBD5E1;
+}
+
+.social-login-btn.google i { color: #EA4335; }
+.social-login-btn.github i { color: #24292F; }
+.social-login-btn.microsoft i { color: #F25022; }
+
+.divider-text {
+  text-align: center;
+  position: relative;
+  margin: 25px 0;
+}
+
+.divider-text::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #E2E8F0;
+  z-index: 1;
+}
+
+.divider-text span {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-white);
+  padding: 0 15px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Validation messages */
+.validation-message {
+  font-size: 0.78rem;
+  margin-top: 5px;
+  display: none;
+}
+
+.validation-message.error {
+  color: #EF4444;
+  display: block;
+}
+
+.validation-message.success {
+  color: #10B981;
+  display: block;
+}
+
+.is-invalid-custom {
+  border-color: #EF4444 !important;
+}
+
+.is-invalid-custom:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Custom checkbox/radio */
+.checkbox-custom {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-custom input {
+  margin-top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid #CBD5E1;
+  accent-color: var(--primary-color);
+}
+
+/* Settings Form Preferences Style */
+.preference-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.preference-row:last-child {
+  border-bottom: none;
+}
+
+.preference-details h6 {
+  margin-bottom: 2px;
+  font-size: 0.95rem;
+}
+
+.preference-details p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Toggle Switch Styling */
+.switch-custom {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.switch-custom input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-custom {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #CBD5E1;
+  transition: .3s;
+  border-radius: 34px;
+}
+
+.slider-custom:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-custom {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider-custom:before {
+  transform: translateX(22px);
+}
+
+/* Skill Assessment Card Questionnaire Elements */
+.assessment-card {
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: var(--border-radius-md);
+  background: var(--bg-white);
+  padding: 24px;
+  margin-bottom: 20px;
+  transition: var(--transition-fast);
+}
+
+.assessment-card:hover {
+  border-color: rgba(37,99,235,0.2);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-rating-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.skill-option-label {
+  border: 1.5px solid #E2E8F0;
+  border-radius: var(--border-radius-sm);
+  padding: 12px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.skill-option-label:hover {
+  border-color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.02);
+}
+
+.skill-rating-group input[type="radio"] {
+  display: none;
+}
+
+.skill-rating-group input[type="radio"]:checked + .skill-option-label {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: var(--primary-color);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15);
+}
+
+/* Form Multi-Step Progress Header */
+.step-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.step-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #E2E8F0;
+}
+
+.step-dot.active {
+  background: var(--primary-color);
+  width: 24px;
+  border-radius: 5px;
+}
+
+.step-dot.completed {
+  background: rgba(16, 185, 129, 0.8);
+}
+
+/* Modals Override Styles */
+.modal-custom-content {
+  border: none;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.modal-success-header {
+  background: linear-gradient(135deg, #10B981 0%, #047857 100%);
+  color: white;
+  padding: 24px;
+  border: none;
+  text-align: center;
+}
+
+.modal-success-icon-wrap {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: #10B981;
+  margin: 0 auto 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}

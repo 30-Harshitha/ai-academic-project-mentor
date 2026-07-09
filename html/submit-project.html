@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Idea Submission Workspace</title>
+  
+  <link href="https://fonts.googleapis.com/css2%family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <style>
+    :root {
+        --bg-main: #0a0a0c;
+        --bg-card: #121214;
+        --accent: #d4ff00; 
+        --accent-muted: rgba(212, 255, 0, 0.1);
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+        --border: #27272a;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        padding-bottom: 60px;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        font-family: monospace;
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-size: 15px;
+        color: var(--text-main);
+        text-decoration: none;
+    }
+
+    .logo span { color: var(--text-muted); font-weight: 400; }
+    .close-icon { color: var(--text-main); cursor: pointer; font-size: 20px; text-decoration: none; }
+    .close-icon:hover { color: var(--accent); }
+
+    .card-os {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+
+    .card-os h5 { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-main); }
+    .form-group-custom { margin-bottom: 18px; }
+    .form-group-custom label { display: block; font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+    
+    .form-control-os {
+        width: 100%;
+        background-color: var(--bg-main);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 16px;
+        color: var(--text-main);
+        font-size: 14px;
+    }
+
+    .form-control-os:focus { outline: none; border-color: var(--accent); color: #fff; }
+    select.form-control-os {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+        background-size: 16px;
+    }
+
+    .drag-drop-area-os { border: 2px dashed var(--border); background-color: var(--bg-main); padding: 24px; border-radius: 10px; text-align: center; }
+    .drag-drop-icon-os { font-size: 24px; color: var(--accent); margin-bottom: 8px; }
+    .btn-accent { background-color: var(--accent); color: #000000; font-weight: 700; border: none; padding: 14px 28px; border-radius: 8px; cursor: pointer; }
+    .back-link { color: var(--text-muted); text-decoration: none; font-size: 14px; }
+    .back-link:hover { color: var(--accent); }
+    .modal-os-content { background-color: var(--bg-card); border: 1px solid var(--border); color: var(--text-main); border-radius: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="container" style="max-width: 1040px;">
+    <header>
+      <a href="/dashboard.html" class="logo">STUDENT/OS <span>v1.0</span></a>
+      <a href="/dashboard.html" class="close-icon">✕</a>
+    </header>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="card-os">
+            <h5><i class="fas fa-edit me-2" style="color:var(--accent)"></i>Project Details Form</h5>
+            
+            <form id="project-submit-form">
+              <div class="row">
+                <div class="col-md-12 form-group-custom">
+                  <label for="projectTitle">Project Title <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="projectTitle" required placeholder="Smart Agriculture Crop Disease Predictor">
+                </div>
+
+                <div class="col-md-6 form-group-custom">
+                  <label for="projectDomain">Project Domain <span class="text-danger">*</span></label>
+                  <select class="form-control-os" id="projectDomain" required>
+                    <option value="" disabled selected>Select Target Domain</option>
+                    <option value="Agriculture & IoT">Agriculture & IoT</option>
+                    <option value="Healthcare Systems">Healthcare Systems</option>
+                    <option value="FinTech Applications">FinTech Applications</option>
+                    <option value="E-Commerce Architectures">E-Commerce Architectures</option>
+                    <option value="Education Platforms">Education Platforms</option>
+                    <option value="Cybersecurity Protocols">Cybersecurity Protocols</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 form-group-custom">
+                  <label for="projectCategory">Project Category <span class="text-danger">*</span></label>
+                  <select class="form-control-os" id="projectCategory" required>
+                    <option value="Capstone Project">University Capstone Project</option>
+                    <option value="Research Thesis">Scientific Research Thesis</option>
+                    <option value="Coursework Mini-Project">Coursework Mini-Project</option>
+                    <option value="Hackathon Submission">Hackathon Innovation Submission</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4 form-group-custom">
+                  <label for="teamSize">Target Team Size <span class="text-danger">*</span></label>
+                  <input type="number" class="form-control-os" id="teamSize" required min="1" max="4" value="2">
+                </div>
+
+                <div class="col-md-4 form-group-custom">
+                  <label for="duration">Expected Duration <span class="text-danger">*</span></label>
+                  <select class="form-control-os" id="duration" required>
+                    <option value="3 Months">3 Months (Short Term)</option>
+                    <option value="6 Months">6 Months (Standard Sem)</option>
+                    <option value="9 Months">9 Months (Full Year)</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4 form-group-custom">
+                  <label for="difficulty">Difficulty Level <span class="text-danger">*</span></label>
+                  <select class="form-control-os" id="difficulty" required>
+                    <option value="Beginner">Beginner (Foundation)</option>
+                    <option value="Intermediate">Intermediate (Skilled)</option>
+                    <option value="Advanced">Advanced (Complex)</option>
+                  </select>
+                </div>
+
+                <div class="col-md-12 form-group-custom">
+                  <label for="techStack">Technology Stack Tags (Comma separated) <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control-os" id="techStack" required placeholder="Python, TensorFlow, Flask, React Native, SQL">
+                </div>
+
+                <div class="col-md-12 form-group-custom">
+                  <label for="projectDesc">Project Brief Description <span class="text-danger">*</span></label>
+                  <textarea class="form-control-os" id="projectDesc" rows="4" required placeholder="Briefly summarize the target features and modules of your project idea..."></textarea>
+                </div>
+
+                <div class="col-md-12 form-group-custom">
+                  <label for="problemStatement">Problem Statement <span class="text-danger">*</span></label>
+                  <textarea class="form-control-os" id="problemStatement" rows="3" required placeholder="What domain problems does this architecture solve directly?"></textarea>
+                </div>
+
+                <div class="col-md-12 form-group-custom">
+                  <label for="expectedOutcome">Expected Project Outcome / Deliverables <span class="text-danger">*</span></label>
+                  <textarea class="form-control-os" id="expectedOutcome" rows="3" required placeholder="Describe the final deployable software output..."></textarea>
+                </div>
+
+                <div class="col-md-12 mb-3">
+                  <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: block;">Upload Project Proposal Abstract (PDF) <span class="text-danger">*</span></label>
+                  <div class="drag-drop-area-os" id="proposal-drag-area">
+                    <i class="fas fa-file-pdf drag-drop-icon-os"></i>
+                    <p class="mb-1 text-white fw-bold drag-drop-label" style="font-size:13px;">Drag & Drop Proposal PDF here, or click to browse</p>
+                    <span class="text-muted small" style="font-size:12px;">Only document formats under 5MB allowed.</span>
+                    <input type="file" id="proposalFile" accept="application/pdf" style="display: none;">
+                  </div>
+                </div>
+
+                <div class="col-md-12 mb-4">
+                  <label style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: block;">Upload Initial UI Wireframes / Architecture Diagram Images</label>
+                  <div class="drag-drop-area-os" id="images-drag-area">
+                    <i class="fas fa-images drag-drop-icon-os"></i>
+                    <p class="mb-1 text-white fw-bold drag-drop-label" style="font-size:13px;">Drag & Drop images here, or click to browse</p>
+                    <span class="text-muted small" style="font-size:12px;">Supports JPEG, PNG format up to 3 images.</span>
+                    <input type="file" id="imagesFiles" accept="image/*" multiple style="display: none;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <a href="/dashboard.html" class="back-link">← Cancel and Back to Dashboard</a>
+                <button type="submit" class="btn btn-accent px-4">
+                  Submit Idea to Mentors <i class="fas fa-paper-plane ms-2"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="card-os" style="border-left: 3px solid var(--accent);">
+            <h5><i class="fas fa-info-circle me-1" style="color:var(--accent);"></i>Submission Guide</h5>
+            <p style="color:var(--text-muted); font-size:13px; line-height:1.6;">
+              Submitting a project is the first step to unlocking developer resources and supervisor approvals.
+            </p>
+            <label class="d-block small mb-2 uppercase fw-bold text-white" style="font-size:11px; letter-spacing:1px;">QUALITY CRITERIA</label>
+            <ul class="small ps-3 mb-4" style="line-height: 1.7; color:var(--text-muted); font-size:13px;">
+              <li>Explain your ML classification algorithms.</li>
+              <li>Detail local SQLite synchronization limits.</li>
+              <li>Provide active mock UI wireframe files (PNG).</li>
+            </ul>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="submissionSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content modal-os-content text-center p-4">
+        <div class="my-3">
+          <div class="mx-auto d-flex align-items-center justify-content-center" style="width:56px; height:56px; background:var(--accent-muted); color:var(--accent); border-radius:50%; font-size:24px;">
+            <i class="fas fa-check"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold text-white mb-2">Proposal Uploaded!</h4>
+        <p class="small mb-4" style="color:var(--text-muted);">Academic tracking indicators will sync on dashboard.</p>
+        
+        <div class="bg-black p-3 rounded mb-4 border border-secondary">
+          <span class="d-block small text-muted mb-1" style="font-size:11px; letter-spacing:1px; font-weight:700;">SUBMISSION TOKEN</span>
+          <span class="h5 fw-bold" id="mock-submission-id" style="color:var(--accent); font-family:monospace;">SUB-XXXXXX</span>
+        </div>
+        
+        <button type="button" class="btn btn-accent w-100 py-3" id="modal-redirect-dash-btn" onclick="window.location.href='/dashboard.html'">
+          Back to Dashboard <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/submit-project.js"></script>
+</body>
+</html>

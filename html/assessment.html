@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skill Assessment Matrix</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    :root {
+        --bg-main: #0a0a0c;
+        --bg-card: #121214;
+        --accent: #d4ff00; /* Signature Neon Yellow */
+        --accent-muted: rgba(212, 255, 0, 0.1);
+        --text-main: #ffffff;
+        --text-muted: #94a3b8;
+        --border: #27272a;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-family: 'Poppins', sans-serif;
+        min-height: 100vh;
+        padding-bottom: 60px;
+    }
+
+    /* Top App Header Layout */
+    header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 0;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+        font-family: monospace;
+        font-weight: 800;
+        letter-spacing: 2px;
+        font-size: 15px;
+        color: var(--text-main);
+        text-decoration: none;
+    }
+
+    .logo span {
+        color: var(--text-muted);
+        font-weight: 400;
+    }
+
+    .close-icon {
+        color: var(--text-main);
+        cursor: pointer;
+        font-size: 20px;
+        transition: color 0.2s;
+    }
+    .close-icon:hover { color: var(--accent); }
+
+    /* Structural Feature Cards */
+    .card-os {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+
+    .card-os h2, .card-os h5 {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: var(--text-main);
+        letter-spacing: -0.3px;
+    }
+
+    /* Progress Pipeline Custom Track */
+    .progress-track-os {
+        background-color: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 4px;
+    }
+    .progress-bar-os {
+        background-color: var(--accent);
+        height: 6px;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+
+    /* Advanced Custom Option Button Array Groups */
+    .skill-rating-group-os {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 6px;
+        margin-top: 14px;
+    }
+
+    .skill-rating-group-os input[type="radio"] {
+        display: none;
+    }
+
+    .skill-rating-group-os label {
+        display: block;
+        text-align: center;
+        background-color: var(--bg-main);
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 8px 4px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .skill-rating-group-os input[type="radio"]:checked + label {
+        background-color: var(--accent-muted);
+        border-color: var(--accent);
+        color: var(--accent);
+        font-weight: 600;
+    }
+
+    /* STUDENT/OS Action Elements */
+    .btn-accent {
+        background-color: var(--accent);
+        color: #000000;
+        font-weight: 700;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        transition: opacity 0.2s;
+    }
+    .btn-accent:hover { opacity: 0.95; }
+
+    footer {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 12px;
+        margin-top: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" style="max-width: 1040px;">
+    
+    <header>
+      <a href="dashboard.html" class="logo">STUDENT/OS <span>v1.0</span></a>
+      <div class="close-icon" onclick="history.back()">✕</div>
+    </header>
+
+    <main>
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <h2 class="fw-bold text-white mb-1" style="font-size: 24px; letter-spacing: -0.5px;">Capability Assessment Matrix</h2>
+          <p style="color: var(--text-muted); font-size: 14px; margin: 0;">Quantify your core engineering capability stack to tune tracking layers.</p>
+        </div>
+        <span id="assessment-prog-text" style="font-family: monospace; font-size: 14px; color: var(--accent); font-weight: 700;">0% Sync Complete</span>
+      </div>
+
+      <div class="progress-track-os mb-4">
+        <div class="progress-bar-os" id="assessment-prog-bar"></div>
+      </div>
+
+      <form id="skill-assessment-form">
+        <div class="row g-3">
+          
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-python me-2" style="color: var(--accent);"></i>Python Programming</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Syntax variables, structural types, clean OOP paradigms, and native list comprehensions.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="py_beg" name="skill_python" value="beginner" required><label for="py_beg">Beginner</label>
+                <input type="radio" id="py_int" name="skill_python" value="intermediate"><label for="py_int">Intermed</label>
+                <input type="radio" id="py_adv" name="skill_python" value="advanced"><label for="py_adv">Advanced</label>
+                <input type="radio" id="py_exp" name="skill_python" value="expert"><label for="py_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-java me-2" style="color: var(--accent);"></i>Java Programming</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Strict interface inheritance architectures, multithread routines, and enterprise frameworks.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="jv_beg" name="skill_java" value="beginner" required><label for="jv_beg">Beginner</label>
+                <input type="radio" id="jv_int" name="skill_java" value="intermediate"><label for="jv_int">Intermed</label>
+                <input type="radio" id="jv_adv" name="skill_java" value="advanced"><label for="jv_adv">Advanced</label>
+                <input type="radio" id="jv_exp" name="skill_java" value="expert"><label for="jv_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-js-square me-2" style="color: var(--accent);"></i>JavaScript (ES6+)</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Asynchronous Promises, async/await handlers, custom structural closures, and DOM events.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="js_beg" name="skill_js" value="beginner" required><label for="js_beg">Beginner</label>
+                <input type="radio" id="js_int" name="skill_js" value="intermediate"><label for="js_int">Intermed</label>
+                <input type="radio" id="js_adv" name="skill_js" value="advanced"><label for="js_adv">Advanced</label>
+                <input type="radio" id="js_exp" name="skill_js" value="expert"><label for="js_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-html5 me-2" style="color: var(--accent);"></i>HTML5 Layout Layouts</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Semantic microformats structures, native metadata optimization, forms, and validation tags.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="htm_beg" name="skill_html" value="beginner" required><label for="htm_beg">Beginner</label>
+                <input type="radio" id="htm_int" name="skill_html" value="intermediate"><label for="htm_int">Intermed</label>
+                <input type="radio" id="htm_adv" name="skill_html" value="advanced"><label for="htm_adv">Advanced</label>
+                <input type="radio" id="htm_exp" name="skill_html" value="expert"><label for="htm_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-css3-alt me-2" style="color: var(--accent);"></i>CSS3 Box Models</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Flexible viewport positioning engines (Flexbox, CSS Grid), animations, variables, and queries.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="css_beg" name="skill_css" value="beginner" required><label for="css_beg">Beginner</label>
+                <input type="radio" id="css_int" name="skill_css" value="intermediate"><label for="css_int">Intermed</label>
+                <input type="radio" id="css_adv" name="skill_css" value="advanced"><label for="css_adv">Advanced</label>
+                <input type="radio" id="css_exp" name="skill_css" value="expert"><label for="css_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-database me-2" style="color: var(--accent);"></i>SQL Database Architecture</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Structured relational table schemas, primary indexes, complex join operations, and optimization.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="sql_beg" name="skill_sql" value="beginner" required><label for="sql_beg">Beginner</label>
+                <input type="radio" id="sql_int" name="skill_sql" value="intermediate"><label for="sql_int">Intermed</label>
+                <input type="radio" id="sql_adv" name="skill_sql" value="advanced"><label for="sql_adv">Advanced</label>
+                <input type="radio" id="sql_exp" name="skill_sql" value="expert"><label for="sql_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-brain me-2" style="color: var(--accent);"></i>Machine Learning (Sci-Kit)</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Supervised clustering parameters, gradient models tuning, and advanced statistical analysis.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="ml_beg" name="skill_ml" value="beginner" required><label for="ml_beg">Beginner</label>
+                <input type="radio" id="ml_int" name="skill_ml" value="intermediate"><label for="ml_int">Intermed</label>
+                <input type="radio" id="ml_adv" name="skill_ml" value="advanced"><label for="ml_adv">Advanced</label>
+                <input type="radio" id="ml_exp" name="skill_ml" value="expert"><label for="ml_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-network-wired me-2" style="color: var(--accent);"></i>Deep Learning (TensorFlow)</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Artificial multi-layer architectures, CNN tensor shapes, loss configurations, and optimization layers.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="dl_beg" name="skill_dl" value="beginner" required><label for="dl_beg">Beginner</label>
+                <input type="radio" id="dl_int" name="skill_dl" value="intermediate"><label for="dl_int">Intermed</label>
+                <input type="radio" id="dl_adv" name="skill_dl" value="advanced"><label for="dl_adv">Advanced</label>
+                <input type="radio" id="dl_exp" name="skill_dl" value="expert"><label for="dl_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-robot me-2" style="color: var(--accent);"></i>Artificial Intelligence</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Graph-based search loops, heuristic algorithmic solvers, agent structures, and processing models.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="ai_beg" name="skill_ai" value="beginner" required><label for="ai_beg">Beginner</label>
+                <input type="radio" id="ai_int" name="skill_ai" value="intermediate"><label for="ai_int">Intermed</label>
+                <input type="radio" id="ai_adv" name="skill_ai" value="advanced"><label for="ai_adv">Advanced</label>
+                <input type="radio" id="ai_exp" name="skill_ai" value="expert"><label for="ai_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-chart-bar me-2" style="color: var(--accent);"></i>Data Science (Pandas)</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Analytical exploration, programmatic file sanitation, operations matrix layouts, and scaling.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="ds_beg" name="skill_ds" value="beginner" required><label for="ds_beg">Beginner</label>
+                <input type="radio" id="ds_int" name="skill_ds" value="intermediate"><label for="ds_int">Intermed</label>
+                <input type="radio" id="ds_adv" name="skill_ds" value="advanced"><label for="ds_adv">Advanced</label>
+                <input type="radio" id="ds_exp" name="skill_ds" value="expert"><label for="ds_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-cloud me-2" style="color: var(--accent);"></i>Cloud Systems (AWS/GCP)</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Virtualized node systems deployment, access permissions configuration, container controls, and buckets.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="cc_beg" name="skill_cc" value="beginner" required><label for="cc_beg">Beginner</label>
+                <input type="radio" id="cc_int" name="skill_cc" value="intermediate"><label for="cc_int">Intermed</label>
+                <input type="radio" id="cc_adv" name="skill_cc" value="advanced"><label for="cc_adv">Advanced</label>
+                <input type="radio" id="cc_exp" name="skill_cc" value="expert"><label for="cc_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-git-alt me-2" style="color: var(--accent);"></i>Git Version Control</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Distributed code management trees, branch logic isolation layers, merges, and rebasing protocols.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="gt_beg" name="skill_git" value="beginner" required><label for="gt_beg">Beginner</label>
+                <input type="radio" id="gt_int" name="skill_git" value="intermediate"><label for="gt_int">Intermed</label>
+                <input type="radio" id="gt_adv" name="skill_git" value="advanced"><label for="gt_adv">Advanced</label>
+                <input type="radio" id="gt_exp" name="skill_git" value="expert"><label for="gt_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-github me-2" style="color: var(--accent);"></i>GitHub Repositories</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Remote project pipelines tracking, collaborative PR routines, issue logs, and automated workflows.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="gh_beg" name="skill_github" value="beginner" required><label for="gh_beg">Beginner</label>
+                <input type="radio" id="gh_int" name="skill_github" value="intermediate"><label for="gh_int">Intermed</label>
+                <input type="radio" id="gh_adv" name="skill_github" value="advanced"><label for="gh_adv">Advanced</label>
+                <input type="radio" id="gh_exp" name="skill_github" value="expert"><label for="gh_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-react me-2" style="color: var(--accent);"></i>React Interface Engineering</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Component state lifecycles initialization, declarative DOM binding hooks, and structural state trees.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="re_beg" name="skill_react" value="beginner" required><label for="re_beg">Beginner</label>
+                <input type="radio" id="re_int" name="skill_react" value="intermediate"><label for="re_int">Intermed</label>
+                <input type="radio" id="re_adv" name="skill_react" value="advanced"><label for="re_adv">Advanced</label>
+                <input type="radio" id="re_exp" name="skill_react" value="expert"><label for="re_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fab fa-node-js me-2" style="color: var(--accent);"></i>Node.js Backend Execution</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Event-driven non-blocking runtime layers, module systems resolution, files handling, and package stacks.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="nd_beg" name="skill_node" value="beginner" required><label for="nd_beg">Beginner</label>
+                <input type="radio" id="nd_int" name="skill_node" value="intermediate"><label for="nd_int">Intermed</label>
+                <input type="radio" id="nd_adv" name="skill_node" value="advanced"><label for="nd_adv">Advanced</label>
+                <input type="radio" id="nd_exp" name="skill_node" value="expert"><label for="nd_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="card-os">
+              <h5><i class="fas fa-pepper-hot me-2" style="color: var(--accent);"></i>Flask Microframework</h5>
+              <p class="small style-desc m-0 text-muted" style="font-size: 12px; line-height: 1.5;">Lightweight request routing mechanics, WSGI applications logic setup, endpoints, and middleware layers.</p>
+              <div class="skill-rating-group-os">
+                <input type="radio" id="fl_beg" name="skill_flask" value="beginner" required><label for="fl_beg">Beginner</label>
+                <input type="radio" id="fl_int" name="skill_flask" value="intermediate"><label for="fl_int">Intermed</label>
+                <input type="radio" id="fl_adv" name="skill_flask" value="advanced"><label for="fl_adv">Advanced</label>
+                <input type="radio" id="fl_exp" name="skill_flask" value="expert"><label for="fl_exp">Expert</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-accent px-5">
+            Synchronize Competency Stack <i class="fas fa-sync-alt ms-2"></i>
+          </button>
+        </div>
+      </form>
+    </main>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('skill-assessment-form');
+        const progText = document.getElementById('assessment-prog-text');
+        const progBar = document.getElementById('assessment-prog-bar');
+        
+        function updateProgress() {
+            const groups = new Set();
+            form.querySelectorAll('input[type="radio"]').forEach(radio => groups.add(radio.name));
+            
+            let answered = 0;
+            groups.forEach(name => {
+                if(form.querySelector(`input[name="${name}"]:checked`)) answered++;
+            });
+            
+            const pct = Math.round((answered / groups.size) * 100);
+            progText.textContent = `${pct}% Sync Complete`;
+            progBar.style.width = `${pct}%`;
+        }
+
+        form.addEventListener('change', updateProgress);
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Competency index configurations successfully updated on ecosystem tracking memory arrays.');
+        });
+    });
+  </script>
+</body>
+</html>
