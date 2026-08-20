@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | Reports & Documentation</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Report Type Pill Buttons matching Photo 3 */
+    .report-tab-btn {
+        background: #FFFFFF;
+        border: 1.5px solid #CBD5E1;
+        color: #334155;
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 8px 18px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .report-tab-btn:hover {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        color: #1D4ED8;
+    }
+    .report-tab-btn.active {
+        background: #2563EB;
+        color: #FFFFFF !important;
+        border-color: #2563EB;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    /* Terminal Preview Document Box matching Photo 3 & 4 */
+    .report-console-box {
+        background: #0F172A;
+        color: #38BDF8;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 0.88rem;
+        padding: 1.75rem;
+        border-radius: 14px;
+        border: 1px solid #1E293B;
+        box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
+        min-height: 480px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        line-height: 1.65;
+        overflow-x: auto;
+    }
+
+    @media print {
+        header, .no-print { display: none !important; }
+        body { background: white !important; color: black !important; }
+        .report-console-box {
+            background: white !important;
+            color: black !important;
+            border: none !important;
+            box-shadow: none !important;
+            font-family: 'Times New Roman', serif !important;
+            font-size: 11pt !important;
+        }
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Top App Header matching exact screenshot layout -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn active">Reports</a>
+        <a href="faculty.html" class="nav-pill-btn">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="container-fluid my-4 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Title Header -->
+    <div class="mb-4">
+      <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Documentation & Report Generation Page</h2>
+      <p class="text-secondary m-0" style="font-size: 0.95rem;">
+        On-demand instant creation of academic reports generated specifically for your active submitted project.
+      </p>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="card p-4 border-0 shadow-sm mb-4" style="border-radius: 16px; background: #FFFFFF;">
+      
+      <!-- Top Row: 4 Report Type Tabs + Action Buttons (Matching Photo 3) -->
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 no-print">
+        
+        <!-- 4 Report Type Tabs -->
+        <div class="d-flex align-items-center gap-2 flex-wrap" id="report-type-tabs">
+          <button type="button" class="report-tab-btn active" onclick="switchReportType('synopsis')">
+            📄 Academic Synopsis
+          </button>
+          <button type="button" class="report-tab-btn" onclick="switchReportType('methodology')">
+            🏗️ Architecture & Methodology
+          </button>
+          <button type="button" class="report-tab-btn" onclick="switchReportType('progress')">
+            📊 Progress Report
+          </button>
+          <button type="button" class="report-tab-btn" onclick="switchReportType('slides')">
+            🎯 Presentation Slide Outline
+          </button>
+        </div>
+
+        <!-- Action Buttons: Copy & Print PDF -->
+        <div class="d-flex align-items-center gap-2">
+          <button type="button" class="btn btn-outline-secondary btn-sm px-3 py-1.5 fw-semibold" onclick="copyReportToClipboard()" style="border-radius: 8px;">
+            <i class="fas fa-copy me-1"></i> Copy
+          </button>
+          <button type="button" class="btn btn-primary btn-sm px-3 py-1.5 fw-bold" onclick="window.print()" style="border-radius: 8px; background: #0284c7; border: none;">
+            <i class="fas fa-print me-1"></i> Print / Download PDF
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Report Section Header Title -->
+      <div class="mb-3">
+        <h5 class="fw-bold text-dark m-0" id="report-active-title">Academic Synopsis</h5>
+      </div>
+
+      <!-- Document Terminal Console Window (Matching Photo 3 & 4) -->
+      <div class="report-console-box" id="report-output-console">
+        <!-- Content dynamically injected via JS -->
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let reportsData = {};
+
+    document.addEventListener("DOMContentLoaded", function () {
+        generateDynamicProjectReports();
+        switchReportType('synopsis');
+    });
+
+    function generateDynamicProjectReports() {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser")) || { fullName: "Alex Morgan", email: "student@university.edu" };
+        const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea")) || {
+            description: "An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources.",
+            projectTitle: "Smart Student Mental Well-being Companion",
+            duration: "8",
+            teamSize: "2",
+            weeklyHours: "10"
+        };
+
+        const title = activeProj.projectTitle || activeProj.description.substring(0, 45) + "...";
+        const desc = activeProj.description;
+        const weeks = activeProj.duration || "8";
+        const teamSize = activeProj.teamSize || "2";
+        const weeklyHours = activeProj.weeklyHours || "10";
+        const studentName = currentUser.fullName || "Student Team";
+        const totalHours = parseInt(weeks) * parseInt(weeklyHours);
+
+        reportsData = {
+            synopsis: `================================================================================
+                              ACADEMIC PROJECT SYNOPSIS
+================================================================================
+
+Project Title: ${title}
+Student / Team: ${studentName} (Team Size: ${teamSize} Member(s))
+Target Timeline: ${weeks} Weeks (~${totalHours} Hours per Student)
+Academic Year: 2026-2027
+
+ABSTRACT & PROBLEM STATEMENT
+${desc}
+Existing manual systems often suffer from high operational complexity, fragmented data access, and limited real-time monitoring capabilities. This academic project directly solves these domain challenges by engineering an intelligent, user-centric software solution that streamlines processing, enhances operational transparency, and provides automated analytics.
+
+PROJECT OBJECTIVES & TECHNICAL SCOPE
+The primary objective of this project is to build and evaluate a robust, high-performance software system. Key deliverables include: (1) An automated data processing engine; (2) An interactive web dashboard for real-time progress monitoring; (3) Role-based access control and security protocols; and (4) One-click academic report generation for faculty mentors.
+
+SYSTEM FEASIBILITY & EXPECTED OUTCOMES
+Based on preliminary feasibility evaluations, the project achieves an 88% viability rating over a ${weeks}-week development cycle. The architecture is engineered to maintain system response times below 500ms while delivering high accuracy and accessible mentorship workflows.`,
+
+            methodology: `================================================================================
+                        SYSTEM ARCHITECTURE & METHODOLOGY
+================================================================================
+
+Project Title: ${title}
+Student / Team: ${studentName}
+
+KEY ARCHITECTURAL PILLARS:
+- Frontend Presentation Layer: Built using React 18 / HTML5 + CSS3 for a responsive, cross-device student workspace.
+- Backend API Microframework: Powered by Node.js Express / Python FastAPI for high-throughput RESTful endpoint routing.
+- Database & Storage Engine: Relational Schema using PostgreSQL / SQLite / MySQL with ORM data mapping.
+- AI & Analytics Engine: Integration of pre-trained models (Scikit-Learn, NLTK, Google Gemini API) for automated classification and insights.
+
+STEP-BY-STEP DEVELOPMENT METHODOLOGY:
+- Step 1 (Requirements & Setup): Literature review, ERD schema design, repository setup, and onboarding skill assessment.
+- Step 2 (Core Pipeline Build): Feasibility Analysis Agent, Scope Definition Agent, and Tech Stack Architecture finalization.
+- Step 3 (Integration & Mentoring): Connecting frontend UI components to backend endpoints and building weekly check-in progress gauges.
+- Step 4 (Testing & Faculty Monitoring): Faculty dashboard integration, security auditing, and end-to-end integration testing.
+
+SECURITY, OPTIMIZATION & DEPLOYMENT STANDARDS:
+- Password hashing via bcrypt and secure session token controls.
+- Input validation and sanitized HTML rendering to prevent cross-site scripting (XSS).
+- Lightweight deployment pipeline via Render / Vercel cloud hosting.`,
+
+            progress: `================================================================================
+                         ACADEMIC PROJECT PROGRESS REPORT
+================================================================================
+
+Project Title: ${title}
+Student / Team: ${studentName} (Team Size: ${teamSize})
+Status: ON TRACK (Health Confidence Score: 88%)
+
+EXECUTIVE PROGRESS SUMMARY:
+The team has successfully completed Phase 1 (Requirements & Setup) and Phase 2 (Core Pipeline Build). All 5 multi-agent modules (Feasibility, Scope, Tech Stack, Milestone, Risk) have been executed and verified for the active project.
+
+MILESTONE DELIVERABLES STATUS:
+- Milestone 1 (100% Complete): Requirements gathering, ERD schema design, repository setup, and student skill audit.
+- Milestone 2 (100% Complete): Multi-Agent Control Hub, Scope Definition, and Architecture Stack recommendations.
+- Milestone 3 (75% Complete): Interactive chat UI connected to backend API; weekly check-in progress gauges active.
+- Milestone 4 (Pending): Faculty monitoring dashboard integration and final defense presentation preparation.
+
+CURRENT RISKS & MITIGATION ACTIONS:
+- API Latency during real-time inference: Switched heavy remote API calls to distilled local classifiers to maintain response times under 500ms.`,
+
+            slides: `================================================================================
+                         FINAL PRESENTATION SLIDE OUTLINE
+================================================================================
+
+Project Title: ${title}
+Student Team: ${studentName} (Team Size: ${teamSize} Member(s))
+Presentation Duration: 15 Minutes + Q&A Session
+
+SLIDE 1: Title Slide (Project Name, Team Members, Faculty Supervisor)
+- Content to Put:
+  * Project Title: ${title}
+  * Subtitle: An Intelligent Academic Project Platform
+  * Team Members: ${studentName} & Team
+  * Faculty Supervisor: Academic Department Evaluation Panel
+  * Institution Logo, Date, and Academic Year (2026-2027)
+
+SLIDE 2: Problem Statement & Motivation (Why this project matters)
+- Content to Put:
+  * Key Problem: ${desc.substring(0, 120)}...
+  * Motivation: High demand for automated, accessible software tools in the domain.
+  * Target Audience: Evaluators, students, and domain end-users.
+
+SLIDE 3: System Objectives & Scope (MVP vs Stretch Goals)
+- Content to Put:
+  * Primary Objective: Build an automated, user-centric software solution.
+  * Core MVP Scope: User authentication, processing engine, interactive dashboard, and report exporter.
+  * Out-of-Scope Items: High-concurrency enterprise cloud cluster hosting.
+
+SLIDE 4: High-Level System Architecture & Technology Stack
+- Content to Put:
+  * Architectural Diagram: Student Input -> API Router -> Multi-Agent Pipeline -> UI Output.
+  * Tech Stack: Frontend (React/HTML5), Backend (Node.js/Python), Database (SQL ORM), AI Engine.
+
+SLIDE 5: Core Algorithm & Implementation Highlights
+- Content to Put:
+  * Processing Pipeline: Tokenization, feature extraction, and scoring algorithms.
+  * Feasibility Calculation: Weighted scoring formula combining student skills and time constraints.
+  * Code Snippets & Screenshots: Highlighting core API route handlers.
+
+SLIDE 6: Experimental Results & Performance Benchmarks
+- Content to Put:
+  * System Accuracy: Achieved 88.6% evaluation benchmark score.
+  * Response Latency: Average API response time < 450ms.
+  * User Confidence Score: 92% student satisfaction rating.
+
+SLIDE 7: Risk Assessment & Challenges Overcome
+- Content to Put:
+  * Challenge 1: Heavy API model latency -> Resolved by deploying lightweight local classifiers.
+  * Challenge 2: Dataset scarcity -> Overcome via open-source dataset augmentation.
+  * Plan-B Mitigation Strategies: Fallback cached response templates.
+
+SLIDE 8: Future Enhancements & Conclusion
+- Content to Put:
+  * Future Enhancements: Multi-language UI localization, voice interaction, IDE plugins.
+  * Conclusion: Successfully automates initial project planning and monitoring lifecycle.
+
+SLIDE 9: Q&A / Thank You
+- Content to Put:
+  * Open Floor: "Thank You! We welcome questions from the Faculty Evaluation Panel."
+  * Project Repository Link, Live Demo URL, and Team Contact Info.`
+        };
+    }
+
+    function switchReportType(type) {
+        const btns = document.querySelectorAll('.report-tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+
+        const titleMap = {
+            synopsis: "Academic Synopsis (Paragraph Format)",
+            methodology: "Architecture & Methodology (Bullet Point Format)",
+            progress: "Academic Progress Report",
+            slides: "Final Presentation Slide Outline (Slide-by-Slide Content Guide)"
+        };
+
+        const idxMap = { synopsis: 0, methodology: 1, progress: 2, slides: 3 };
+        if (btns[idxMap[type]]) btns[idxMap[type]].classList.add('active');
+
+        const titleEl = document.getElementById("report-active-title");
+        if (titleEl) titleEl.innerText = titleMap[type] || "Academic Report";
+
+        const consoleEl = document.getElementById("report-output-console");
+        if (consoleEl && reportsData[type]) {
+            consoleEl.innerText = reportsData[type];
+        }
+    }
+
+    function copyReportToClipboard() {
+        const consoleEl = document.getElementById("report-output-console");
+        if (consoleEl) {
+            navigator.clipboard.writeText(consoleEl.innerText).then(() => {
+                alert("Report content copied to clipboard successfully!");
+            });
+        }
+    }
+  </script>
+</body>
+</html>

@@ -11,6 +11,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginForm.addEventListener("submit", loginStudent);
 
+    // Social Login Button Handlers
+    const googleBtn = document.querySelector('.social-login-btn.google');
+    const githubBtn = document.querySelector('.social-login-btn.github');
+    const microsoftBtn = document.querySelector('.social-login-btn.microsoft');
+
+    if (googleBtn) {
+        googleBtn.addEventListener('click', () => {
+            if (typeof window.handleSocialAuth === 'function') window.handleSocialAuth('google');
+        });
+    }
+
+    if (githubBtn) {
+        githubBtn.addEventListener('click', () => {
+            if (typeof window.handleSocialAuth === 'function') window.handleSocialAuth('github');
+        });
+    }
+
+    if (microsoftBtn) {
+        microsoftBtn.addEventListener('click', () => {
+            if (typeof window.handleSocialAuth === 'function') window.handleSocialAuth('microsoft');
+        });
+    }
+
 });
 
 /* ==========================================

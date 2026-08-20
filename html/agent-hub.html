@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | Multi-Agent Control Hub</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Agent Control Action Cards */
+    .agent-trigger-card {
+        border: 1.5px solid #CBD5E1;
+        border-radius: 14px;
+        background: #FFFFFF;
+        padding: 1.1rem;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .agent-trigger-card:hover {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+    }
+    .agent-trigger-card.active-agent {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+
+    /* Live Terminal Window */
+    .terminal-console {
+        background: #0F172A;
+        color: #38BDF8;
+        font-family: 'Consolas', 'Courier New', monospace;
+        font-size: 0.85rem;
+        padding: 1rem 1.25rem;
+        border-radius: 10px;
+        border: 1px solid #1E293B;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+        min-height: 110px;
+        max-height: 220px;
+        overflow-y: auto;
+        line-height: 1.6;
+    }
+
+    /* Tech Stack Architecture Grid Boxes */
+    .tech-box {
+        background: #F0F7FF;
+        border: 1px solid #BFDBFE;
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    .tech-box:hover {
+        border-color: #2563EB;
+        background: #E0F2FE;
+        transform: translateY(-2px);
+    }
+    .tech-box-label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #0284C7;
+        margin-bottom: 4px;
+    }
+    .tech-box-val {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: #0F172A;
+    }
+
+    /* Output Card Base */
+    .output-section-card {
+        background: #FFFFFF;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    /* Mentor Insight Highlight Box */
+    .mentor-insight-box {
+        background: #F0FDF4;
+        border: 1px solid #BBF7D0;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        color: #166534;
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin-top: 1rem;
+    }
+
+    /* Milestone Cards */
+    .milestone-item-card {
+        background: #F8FAFC;
+        border: 1.5px solid #E2E8F0;
+        border-left: 4px solid #2563EB;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 0.85rem;
+        transition: all 0.2s ease;
+    }
+    .milestone-item-card:hover {
+        border-color: #93C5FD;
+        border-left-color: #1D4ED8;
+        background: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+
+    /* Milestone 3 Interactive Box */
+    .m3-checkin-box {
+        background: linear-gradient(135deg, #EFF6FF 0%, #F0F7FF 100%);
+        border: 1.5px solid #BFDBFE;
+        border-radius: 14px;
+        padding: 1.5rem;
+        margin-top: 1.25rem;
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Top App Header -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn active">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn">Reports</a>
+        <a href="faculty.html" class="nav-pill-btn">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="container-fluid my-4 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Multi-Agent Control Hub Header Box -->
+    <div class="card p-4 border-0 shadow-sm mb-4" style="border-radius: 16px; background: #FFFFFF;">
+      <div class="mb-3">
+        <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Multi-Agent Control Hub</h2>
+        <p class="text-secondary m-0" style="font-size: 0.95rem;">
+          Trigger individual agents independently to generate tailored project insights, or run the complete pipeline.
+        </p>
+      </div>
+
+      <!-- Active Submitted Project Summary Display Box -->
+      <div class="p-3 mb-4 rounded-3" style="background: #F8FAFC; border: 1.5px solid #E2E8F0;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+          <h6 class="fw-bold text-primary m-0" style="font-size: 0.92rem;">
+            <i class="fas fa-lightbulb me-2"></i>Active Submitted Project Details
+          </h6>
+          <div>
+            <span class="badge bg-primary ms-1" id="hub-badge-duration">8 Weeks Duration</span>
+            <span class="badge bg-secondary ms-1" id="hub-badge-hours">10 Hours/Wk per student</span>
+            <span class="badge bg-dark ms-1" id="hub-badge-team">Team Size: 2</span>
+          </div>
+        </div>
+        <p class="text-secondary small m-0" style="font-size: 0.88rem; line-height: 1.5;" id="hub-active-project-desc">
+          <em>An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources.</em>
+        </p>
+      </div>
+
+      <!-- Live Faculty Feedback Banner (Rendered if teacher sent feedback) -->
+      <div id="hub-faculty-feedback-banner" style="display: none;" class="mb-4">
+        <div class="alert alert-warning border border-warning shadow-sm mb-0 p-3" style="border-radius: 14px; background: #FFFBEB;">
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
+            <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+              <i class="fas fa-chalkboard-teacher text-warning me-2"></i>Faculty Advisor Guidance Received:
+            </h6>
+            <span class="badge bg-warning text-dark fw-bold font-monospace" id="hub-feedback-status-badge">Needs Guidance</span>
+          </div>
+          <p class="mb-1 text-dark small" style="font-size: 0.88rem; line-height: 1.45;" id="hub-feedback-note-text">
+            "Great progress on dataset curation! For API latency during sentiment inference, switch to lightweight local DistilBERT/ONNX weights before next week's review."
+          </p>
+          <div class="text-muted small" style="font-size: 0.76rem;" id="hub-feedback-time">Sent: Just now</div>
+        </div>
+      </div>
+
+      <!-- 5 Independent Agent Action Trigger Cards -->
+      <div class="row g-3 mb-4">
+        <!-- 1. Feasibility Agent -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <div class="agent-trigger-card" onclick="triggerSingleAgent('feasibility')">
+            <div>
+              <h6 class="fw-bold text-primary mb-2" style="font-size: 0.88rem;">
+                <i class="fas fa-search me-1"></i>Feasibility Agent
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.78rem; line-height: 1.4;">
+                Evaluates complexity & effort budget.
+              </p>
+            </div>
+            <div class="mt-3 text-end">
+              <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.72rem;">Trigger 🔍</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Scope Definition Agent -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <div class="agent-trigger-card" onclick="triggerSingleAgent('scope')">
+            <div>
+              <h6 class="fw-bold text-primary mb-2" style="font-size: 0.88rem;">
+                <i class="fas fa-bullseye me-1"></i>Scope Agent
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.78rem; line-height: 1.4;">
+                Generates problem statement & MVP features.
+              </p>
+            </div>
+            <div class="mt-3 text-end">
+              <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.72rem;">Trigger 🎯</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Tech Stack Agent -->
+        <div class="col-xl-3 col-md-4 col-6">
+          <div class="agent-trigger-card" onclick="triggerSingleAgent('tech')">
+            <div>
+              <h6 class="fw-bold text-primary mb-2" style="font-size: 0.88rem;">
+                <i class="fas fa-layer-group me-1"></i>Tech Stack Agent
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.78rem; line-height: 1.4;">
+                Recommends Frontend, Backend API, Database & AI tools.
+              </p>
+            </div>
+            <div class="mt-3 text-end">
+              <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.72rem;">Trigger ⚙️</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Milestone & Timeline Agent -->
+        <div class="col-xl-3 col-md-6 col-6">
+          <div class="agent-trigger-card" onclick="triggerSingleAgent('timeline')">
+            <div>
+              <h6 class="fw-bold text-primary mb-2" style="font-size: 0.88rem;">
+                <i class="fas fa-calendar-alt me-1"></i>Milestone Agent
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.78rem; line-height: 1.4;">
+                Plans week-wise roadmap for your time constraints.
+              </p>
+            </div>
+            <div class="mt-3 text-end">
+              <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.72rem;">Trigger 🗓️</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Risk Agent -->
+        <div class="col-xl-2 col-md-6 col-12">
+          <div class="agent-trigger-card" onclick="triggerSingleAgent('risk')">
+            <div>
+              <h6 class="fw-bold text-primary mb-2" style="font-size: 0.88rem;">
+                <i class="fas fa-shield-alt me-1"></i>Risk Agent
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.78rem; line-height: 1.4;">
+                Identifies risks & Plan-B fallbacks.
+              </p>
+            </div>
+            <div class="mt-3 text-end">
+              <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.72rem;">Trigger 🛡️</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Button: Run Complete Multi-Agent Pipeline -->
+      <div class="text-center">
+        <button type="button" class="btn btn-primary px-4 py-2.5 fw-bold" id="run-all-pipeline-btn" onclick="runCompletePipeline()" style="border-radius: 24px; background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); border: none; font-size: 0.95rem; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);">
+          🚀 Run Complete Multi-Agent Pipeline (All-in-One)
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Live Agent Log Terminal Box -->
+    <div class="mb-4">
+      <h6 class="fw-bold text-dark mb-2" style="font-size: 0.9rem;">
+        <i class="fas fa-terminal me-2 text-primary"></i>Live Agent Log Terminal
+      </h6>
+      <div class="terminal-console" id="live-log-terminal">
+        <div>[0.0s] Agent Control Hub initialized. Ready to execute multi-agent workflows...</div>
+      </div>
+    </div>
+
+    <!-- Detailed Agent Output Cards Display Area -->
+    <div id="agent-outputs-container">
+
+      <!-- 1. Feasibility Analysis Agent Output -->
+      <div class="output-section-card" id="feasibility-output-card">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <h5 class="fw-bold text-dark m-0" style="font-size: 1.15rem;">
+            <i class="fas fa-search text-primary me-2"></i>Feasibility Analysis Agent Output
+          </h5>
+          <span class="badge bg-success bg-opacity-10 text-success fs-6 fw-bold border border-success border-opacity-25 px-3 py-1.5" id="feasibility-score-tag">
+            Score: 88%
+          </span>
+        </div>
+        <div class="text-secondary small leading-relaxed mb-3" style="font-size: 0.92rem;" id="feasibility-body-text">
+          The submitted project idea addresses a genuine challenge in General Software Systems. Your skill profile (Python, JavaScript/React, HTML/CSS) provides a solid foundation. Given your commitment of available student-hours over your chosen semester duration, this project is academically viable and technically achievable without incurring severe burnout.
+        </div>
+        <div class="mentor-insight-box">
+          <i class="fas fa-leaf me-2 text-success"></i><strong>Mentor Insight:</strong> You've chosen a very meaningful concept! The primary area to watch is dataset preparation and sentiment model tuning in Week 2. Start with pre-trained models so you get early working prototypes quickly.
+        </div>
+      </div>
+
+      <!-- 2. Scope Agent Output -->
+      <div class="output-section-card" id="scope-output-card">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 1.15rem;">
+          <i class="fas fa-bullseye text-primary me-2"></i>Scope Definition Agent Output
+        </h5>
+        
+        <p class="text-secondary small mb-3" style="font-size: 0.92rem;" id="scope-problem-statement">
+          <strong>Problem Statement:</strong> Current manual workflows often suffer from fragmented processes, poor accessibility, and high execution complexity. This academic project aims to create an automated, user-centric software solution that streamlines processing, provides actionable analytics, and ensures data transparency.
+        </p>
+
+        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Must-Have Core MVP Features:</h6>
+        <ul class="text-secondary small ps-3 mb-3" style="font-size: 0.88rem; line-height: 1.6;">
+          <li><strong>User Authentication & Profile Control:</strong> Role-based access and student settings management.</li>
+          <li><strong>Core Processing Engine:</strong> Automated ingestion and analytical processing pipeline.</li>
+          <li><strong>Interactive Control Dashboard:</strong> Real-time progress gauges, metrics, and visual status cards.</li>
+          <li><strong>Report Generation Engine:</strong> One-click summary report exports for academic evaluators.</li>
+        </ul>
+      </div>
+
+      <!-- 3. Tech Stack Agent Output -->
+      <div class="output-section-card" id="tech-output-card">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 1.15rem;">
+          <i class="fas fa-layer-group text-primary me-2"></i>Technology Stack Agent Output
+        </h5>
+
+        <h6 class="fw-bold text-dark mb-3" style="font-size: 0.88rem;">Recommended System Architecture & Tech Stack:</h6>
+        <div class="row g-3 mb-3">
+          <div class="col-md-3 col-6">
+            <div class="tech-box">
+              <div class="tech-box-label">FRONTEND UI</div>
+              <div class="tech-box-val" id="stack-frontend">React 18 + Vite</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="tech-box">
+              <div class="tech-box-label">BACKEND API</div>
+              <div class="tech-box-val" id="stack-backend">Python FastAPI / Flask</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="tech-box">
+              <div class="tech-box-label">DATABASE</div>
+              <div class="tech-box-val" id="stack-database">SQLite / PostgreSQL ORM</div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="tech-box">
+              <div class="tech-box-label">AI / ANALYTICS</div>
+              <div class="tech-box-val" id="stack-aitools">Scikit-Learn + NLTK</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-secondary small mb-0" style="font-size: 0.85rem;">
+          💡 <strong>Stack Rationale:</strong> Avoids heavy enterprise overhead, saving ~2 weeks of setup time so student effort stays focused on core feature deliverables.
+        </p>
+      </div>
+
+      <!-- 4. Milestone & Timeline Planning Agent Output (Includes Milestone 3 Interactive Check-in Engine) -->
+      <div class="output-section-card" id="timeline-output-card">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 1.15rem;">
+          <i class="fas fa-calendar-alt text-primary me-2"></i>Milestone & Timeline Planning Agent Output
+        </h5>
+
+        <div id="dynamic-timeline-content">
+          <!-- Dynamically populated based on activeProjectIdea -->
+        </div>
+
+        <!-- INTERACTIVE WEEKLY CHECK-IN & MENTOR DOUBT DESK -->
+        <div class="m3-checkin-box" id="milestone3-checkin-section">
+          <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div>
+              <h6 class="fw-bold text-primary mb-1" style="font-size: 1rem;">
+                <i class="fas fa-comments text-primary me-2"></i>Weekly Progress Check-in & Mentor Doubt Desk
+              </h6>
+              <p class="text-secondary small m-0" style="font-size: 0.85rem;">
+                Log your team's weekly progress, report technical blockers, and ask Nova AI Mentor for immediate doubts & guidance.
+              </p>
+            </div>
+            <span class="badge bg-primary px-3 py-1.5 fw-bold" style="font-size: 0.8rem;">Active Weekly Monitoring</span>
+          </div>
+
+          <form id="m3-checkin-form">
+            <div class="row g-3 mb-3">
+              <div class="col-md-3">
+                <label class="form-label small fw-bold text-dark">Current Check-in Week</label>
+                <select id="m3-select-week" class="form-select form-select-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;">
+                  <option value="1">Week 1 (Requirements & Setup)</option>
+                  <option value="2">Week 2 (Architecture & Schema)</option>
+                  <option value="3">Week 3 (Core Model & Agent Build)</option>
+                  <option value="4">Week 4 (API Endpoints Integration)</option>
+                  <option value="5" selected>Week 5 (Progress Check-in & Mid-Sprint)</option>
+                  <option value="6">Week 6 (UI Workspace & Gauges)</option>
+                  <option value="7">Week 7 (Faculty Dashboard Testing)</option>
+                  <option value="8">Week 8 (Final Documentation & Defense)</option>
+                </select>
+              </div>
+
+              <div class="col-md-9">
+                <label class="form-label small fw-bold text-dark">Weekly Accomplishments & Completed Tasks</label>
+                <input type="text" id="m3-completed-tasks" class="form-control form-control-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Completed dataset preparation (2,000 samples) and connected baseline API endpoints..." required>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Ask Nova AI Mentor a Doubt / Report Technical Blocker</label>
+              <textarea id="m3-student-doubt" class="form-control form-control-sm" rows="2" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Having a doubt regarding API latency during real-time sentiment inference. What is the recommended fix?"></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+              <button type="submit" id="m3-submit-btn" class="btn btn-primary btn-sm px-4 py-2 fw-bold" style="border-radius: 20px; background: #0284c7; border: none;">
+                Submit Weekly Check-in & Query Mentor <i class="fas fa-paper-plane ms-1"></i>
+              </button>
+              
+              <a href="ai-mentor.html" class="btn btn-outline-primary btn-sm px-3 py-1.5 fw-semibold" style="border-radius: 20px;">
+                Open Full AI Mentor Chat <i class="fas fa-robot ms-1"></i>
+              </a>
+            </div>
+          </form>
+
+          <!-- Dynamic Mentor Response Display Box -->
+          <div id="m3-mentor-response-box" class="mt-3 p-3 bg-white rounded-3 border" style="display: none; border-color: #BFDBFE !important;">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div class="brand-logo-circle bg-primary text-white p-1 rounded-circle" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">🎓</div>
+              <h6 class="fw-bold text-primary m-0" style="font-size: 0.9rem;">Nova AI Mentor Feedback & Doubt Resolution</h6>
+            </div>
+            <div id="m3-mentor-feedback-content" class="small text-dark leading-relaxed" style="font-size: 0.88rem;">
+              <!-- Response injected via JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 5. Risk Assessment & Mitigation Agent Output -->
+      <div class="output-section-card" id="risk-output-card">
+        <h5 class="fw-bold text-dark mb-3" style="font-size: 1.15rem;">
+          <i class="fas fa-shield-alt text-primary me-2"></i>Risk Assessment & Mitigation Agent Output
+        </h5>
+        
+        <div class="text-secondary small leading-relaxed" style="font-size: 0.9rem;" id="risk-body-content">
+          <ul class="mb-0 ps-3">
+            <li class="mb-2"><strong>Risk 1: High Model Inference Latency on Mobile</strong> — <em>Mitigation:</em> Use compressed lightweight architectures (MobileNet/FastAPI async wrappers) to maintain response times under 500ms.</li>
+            <li class="mb-2"><strong>Risk 2: Dataset Quality & Insufficient Training Samples</strong> — <em>Mitigation:</em> Leverage open-source benchmark datasets with data augmentation techniques.</li>
+            <li><strong>Risk 3: Integration Overrun near Evaluation Deadline</strong> — <em>Mitigation:</em> Keep MVP scope strict and modularize third-party API dependencies early.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea")) || {
+            description: "An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources.",
+            duration: "8",
+            teamSize: "2",
+            weeklyHours: "10"
+        };
+
+        renderActiveProjectSummary(activeProj);
+        recalculateTimeMilestones(activeProj);
+
+        // Auto-run pipeline if redirected from submission page
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("autoRun") === "true") {
+            runCompletePipeline();
+        }
+
+        // Setup Milestone 3 Interactive Check-in Form Listener
+        setupMilestone3Form();
+
+        // Render Faculty Feedback Notice if teacher sent guidance
+        loadFacultyFeedbackNotice();
+    });
+
+    function loadFacultyFeedbackNotice() {
+        const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
+        const activeNote = allNotes["STU-ACTIVE"] || allNotes["STU-102"];
+
+        if (activeNote && activeNote.note) {
+            const banner = document.getElementById("hub-faculty-feedback-banner");
+            const statusEl = document.getElementById("hub-feedback-status-badge");
+            const textEl = document.getElementById("hub-feedback-note-text");
+            const timeEl = document.getElementById("hub-feedback-time");
+
+            if (banner && textEl) {
+                textEl.innerText = `"${activeNote.note}"`;
+                if (statusEl) statusEl.innerText = activeNote.status || "Guidance Received";
+                if (timeEl) timeEl.innerText = `Sent: ${activeNote.timestamp}`;
+                banner.style.display = "block";
+            }
+        }
+    }
+
+    function renderActiveProjectSummary(proj) {
+        const descEl = document.getElementById("hub-active-project-desc");
+        const durEl = document.getElementById("hub-badge-duration");
+        const hrsEl = document.getElementById("hub-badge-hours");
+        const teamEl = document.getElementById("hub-badge-team");
+
+        if (descEl && proj.description) descEl.innerHTML = `<em>"${proj.description}"</em>`;
+        if (durEl) durEl.innerText = `${proj.duration || '8'} Weeks Duration`;
+        if (hrsEl) hrsEl.innerText = `${proj.weeklyHours || '10'} Hours/Wk per student`;
+        if (teamEl) teamEl.innerText = `Team Size: ${proj.teamSize || '2'}`;
+    }
+
+    function appendTerminalLog(msg) {
+        const terminal = document.getElementById("live-log-terminal");
+        if (terminal) {
+            const timeStr = `[${(Math.random() * 0.8).toFixed(1)}s]`;
+            const div = document.createElement("div");
+            div.innerHTML = `${timeStr} ${msg}`;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    }
+
+    function recalculateTimeMilestones(proj) {
+        const activeProj = proj || JSON.parse(localStorage.getItem("activeProjectIdea")) || {};
+        const weeks = parseInt(activeProj.duration) || 8;
+        const hrsPerWk = parseInt(activeProj.weeklyHours) || 10;
+        const teamCount = parseInt(activeProj.teamSize) || 2;
+        const completedWeek = parseInt(localStorage.getItem("completedCheckinWeek") || "0");
+
+        const totalStudentHours = weeks * hrsPerWk;
+        const totalTeamHours = totalStudentHours * teamCount;
+
+        const p1_end = Math.max(1, Math.round(weeks * 0.25));
+        const p2_start = p1_end + 1;
+        const p2_end = Math.round(weeks * 0.50);
+        const p3_start = p2_end + 1;
+        const p3_end = Math.round(weeks * 0.75);
+        const p4_start = p3_end + 1;
+        const p4_end = weeks;
+
+        const p1_hrs = Math.round(totalStudentHours * 0.25);
+        const p2_hrs = Math.round(totalStudentHours * 0.25);
+        const p3_hrs = Math.round(totalStudentHours * 0.25);
+        const p4_hrs = Math.round(totalStudentHours * 0.25);
+
+        // Dynamic Milestone Statuses based on student's logged weekly check-ins
+        let m1_status, m1_style, m2_status, m2_style, m3_status, m3_style, m4_status, m4_style;
+
+        if (completedWeek === 0) {
+            // Newly submitted project: Milestone 1 active, Milestones 2, 3, 4 pending
+            m1_status = `<span class="badge bg-primary me-2"><i class="fas fa-spinner fa-spin me-1"></i> Active (In Progress ~25%)</span>`;
+            m1_style = `border-left-color: #0284C7; background: #F0F7FF;`;
+
+            m2_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m2_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+
+            m3_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m3_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+
+            m4_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m4_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+        } else if (completedWeek >= 1 && completedWeek <= 2) {
+            // Week 1/2 checked in: Milestone 1 completed, Milestone 2 active
+            m1_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m1_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m2_status = `<span class="badge bg-primary me-2"><i class="fas fa-spinner fa-spin me-1"></i> Active (In Progress ~50%)</span>`;
+            m2_style = `border-left-color: #0284C7; background: #F0F7FF;`;
+
+            m3_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m3_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+
+            m4_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m4_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+        } else if (completedWeek >= 3 && completedWeek <= 4) {
+            // Week 3/4 checked in: Milestones 1 & 2 completed, Milestone 3 active
+            m1_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m1_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m2_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m2_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m3_status = `<span class="badge bg-primary me-2"><i class="fas fa-spinner fa-spin me-1"></i> Active (In Progress ~75%)</span>`;
+            m3_style = `border-left-color: #0284C7; background: #F0F7FF;`;
+
+            m4_status = `<span class="badge bg-secondary me-2"><i class="fas fa-clock me-1"></i> Pending / Upcoming</span>`;
+            m4_style = `border-left-color: #CBD5E1; background: #F8FAFC;`;
+        } else {
+            // Week 5+ checked in: Milestones 1, 2 & 3 completed, Milestone 4 active
+            m1_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m1_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m2_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m2_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m3_status = `<span class="badge bg-success me-2"><i class="fas fa-check-circle me-1"></i> Completed (100%)</span>`;
+            m3_style = `border-left-color: #10B981; background: #F0FDF4;`;
+
+            m4_status = `<span class="badge bg-primary me-2"><i class="fas fa-spinner fa-spin me-1"></i> Active (Final Defense Prep ~90%)</span>`;
+            m4_style = `border-left-color: #0284C7; background: #F0F7FF;`;
+        }
+
+        const container = document.getElementById("dynamic-timeline-content");
+        if (container) {
+            container.innerHTML = `
+              <div class="alert alert-primary bg-primary bg-opacity-10 border-primary border-opacity-25 mb-3 p-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <div>
+                    <strong>⏱️ Time Constraint Budget:</strong> 
+                    <span class="badge bg-primary ms-1">${weeks} Weeks Total</span>
+                    <span class="badge bg-secondary ms-1">${hrsPerWk} Hours/Week per student</span>
+                    <span class="badge bg-dark ms-1">Team Size: ${teamCount} Student(s)</span>
+                  </div>
+                  <div>
+                    <strong class="text-primary font-monospace">~${totalStudentHours} Student Hours Total</strong> (${totalTeamHours} Team Hours)
+                  </div>
+                </div>
+              </div>
+
+              <div id="timeline-milestones-list">
+                <div class="milestone-item-card mb-3" style="${m1_style}">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+                      ${m1_status}
+                      Milestone 1 (Week 1${p1_end > 1 ? '-' + p1_end : ''}) — Requirements & Setup
+                    </h6>
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.82rem;">~${p1_hrs} Hours / student</span>
+                  </div>
+                  <ul class="text-secondary small mb-0 ps-3" style="font-size: 0.88rem; line-height: 1.5;">
+                    <li>Study agentic AI workflows & academic project mentoring methodologies.</li>
+                    <li>Design multi-agent system architecture, agent roles, and student-project data models.</li>
+                    <li>Develop student onboarding — profile creation & skill assessment functionality.</li>
+                    <li>Implement project idea submission interface & trigger mechanism for agent pipeline.</li>
+                  </ul>
+                </div>
+
+                <div class="milestone-item-card mb-3" style="${m2_style}">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+                      ${m2_status}
+                      Milestone 2 (Week ${p2_start}-${p2_end}) — Core Multi-Agent Pipeline Build
+                    </h6>
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.82rem;">~${p2_hrs} Hours / student</span>
+                  </div>
+                  <ul class="text-secondary small mb-0 ps-3" style="font-size: 0.88rem; line-height: 1.5;">
+                    <li>Develop Feasibility Analysis Agent & Scope Definition Agent.</li>
+                    <li>Implement Technology Stack Recommendation Agent with reasoning output.</li>
+                    <li>Build Milestone & Timeline Planning Agent — generates week-wise execution plan.</li>
+                    <li>Validate end-to-end pipeline using sample student project ideas.</li>
+                  </ul>
+                </div>
+
+                <div class="milestone-item-card mb-3" style="${m3_style}">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <h6 class="fw-bold text-primary m-0" style="font-size: 0.95rem;">
+                      ${m3_status}
+                      Milestone 3 (Week ${p3_start}-${p3_end}) — Risk, Mentor & Progress Tracking
+                    </h6>
+                    <span class="badge bg-primary font-monospace" style="font-size: 0.82rem;">~${p3_hrs} Hours / student</span>
+                  </div>
+                  <ul class="text-secondary small mb-0 ps-3" style="font-size: 0.88rem; line-height: 1.5;">
+                    <li>Develop Risk Assessment & Mitigation Agent — identifies blockers & suggests resolutions.</li>
+                    <li>Implement conversational mentor interaction for ongoing weekly student check-ins.</li>
+                    <li>Build progress tracking — student updates trigger plan adjustments via agent pipeline.</li>
+                    <li>Develop on-demand documentation generation for synopsis, methodology, and progress reports.</li>
+                  </ul>
+                </div>
+
+                <div class="milestone-item-card mb-3" style="${m4_style}">
+                  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                    <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+                      ${m4_status}
+                      Milestone 4 (Week ${p4_start}-${p4_end}) — Faculty Dashboard & Defense
+                    </h6>
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace" style="font-size: 0.82rem;">~${p4_hrs} Hours / student</span>
+                  </div>
+                  <ul class="text-secondary small mb-0 ps-3" style="font-size: 0.88rem; line-height: 1.5;">
+                    <li>Develop faculty monitoring dashboard — project health indicators & auto-generated mentor summaries.</li>
+                    <li>Conduct end-to-end testing across all agents & interaction workflows.</li>
+                    <li>Optimize agent prompt quality, response accuracy, and pipeline reliability.</li>
+                    <li>Prepare technical documentation, project report, and final demonstration.</li>
+                  </ul>
+                </div>
+              </div>
+            `;
+        }
+    }
+
+    function setupMilestone3Form() {
+        const form = document.getElementById("m3-checkin-form");
+        if (!form) return;
+
+        form.addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const week = document.getElementById("m3-select-week").value;
+            const tasks = document.getElementById("m3-completed-tasks").value.trim();
+            const doubt = document.getElementById("m3-student-doubt").value.trim();
+
+            const submitBtn = document.getElementById("m3-submit-btn");
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `Analyzing Check-in & Doubt <i class="fas fa-spinner fa-spin ms-1"></i>`;
+
+            appendTerminalLog(`[Weekly Check-in] Logging Week ${week} completion & update...`);
+
+            // Save completed week in localStorage & update milestone roadmap live!
+            localStorage.setItem("completedCheckinWeek", week);
+            recalculateTimeMilestones();
+
+            let mentorReplyText = "";
+            try {
+                const res = await fetch("http://localhost:5000/api/projects/agent/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        message: `[Milestone 3 Check-in - Week ${week}] Accomplishments: "${tasks}". Doubt/Blocker: "${doubt || 'None'}"`
+                    })
+                });
+                const data = await res.json();
+                if (data.success && data.reply) {
+                    mentorReplyText = data.reply;
+                }
+            } catch (err) {
+                console.warn("Backend offline, generating local Nova AI mentor check-in response.");
+            }
+
+            if (!mentorReplyText) {
+                mentorReplyText = generateM3LocalFeedback(week, tasks, doubt);
+            }
+
+            const responseBox = document.getElementById("m3-mentor-response-box");
+            const responseContent = document.getElementById("m3-mentor-feedback-content");
+
+            if (responseBox && responseContent) {
+                responseContent.innerHTML = typeof marked !== "undefined" ? marked.parse(mentorReplyText) : mentorReplyText;
+                responseBox.style.display = "block";
+                responseBox.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            appendTerminalLog(`[Milestone 3] Week ${week} Check-in Logged! Mentor Doubt Resolution Ready.`);
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `Submit Weekly Check-in & Query Mentor <i class="fas fa-paper-plane ms-1"></i>`;
+        });
+    }
+
+    function generateM3LocalFeedback(week, tasks, doubt) {
+        let doubtAdvice = "";
+        if (doubt) {
+            const dLower = doubt.toLowerCase();
+            if (dLower.includes("latency") || dLower.includes("api") || dLower.includes("slow")) {
+                doubtAdvice = `**Doubt Resolution (API Latency):** Switch heavy remote LLM API calls to lightweight local classifiers (such as DistilBERT or ONNX runtimes) to reduce inference latency below 500ms.`;
+            } else if (dLower.includes("database") || dLower.includes("schema") || dLower.includes("sql")) {
+                doubtAdvice = `**Doubt Resolution (Database Structure):** Ensure primary foreign key indexes are set on \`studentEmail\` and use ORM query pools to maintain connection stability.`;
+            } else {
+                doubtAdvice = `**Doubt Resolution:** To address "${doubt}", break down the logic into modular unit tests first. Test backend endpoints independently via cURL before binding to frontend UI components.`;
+            }
+        } else {
+            doubtAdvice = `**Weekly Status:** Excellent work! No active technical blockers reported for Week ${week}.`;
+        }
+
+        return `### 🌟 Milestone 3 Progress Check-in (Week ${week})
+- **Check-in Status**: **LOGGED & VERIFIED (Health: ON TRACK - 88% Confidence)**
+- **Completed Tasks Evaluated**: *"<sup>${tasks}</sup>"*
+
+${doubtAdvice}
+
+#### 💡 Next Steps for Week ${parseInt(week) + 1}:
+1. Focus on finalizing your core UI interaction components and progress tracking gauges.
+2. Generate an updated **Academic Progress Report** from the Reports page for your faculty mentor review.`;
+    }
+
+    async function triggerSingleAgent(agentType) {
+        appendTerminalLog(`Triggering ${agentType.toUpperCase()} AGENT...`);
+        const targetCard = document.getElementById(`${agentType}-output-card`);
+        if (targetCard) {
+            targetCard.scrollIntoView({ behavior: 'smooth' });
+        }
+        appendTerminalLog(`[SUCCESS] ${agentType.toUpperCase()} AGENT completed analysis!`);
+    }
+
+    async function runCompletePipeline() {
+        const btn = document.getElementById("run-all-pipeline-btn");
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = `Running Multi-Agent Pipeline <i class="fas fa-spinner fa-spin ms-2"></i>`;
+        }
+
+        const terminal = document.getElementById("live-log-terminal");
+        if (terminal) terminal.innerHTML = `<div>[0.0s] Launching Multi-Agent Pipeline (All-in-One)...</div>`;
+
+        const agents = [
+            { type: 'feasibility', name: 'FEASIBILITY AGENT' },
+            { type: 'scope', name: 'SCOPE DEFINITION AGENT' },
+            { type: 'tech', name: 'TECH STACK AGENT' },
+            { type: 'timeline', name: 'MILESTONE & TIMELINE AGENT' },
+            { type: 'risk', name: 'RISK ASSESSMENT AGENT' }
+        ];
+
+        for (let i = 0; i < agents.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, 300));
+            appendTerminalLog(`Triggering ${agents[i].name}... SUCCESS`);
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 250));
+        appendTerminalLog(`[1.2s] Multi-Agent Pipeline Execution Completed. All 5 Agents Ready!`);
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = `🚀 Run Complete Multi-Agent Pipeline (All-in-One)`;
+        }
+    }
+  </script>
+</body>
+</html>

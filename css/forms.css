@@ -397,3 +397,82 @@ input:checked + .slider-custom:before {
   margin: 0 auto 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
+
+/* ==========================================================================
+   🤖 DYNAMIC MULTI-AGENT PIPELINE RESULTS CONTAINER (ADDED)
+   ========================================================================== */
+#ai-results-container {
+  margin-top: 30px;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.ai-results-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.report-box {
+  background-color: var(--bg-white);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 24px;
+  margin-bottom: 24px;
+  border-radius: var(--border-radius-md);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.report-step-badge {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.badge-feasibility { color: #2563EB; }
+.badge-scope { color: #9333EA; }
+.badge-tech { color: #059669; }
+.badge-timeline { color: #D97706; }
+
+/* Markdown Typography & Structural Overrides within Report Box */
+.report-box h1, .report-box h2, .report-box h3 {
+  font-weight: 700;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+.report-box h3 { font-size: 1.2rem; }
+.report-box p { margin-bottom: 12px; }
+.report-box ul, .report-box ol {
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+.report-box li { margin-bottom: 4px; }
+
+/* Style the generated Markdown tables nicely */
+.report-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 14px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+}
+.report-box th, .report-box td {
+  border: 1px solid #E2E8F0;
+  padding: 12px;
+  text-align: left;
+}
+.report-box th {
+  background-color: #F8FAFC;
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

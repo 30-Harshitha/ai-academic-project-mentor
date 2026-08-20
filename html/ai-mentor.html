@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | AI Mentor Chat & Weekly Check-ins</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Chat Card Container Styling */
+    .chat-card-container {
+        background: #FFFFFF;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+        display: flex;
+        flex-direction: column;
+        height: 600px;
+        max-height: calc(100vh - 220px);
+        overflow: hidden;
+    }
+
+    /* Message Display Area */
+    .chat-messages-area {
+        flex: 1;
+        padding: 1.5rem;
+        overflow-y: auto;
+        background: #FAFAFA;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    /* Chat Bubbles */
+    .chat-bubble {
+        max-width: 82%;
+        padding: 1rem 1.25rem;
+        border-radius: 14px;
+        font-size: 0.92rem;
+        line-height: 1.55;
+    }
+    .chat-bubble-assistant {
+        background: #F0F7FF;
+        border: 1px solid #BFDBFE;
+        color: #0F172A;
+        border-bottom-left-radius: 4px;
+    }
+    .chat-bubble-user {
+        background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%);
+        color: #FFFFFF;
+        border-bottom-right-radius: 4px;
+        margin-left: auto;
+    }
+
+    /* Quick Prompt Chips */
+    .quick-chip {
+        background: #FFFFFF;
+        border: 1.5px solid #CBD5E1;
+        color: #334155;
+        font-size: 0.83rem;
+        font-weight: 600;
+        padding: 6px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .quick-chip:hover {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        color: #1D4ED8;
+        transform: translateY(-1px);
+    }
+
+    /* Chat Footer & Input Box */
+    .chat-footer-box {
+        padding: 1rem 1.25rem;
+        background: #FFFFFF;
+        border-top: 1px solid #E2E8F0;
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- App Header -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn active">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn">Reports</a>
+        <a href="faculty.html" class="nav-pill-btn">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container-fluid my-4 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Title Header -->
+    <div class="mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Conversational Mentor Module (Nova AI)</h2>
+        <p class="text-secondary m-0" style="font-size: 0.95rem;">
+          Chat with Nova AI for weekly check-ins, technical doubts, code debugging, stress relief, and presentation prep.
+        </p>
+      </div>
+      <span class="badge bg-success bg-opacity-10 text-success fw-bold border border-success border-opacity-25 px-3 py-1.5" style="font-size: 0.82rem;">
+        <i class="fas fa-check-circle me-1"></i> Nova AI Mentor Online
+      </span>
+    </div>
+
+    <!-- Chat Interface Container Card -->
+    <div class="chat-card-container">
+      
+      <!-- Messages Area -->
+      <div class="chat-messages-area" id="chat-messages-container">
+        <!-- Initial Greeting Message Bubble -->
+        <div class="d-flex align-items-start gap-2">
+          <div class="brand-logo-circle bg-primary text-white p-2 rounded-circle" style="width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1rem;">🎓</div>
+          <div class="chat-bubble chat-bubble-assistant">
+            Hello there! 👋 I'm <strong>Nova</strong>, your AI Academic Project Mentor. I'm here to support your <strong>Milestone 3 Weekly Check-ins</strong>, answer any technical doubts, debug code errors, or guide you through thesis preparation. What technical question or doubt do you have today?
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Chips & Input Footer -->
+      <div class="chat-footer-box">
+        
+        <!-- Quick Action Suggestion Chips -->
+        <div class="d-flex flex-wrap gap-2 mb-3" id="quick-prompt-chips">
+          <button type="button" class="quick-chip" data-prompt="Can you help me debug a code error in my project backend?">
+            🐛 Code Error Help
+          </button>
+          <button type="button" class="quick-chip" data-prompt="Here is my Milestone 3 weekly check-in update: We completed dataset ingestion and connected baseline REST API routes.">
+            🗓️ Milestone 3 Weekly Check-in
+          </button>
+          <button type="button" class="quick-chip" data-prompt="I have a doubt regarding API latency during real-time sentiment analysis inference. What is the recommended fix?">
+            ❓ Ask Technical Doubt
+          </button>
+          <button type="button" class="quick-chip" data-prompt="I am feeling overwhelmed with deadlines. Can you offer some stress relief and priority guidance?">
+            🧘 Stress Relief
+          </button>
+          <button type="button" class="quick-chip" data-prompt="How do I structure a winning project synopsis for my faculty review?">
+            📑 Synopsis & Defense Help
+          </button>
+        </div>
+
+        <!-- Chat Form Input Row -->
+        <form id="ai-chat-form" class="d-flex align-items-center gap-2">
+          <input type="text" id="ai-chat-input" class="form-control" style="border-radius: 20px; border: 1.5px solid #CBD5E1; padding: 10px 18px; font-size: 0.92rem;" placeholder="Ask Nova AI Mentor a doubt or submit weekly check-in..." autocomplete="off" required>
+          <button type="submit" id="send-chat-btn" class="btn btn-primary px-4 py-2 fw-bold" style="border-radius: 20px; background: #0284c7; border: none; font-size: 0.92rem; white-space: nowrap;">
+            Send <i class="fas fa-paper-plane ms-1"></i>
+          </button>
+        </form>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/ai-mentor.js"></script>
+
+</body>
+</html>

@@ -174,4 +174,31 @@
     grid-template-columns: 1fr;
     gap: 8px;
   }
+
+  /* Header & Navigation Pills Mobile Scrolling */
+  header nav {
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  header nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-pill-btn {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+
+  /* Agent Control Cards Responsiveness */
+  .agent-trigger-card {
+    padding: 1rem;
+    min-height: 120px;
+  }
+
+  .output-section-card {
+    padding: 1.25rem;
+  }
 }

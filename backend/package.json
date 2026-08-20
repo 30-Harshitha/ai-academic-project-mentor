@@ -10,11 +10,14 @@
   "author": "Harshitha",
   "license": "ISC",
   "dependencies": {
+    "@google/genai": "^2.12.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
+    "dotenv": "^17.4.2",
     "express": "^4.21.2",
     "multer": "^2.2.0",
-    "mysql2": "^3.14.1"
+    "mysql2": "^3.14.1",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
