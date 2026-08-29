@@ -1,0 +1,11 @@
+{
+  "name": "ai-academic-project-mentor",
+  "version": "1.0.0",
+  "description": "An Agentic AI Platform for End-to-End Academic Project Lifecycle Management",
+  "main": "client/backend/index.js",
+  "scripts": {
+    "start": "node client/backend/index.js"
+  },
+  "author": "Harshitha H S",
+  "license": "MIT"
+}

@@ -4,9 +4,19 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environment & Temp Files
+# Excel Temporary Lock Files
+~$*.xlsx
+~$*.xls
+~$*.xlsm
+
+# Environment & System Files
 .env
 .env.local
 .DS_Store
 desktop.ini
 *.tmp
+
+# Temporary Python Scripts
+add_profile_nav.py
+make_ppt.py
+edit_existing_ppt.py
