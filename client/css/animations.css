@@ -1,0 +1,408 @@
+/* ==========================================
+   AI Academic Project Mentor
+   animations.css
+========================================== */
+
+/* Fade In */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide Up */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Slide Left */
+@keyframes slideLeft {
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Slide Right */
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Zoom In */
+@keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Pulse */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Floating */
+@keyframes floating {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Rotate */
+@keyframes rotate360 {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Glow */
+@keyframes glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(13,110,253,.3);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(13,110,253,.7);
+    }
+}
+
+/* Border Pulse */
+@keyframes borderPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(13,110,253,.6);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(13,110,253,0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(13,110,253,0);
+    }
+}
+
+/* Bounce */
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    25% {
+        transform: translateY(-10px);
+    }
+
+    50% {
+        transform: translateY(0);
+    }
+
+    75% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Shake */
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(-6px);
+    }
+
+    40% {
+        transform: translateX(6px);
+    }
+
+    60% {
+        transform: translateX(-4px);
+    }
+
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+/* Gradient */
+@keyframes gradientMove {
+
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 200%;
+    }
+}
+
+/* =======================================
+   Animation Classes
+======================================= */
+
+.fade-in{
+    animation:fadeIn .8s ease;
+}
+
+.slide-up{
+    animation:slideUp .8s ease;
+}
+
+.slide-left{
+    animation:slideLeft .8s ease;
+}
+
+.slide-right{
+    animation:slideRight .8s ease;
+}
+
+.zoom-in{
+    animation:zoomIn .6s ease;
+}
+
+.pulse{
+    animation:pulse 2s infinite;
+}
+
+.bounce{
+    animation:bounce 1.8s infinite;
+}
+
+.float{
+    animation:floating 3s infinite ease-in-out;
+}
+
+.rotate{
+    animation:rotate360 2s linear infinite;
+}
+
+.glow{
+    animation:glow 2s infinite;
+}
+
+.shake{
+    animation:shake .6s;
+}
+
+/* =======================================
+   Navbar
+======================================= */
+
+.navbar-custom{
+    animation:slideDown .7s ease;
+}
+
+@keyframes slideDown{
+    from{
+        transform:translateY(-100%);
+    }
+    to{
+        transform:translateY(0);
+    }
+}
+
+/* =======================================
+   Cards
+======================================= */
+
+.card-custom{
+    animation:slideUp .7s ease;
+    transition:.3s;
+}
+
+.card-custom:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+
+/* =======================================
+   Sidebar Links
+======================================= */
+
+.sidebar-custom .nav-link{
+    transition:.3s;
+}
+
+.sidebar-custom .nav-link:hover{
+    transform:translateX(6px);
+}
+
+/* =======================================
+   Buttons
+======================================= */
+
+.btn{
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-3px);
+}
+
+.btn:active{
+    transform:scale(.96);
+}
+
+/* =======================================
+   Floating AI Button
+======================================= */
+
+.fab-custom{
+    animation:floating 3s infinite,borderPulse 2s infinite;
+}
+
+/* =======================================
+   Icons
+======================================= */
+
+.logo-icon i{
+    animation:rotate360 12s linear infinite;
+}
+
+.drag-drop-icon{
+    animation:floating 2.5s infinite;
+}
+
+.modal-success-icon-wrap{
+    animation:zoomIn .5s ease,pulse 2s infinite;
+}
+
+/* =======================================
+   Avatar
+======================================= */
+
+.currentUser-avatar{
+    transition:.4s;
+}
+
+.currentUser-avatar:hover{
+    transform:scale(1.08);
+}
+
+/* =======================================
+   Inputs
+======================================= */
+
+.form-control-custom{
+    transition:.3s;
+}
+
+.form-control-custom:focus{
+    transform:scale(1.01);
+}
+
+/* =======================================
+   Drag Area
+======================================= */
+
+.drag-drop-area{
+    transition:.3s;
+}
+
+.drag-drop-area:hover{
+    transform:scale(1.02);
+    border-color:#0d6efd;
+}
+
+/* =======================================
+   Notifications
+======================================= */
+
+.badge-count{
+    animation:pulse 1.5s infinite;
+}
+
+/* =======================================
+   Responsive
+======================================= */
+
+@media(max-width:992px){
+
+.card-custom{
+    animation:none;
+}
+
+.fab-custom{
+    animation:floating 3s infinite;
+}
+
+}
+
+@media(max-width:768px){
+
+.sidebar-custom .nav-link:hover{
+    transform:none;
+}
+
+.btn:hover{
+    transform:none;
+}
+
+.card-custom:hover{
+    transform:none;
+}
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+*{
+    animation:none!important;
+    transition:none!important;
+}
+
+}

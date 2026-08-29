@@ -1,0 +1,313 @@
+/* ==========================================================================
+   AI Academic Project Mentor - Royal Blue Educational Theme
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Rich Royal Blue Color Palette */
+  --primary-color: #2563EB;        /* Royal Blue */
+  --primary-dark: #1D4ED8;         /* Deep Royal Blue */
+  --primary-navy: #0F172A;         /* Deep Navy */
+  --primary-light: #EFF6FF;        /* Soft Ice Blue */
+  --primary-border: #BFDBFE;       /* Light Blue Border */
+  --secondary-color: #ffffff;
+  --accent-color: #0284C7;          /* Sky / Electric Azure */
+  --accent-light: #E0F2FE;
+  --accent-emerald: #059669;       /* Emerald Success */
+  --accent-emerald-light: #D1FAE5;
+  --accent-amber: #D97706;         /* Warning Amber */
+  --accent-amber-light: #FEF3C7;
+  --accent-rose: #E11D48;          /* Rose Alert */
+  --accent-rose-light: #FFE4E6;
+
+  /* Surfaces & Backgrounds */
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --text-dark: #0F172A;
+  --text-body: #334155;
+  --text-muted: #64748B;
+  --border: #E2E8F0;
+  --border-focus: #3B82F6;
+  
+  --accent-muted: rgba(37, 99, 235, 0.08);
+  --gradient-primary: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  --gradient-navy: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%);
+  
+  /* Shadows & Elevation */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 14px rgba(37, 99, 235, 0.12);
+  --shadow-lg: 0 10px 30px rgba(15, 23, 42, 0.12);
+  --shadow-hover: 0 8px 24px rgba(37, 99, 235, 0.22);
+  
+  /* Radii */
+  --border-radius-sm: 8px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 20px;
+  
+  /* Transitions */
+  --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base resets */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Poppins', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
+  transition: var(--transition-fast);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* App Header & Navbar */
+header, .navbar-custom {
+  background: var(--gradient-navy) !important;
+  color: white;
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.nav-left, .navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo-circle {
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 1.3rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: var(--border-radius-sm);
+  color: white;
+  backdrop-filter: blur(8px);
+}
+
+.nav-left h1, .navbar-brand .logo {
+  font-size: 1.3rem;
+  margin: 0;
+  font-weight: 700;
+  color: white;
+}
+
+.nav-left p {
+  font-size: 0.8rem;
+  color: #BFDBFE;
+  margin: 0;
+}
+
+/* Navigation Menu Buttons */
+.nav-menu-btn, .sidebar-toggle-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.nav-menu-btn:hover, .sidebar-toggle-btn:hover {
+  background: white !important;
+  color: var(--primary-dark) !important;
+}
+
+/* Cards & Workspace Shells */
+.workspace-card, .card-os, .card-custom {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--border-radius-md);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-normal);
+}
+
+.workspace-card:hover, .card-os:hover, .card-custom:hover {
+  border-color: var(--primary-border);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Form Controls */
+input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea, .form-control-os, .form-select-os {
+  width: 100%;
+  background-color: #FAFAFA !important;
+  border: 1.5px solid var(--border) !important;
+  color: var(--text-dark) !important;
+  border-radius: var(--border-radius-sm) !important;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  transition: var(--transition-fast);
+}
+
+input:focus, select:focus, textarea:focus, .form-control-os:focus, .form-select-os:focus {
+  outline: none !important;
+  border-color: var(--primary-color) !important;
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15) !important;
+}
+
+/* Buttons */
+.btn-primary-custom, .send-action-btn, .btn-primary {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+  color: white !important;
+  border: none !important;
+  padding: 0.85rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary-custom:hover, .send-action-btn:hover, .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+}
+
+.btn-secondary-custom, .agent-trigger-btn, .btn-secondary {
+  background: var(--primary-light) !important;
+  color: var(--primary-dark) !important;
+  border: 1px solid var(--primary-border) !important;
+  padding: 0.7rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-secondary-custom:hover, .agent-trigger-btn:hover, .btn-secondary:hover {
+  background: #DBEAFE !important;
+  transform: translateY(-1px);
+}
+
+/* Suggestion Badges */
+.suggestion-badge {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-border);
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.suggestion-badge:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* Agent Display Box & Markdown Output */
+.agent-display-box {
+  background-color: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  height: 100%;
+}
+
+.pre-wrap-markdown {
+  font-size: 0.9rem;
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+.pre-wrap-markdown h1, .pre-wrap-markdown h2, .pre-wrap-markdown h3 {
+  font-size: 1.05rem;
+  color: var(--primary-dark);
+  margin-top: 0.75rem;
+  margin-bottom: 0.35rem;
+}
+
+.pre-wrap-markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.pre-wrap-markdown th, .pre-wrap-markdown td {
+  border: 1px solid var(--border);
+  padding: 0.6rem;
+  text-align: left;
+}
+
+.pre-wrap-markdown th {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+/* Sidebar Custom */
+.sidebar-custom {
+  width: 240px;
+  background-color: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem;
+}
+
+.sidebar-custom .nav-link {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: var(--transition-fast);
+}
+
+.sidebar-custom .nav-link:hover, .sidebar-custom .nav-link-active {
+  color: var(--primary-dark);
+  background-color: var(--primary-light);
+  font-weight: 600;
+}
+
+/* Responsive Scaling */
+@media (max-width: 991px) {
+  header, .navbar-custom { padding: 0.85rem 1rem; }
+  .sidebar-custom { display: none; }
+  .workspace-card { padding: 1.25rem; }
+}

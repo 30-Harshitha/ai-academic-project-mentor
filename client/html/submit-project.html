@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | Submit Idea</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Template Card Styling */
+    .template-card {
+        border: 1.5px solid #CBD5E1;
+        border-radius: 12px;
+        background: #FAFAFA;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+    }
+    .template-card:hover {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.12);
+    }
+    .template-card.active-template {
+        border-color: #2563EB;
+        background: #EFF6FF;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Top App Header -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn active">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn">Reports</a>
+        <a href="profile.html" class="nav-pill-btn">Profile</a>
+        <a href="faculty.html" class="nav-pill-btn">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Workspace Container -->
+  <main class="container-fluid my-4 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Page Header Title -->
+    <div class="mb-4">
+      <h2 class="fw-bold text-dark mb-1" style="font-size: 1.75rem;">Project Idea Submission Page</h2>
+      <p class="text-secondary m-0" style="font-size: 0.95rem;">
+        Describe your project idea below. <strong>Press Enter after typing</strong> or click submit to launch the Multi-Agent Control Hub.
+      </p>
+    </div>
+
+    <!-- Main Submission Card -->
+    <div class="card p-4 border-0 shadow-sm mb-4" style="border-radius: 16px; background: #ffffff;">
+      <form id="project-submit-form">
+        
+        <!-- Textarea input -->
+        <div class="mb-4">
+          <label class="form-label fw-bold text-dark" style="font-size: 0.95rem;">Submit Your Project Idea (2-3 Lines)</label>
+          <textarea id="projectDesc" class="form-control" rows="3" required style="border-radius: 10px; border: 1.5px solid #CBD5E1; padding: 12px; font-size: 0.95rem; resize: vertical;" placeholder="An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources."></textarea>
+          <small class="text-muted d-block mt-2" style="font-size: 0.85rem;">
+            💡 <em>Press Enter to submit your project idea directly and launch Agent Hub</em>
+          </small>
+        </div>
+
+        <!-- Time & Team Constraints Section (Single Input Location!) -->
+        <div class="p-3 mb-4 rounded-3" style="background: #F8FAFC; border: 1.5px solid #E2E8F0;">
+          <h6 class="fw-bold text-primary mb-3" style="font-size: 0.9rem;">
+            <i class="fas fa-clock me-2"></i>Team Size & Time Constraints (For Timeline & Milestone Agent Planning)
+          </h6>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold text-dark">Team Size</label>
+              <select id="teamSize" class="form-select form-select-sm" style="border-radius: 8px;">
+                <option value="1">1 Member (Individual Project)</option>
+                <option value="2" selected>2 Members (Pair Team)</option>
+                <option value="3">3 Members (Small Team)</option>
+                <option value="4">4 Members (Group Project)</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold text-dark">Timeline Duration (Weeks)</label>
+              <select id="duration" class="form-select form-select-sm" style="border-radius: 8px;">
+                <option value="4">4 Weeks (Accelerated Sprint)</option>
+                <option value="8" selected>8 Weeks (~80 Hours Total - Standard Semester)</option>
+                <option value="12">12 Weeks (~120 Hours Total)</option>
+                <option value="16">16 Weeks (~160 Hours Total - Full Year)</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small fw-semibold text-dark">Weekly Available Hours / Student</label>
+              <select id="weeklyHours" class="form-select form-select-sm" style="border-radius: 8px;">
+                <option value="5">5 Hours / Week</option>
+                <option value="10" selected>10 Hours / Week (Recommended ~10h/milestone)</option>
+                <option value="15">15 Hours / Week</option>
+                <option value="20">20 Hours / Week</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pre-Loaded Academic Templates (Recommended Projects) -->
+        <div class="mb-4">
+          <h6 class="fw-bold text-dark mb-3" style="font-size: 0.95rem;">Or Pick a Pre-Loaded Academic Template:</h6>
+          
+          <div class="row g-3">
+            <!-- Template Card 1 -->
+            <div class="col-md-6 col-xl-3">
+              <div class="card h-100 template-card p-3" data-domain="Computer Vision & AI" data-idea="A mobile-friendly web app using Computer Vision (CNN) to detect leaf diseases from photographs and recommend organic remedies for small-scale farmers.">
+                <h6 class="fw-bold text-primary mb-2" style="font-size: 0.9rem;">AI-Powered Plant Disease Detector</h6>
+                <p class="text-secondary small m-0" style="font-size: 0.82rem; line-height: 1.45;">
+                  A mobile-friendly web app using Computer Vision (CNN) to detect leaf diseases from photographs and recommend organic remedies for small-scale farmers.
+                </p>
+              </div>
+            </div>
+
+            <!-- Template Card 2 -->
+            <div class="col-md-6 col-xl-3">
+              <div class="card h-100 template-card p-3 active-template" data-domain="NLP & Healthcare" data-idea="An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources.">
+                <h6 class="fw-bold text-primary mb-2" style="font-size: 0.9rem;">Smart Student Mental Well-being Companion</h6>
+                <p class="text-secondary small m-0" style="font-size: 0.82rem; line-height: 1.45;">
+                  An empathetic conversational agent with sentiment analysis that offers personalized mindfulness exercises, study burnout tracking, and support resources.
+                </p>
+              </div>
+            </div>
+
+            <!-- Template Card 3 -->
+            <div class="col-md-6 col-xl-3">
+              <div class="card h-100 template-card p-3" data-domain="EdTech & Data Science" data-idea="A machine learning platform that evaluates student quiz performance in real-time, identifies weak topics, and dynamically generates custom revision pathways.">
+                <h6 class="fw-bold text-primary mb-2" style="font-size: 0.9rem;">Adaptive Learning Recommendation System</h6>
+                <p class="text-secondary small m-0" style="font-size: 0.82rem; line-height: 1.45;">
+                  A machine learning platform that evaluates student quiz performance in real-time, identifies weak topics, and dynamically generates custom revision pathways.
+                </p>
+              </div>
+            </div>
+
+            <!-- Template Card 4 -->
+            <div class="col-md-6 col-xl-3">
+              <div class="card h-100 template-card p-3" data-domain="IoT & Embedded Systems" data-idea="An automated energy monitoring dashboard utilizing sensors and predictive analytics to minimize idle power consumption in computer laboratories.">
+                <h6 class="fw-bold text-primary mb-2" style="font-size: 0.9rem;">IoT & AI Smart Energy Saver for Labs</h6>
+                <p class="text-secondary small m-0" style="font-size: 0.82rem; line-height: 1.45;">
+                  An automated energy monitoring dashboard utilizing sensors and predictive analytics to minimize idle power consumption in computer laboratories.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Action Row -->
+        <div class="d-flex justify-content-end align-items-center">
+          <button type="submit" id="submit-btn" class="btn btn-primary px-4 py-2.5 fw-bold" style="border-radius: 8px; background: linear-gradient(135deg, #0284C7 0%, #2563EB 100%); border: none; font-size: 0.95rem;">
+            Submit & Launch Agent Hub <i class="fas fa-arrow-right ms-2"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/submit-project.js"></script>
+
+</body>
+</html>

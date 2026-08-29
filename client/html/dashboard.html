@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | Student Command Dashboard</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Compact KPI Quick Stat Cards */
+    .kpi-stat-card {
+        background: #FFFFFF;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 1.2rem;
+        transition: all 0.2s ease;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.03);
+    }
+    .kpi-stat-card:hover {
+        border-color: #2563EB;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(37, 99, 235, 0.1);
+    }
+    .kpi-icon-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        background: #EFF6FF;
+        color: #2563EB;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    /* Action Grid Launcher Cards */
+    .action-launcher-card {
+        background: #FFFFFF;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 14px;
+        padding: 1.25rem;
+        text-decoration: none;
+        color: #0F172A;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.2s ease;
+        height: 100%;
+    }
+    .action-launcher-card:hover {
+        border-color: #2563EB;
+        background: #F0F7FF;
+        color: #1D4ED8;
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+    }
+
+    /* Custom Table Styling */
+    .compact-table {
+        margin: 0;
+        font-size: 0.88rem;
+    }
+    .compact-table th {
+        background: #F8FAFC;
+        color: #475569;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-bottom: 1.5px solid #E2E8F0;
+        padding: 12px 16px;
+    }
+    .compact-table td {
+        padding: 14px 16px;
+        vertical-align: middle;
+        border-bottom: 1px solid #F1F5F9;
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Top App Header -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn active">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn">Reports</a>
+        <a href="profile.html" class="nav-pill-btn">Profile</a>
+        <a href="faculty.html" class="nav-pill-btn">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Workspace Container (Zero wasted white space!) -->
+  <main class="container-fluid my-3 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Welcome Header Banner Card -->
+    <div class="card p-3.5 mb-3 border-0 shadow-sm" style="border-radius: 14px; background: #FFFFFF;">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <h2 class="fw-bold text-dark mb-1" style="font-size: 1.5rem;">Welcome Back, <span id="dash-user-name" class="text-primary">Alex Morgan</span>! 👋</h2>
+          <p class="text-secondary m-0" style="font-size: 0.9rem;">
+            Here is your live academic project status, milestone progress, and mentor check-in overview.
+          </p>
+        </div>
+        <div>
+          <span class="badge bg-primary bg-opacity-10 text-primary fw-bold border border-primary border-opacity-25 px-3 py-2" style="font-size: 0.85rem;">
+            <i class="fas fa-university me-1"></i> Academic Tier 2026-2027
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Faculty Feedback Banner (Rendered if teacher sent feedback) -->
+    <div id="student-faculty-feedback-banner" style="display: none;" class="mb-3">
+      <div class="alert alert-warning border border-warning shadow-sm mb-0 p-3" style="border-radius: 14px; background: #FFFBEB;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
+          <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+            <i class="fas fa-chalkboard-teacher text-warning me-2"></i>Faculty Advisor Guidance Received:
+          </h6>
+          <span class="badge bg-warning text-dark fw-bold font-monospace" id="dash-feedback-status-badge">Needs Guidance</span>
+        </div>
+        <p class="mb-1 text-dark small" style="font-size: 0.88rem; line-height: 1.45;" id="dash-feedback-note-text">
+          "Great progress on dataset curation! For API latency during sentiment inference, switch to lightweight local DistilBERT/ONNX weights before next week's review."
+        </p>
+        <div class="text-muted small" style="font-size: 0.76rem;" id="dash-feedback-time">Sent: Just now</div>
+      </div>
+    </div>
+
+    <!-- 4 Compact KPI Quick-Stat Cards Row -->
+    <div class="row g-3 mb-3">
+      
+      <!-- KPI 1: Active Project -->
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-stat-card">
+          <div class="kpi-icon-circle">
+            <i class="fas fa-folder-open"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div class="text-muted small fw-semibold" style="font-size: 0.75rem; text-transform: uppercase;">Active Project</div>
+            <h6 class="fw-bold text-dark mb-1 text-truncate" style="font-size: 0.92rem;" id="dash-kpi-title">Mental Well-being Companion</h6>
+            <span class="badge bg-success bg-opacity-10 text-success fw-bold" style="font-size: 0.75rem;">+ On Track</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI 2: Time Constraint Budget -->
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-stat-card">
+          <div class="kpi-icon-circle">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold" style="font-size: 0.75rem; text-transform: uppercase;">Time Constraint</div>
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.92rem;" id="dash-kpi-time">8 Weeks (~80h Budget)</h6>
+            <span class="badge bg-primary bg-opacity-10 text-primary fw-bold" style="font-size: 0.75rem;">10 Hours / Wk</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI 3: Skill Audit Score -->
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-stat-card">
+          <div class="kpi-icon-circle">
+            <i class="fas fa-sliders-h"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold" style="font-size: 0.75rem; text-transform: uppercase;">Competency Stack</div>
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.92rem;">Advanced (85/100)</h6>
+            <span class="badge bg-info bg-opacity-10 text-info fw-bold" style="font-size: 0.75rem;">14 Skills Synced</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI 4: Faculty Supervisor -->
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-stat-card">
+          <div class="kpi-icon-circle">
+            <i class="fas fa-user-tie"></i>
+          </div>
+          <div>
+            <div class="text-muted small fw-semibold" style="font-size: 0.75rem; text-transform: uppercase;">Faculty Supervision</div>
+            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.92rem;">STU-102 (Dr. Sophia)</h6>
+            <span class="badge bg-primary bg-opacity-10 text-primary fw-bold" style="font-size: 0.75rem;">88% Confidence</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Quick Action Launcher Grid (6 Action Cards) -->
+    <div class="mb-3">
+      <h6 class="fw-bold text-dark mb-2.5" style="font-size: 0.95rem;">Quick Core Action Hub:</h6>
+      
+      <div class="row g-3">
+        <!-- Action 1: Submit Idea -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="submit-project.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-paper-plane"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">Submit Idea</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Create & submit project concept.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Action 2: Agent Hub -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="agent-hub.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-network-wired"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">Agent Hub</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Trigger 5 AI pipeline agents.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Action 3: AI Mentor Chat -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="ai-mentor.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-robot"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">AI Mentor Chat</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Ask doubts & debug errors.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Action 4: Reports & Specs -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="report-view.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-file-alt"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">Reports & Specs</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Export synopsis & slides PDF.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Action 5: Faculty View -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="faculty.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-user-tie"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">Faculty View</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Monitor team health cards.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+
+        <!-- Action 6: Capability Audit -->
+        <div class="col-xl-2 col-md-4 col-6">
+          <a href="assessment.html" class="action-launcher-card">
+            <div>
+              <div class="fs-4 text-primary mb-2"><i class="fas fa-tasks"></i></div>
+              <h6 class="fw-bold mb-1" style="font-size: 0.88rem;">Skill Assessment</h6>
+              <p class="text-secondary small m-0" style="font-size: 0.76rem; line-height: 1.35;">Update skill matrix score.</p>
+            </div>
+            <div class="mt-2 text-end">
+              <i class="fas fa-arrow-right text-primary" style="font-size: 0.8rem;"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Academic Project & Milestone Status Table -->
+    <div class="card border-0 shadow-sm" style="border-radius: 14px; background: #FFFFFF; overflow: hidden;">
+      <div class="p-3 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h6 class="fw-bold text-dark m-0" style="font-size: 0.95rem;">
+          <i class="fas fa-list-check text-primary me-2"></i>Active Academic Project & Milestone Status Overview
+        </h6>
+        <a href="agent-hub.html" class="btn btn-outline-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;">
+          Launch Control Hub <i class="fas fa-arrow-right ms-1"></i>
+        </a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table compact-table align-middle">
+          <thead>
+            <tr>
+              <th>Project Title & Description</th>
+              <th>Domain</th>
+              <th>Time Constraints</th>
+              <th>Active Milestone</th>
+              <th>Overall Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="fw-bold text-dark" style="font-size: 0.9rem;" id="table-proj-title">Smart Student Mental Well-being Companion</div>
+                <div class="text-secondary small text-truncate" style="max-width: 320px; font-size: 0.78rem;" id="table-proj-desc">
+                  An empathetic conversational agent with sentiment analysis for mindfulness exercises.
+                </div>
+              </td>
+              <td><span class="badge bg-primary bg-opacity-10 text-primary fw-bold" style="font-size: 0.78rem;">NLP & AI</span></td>
+              <td>
+                <div class="small fw-semibold text-dark" id="table-proj-time">8 Weeks (~80h)</div>
+                <div class="text-muted small" style="font-size: 0.75rem;" id="table-proj-team">Team Size: 2</div>
+              </td>
+              <td>
+                <span class="badge bg-primary px-2.5 py-1 fw-bold" style="font-size: 0.78rem;">
+                  <i class="fas fa-spinner fa-spin me-1"></i> Milestone 3 (Week 5/8)
+                </span>
+              </td>
+              <td><span class="badge bg-success bg-opacity-10 text-success fw-bold border border-success border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ On Track</span></td>
+              <td class="text-end">
+                <a href="agent-hub.html" class="btn btn-sm btn-primary px-3 py-1 fw-semibold" style="border-radius: 12px; font-size: 0.8rem;">View Hub</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser")) || { fullName: "Alex Morgan" };
+        const nameEl = document.getElementById("dash-user-name");
+        if (nameEl && currentUser.fullName) {
+            nameEl.innerText = currentUser.fullName;
+        }
+
+        const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea"));
+        if (activeProj) {
+            const titleEl = document.getElementById("dash-kpi-title");
+            const timeEl = document.getElementById("dash-kpi-time");
+            const tblTitle = document.getElementById("table-proj-title");
+            const tblDesc = document.getElementById("table-proj-desc");
+            const tblTime = document.getElementById("table-proj-time");
+            const tblTeam = document.getElementById("table-proj-team");
+
+            if (titleEl && activeProj.projectTitle) titleEl.innerText = activeProj.projectTitle;
+            if (timeEl && activeProj.duration) timeEl.innerText = `${activeProj.duration} Weeks (~${parseInt(activeProj.duration)*10}h Budget)`;
+            if (tblTitle && activeProj.projectTitle) tblTitle.innerText = activeProj.projectTitle;
+            if (tblDesc && activeProj.description) tblDesc.innerText = activeProj.description;
+            if (tblTime && activeProj.duration) tblTime.innerText = `${activeProj.duration} Weeks (~${parseInt(activeProj.duration)*10}h)`;
+            if (tblTeam && activeProj.teamSize) tblTeam.innerText = `Team Size: ${activeProj.teamSize}`;
+        }
+
+        // Render Faculty Feedback Note if teacher provided guidance!
+        loadFacultyFeedbackNotice();
+    });
+
+    function loadFacultyFeedbackNotice() {
+        const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
+        const activeNote = allNotes["STU-ACTIVE"] || allNotes["STU-102"];
+
+        if (activeNote && activeNote.note) {
+            const banner = document.getElementById("student-faculty-feedback-banner");
+            const statusEl = document.getElementById("dash-feedback-status-badge");
+            const textEl = document.getElementById("dash-feedback-note-text");
+            const timeEl = document.getElementById("dash-feedback-time");
+
+            if (banner && textEl) {
+                textEl.innerText = `"${activeNote.note}"`;
+                if (statusEl) statusEl.innerText = activeNote.status || "Guidance Received";
+                if (timeEl) timeEl.innerText = `Sent: ${activeNote.timestamp}`;
+                banner.style.display = "block";
+            }
+        }
+    }
+  </script>
+</body>
+</html>

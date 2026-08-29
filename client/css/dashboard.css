@@ -1,0 +1,119 @@
+/* ==========================================================================
+   dashboard.css - Royal Blue Dashboard Theme
+   ========================================================================== */
+
+.welcome-card {
+  background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%) !important;
+  color: white !important;
+  border-radius: 16px !important;
+  padding: 2rem !important;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2) !important;
+}
+
+.welcome-card h2, .welcome-card p {
+  color: white !important;
+}
+
+.welcome-card .text-muted {
+  color: #BFDBFE !important;
+}
+
+.welcome-stats-os {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.stat-item-os {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-val-os {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #93C5FD;
+}
+
+.stat-label-os {
+  font-size: 0.75rem;
+  color: #DBEAFE;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-track-os {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-bar-os {
+  background: linear-gradient(90deg, #60A5FA 0%, #3B82F6 100%);
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s ease;
+}
+
+.metric-grid-os {
+  background-color: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metric-grid-os:hover {
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.metric-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.metric-info h3 {
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.metric-info p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.agent-report-box {
+  background-color: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-body);
+}
+
+.agent-report-box h1, .agent-report-box h2, .agent-report-box h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-top: 0.5rem;
+  margin-bottom: 0.35rem;
+}

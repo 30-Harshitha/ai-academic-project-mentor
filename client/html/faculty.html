@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Academic Project Mentor | Faculty Monitoring Dashboard</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/animations.css">
+
+  <style>
+    /* Top Navigation Pill Styling */
+    .nav-pill-btn {
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .nav-pill-btn:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.15);
+    }
+    .nav-pill-btn.active {
+        background: #ffffff;
+        color: #1e3a8a !important;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Faculty Team Health Cards */
+    .team-health-card {
+        background: #FFFFFF;
+        border: 1.5px solid #E2E8F0;
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.2s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .team-health-card:hover {
+        border-color: #2563EB;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.1);
+        transform: translateY(-2px);
+    }
+    .team-health-card.active-user-card {
+        border: 2px solid #2563EB;
+        background: #F0F7FF;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+    }
+
+    /* AI Summary Highlight Bubble Box */
+    .ai-summary-box {
+        background: #F0F7FF;
+        border: 1px solid #BFDBFE;
+        border-radius: 10px;
+        padding: 1rem;
+        font-size: 0.86rem;
+        color: #1E293B;
+        line-height: 1.5;
+    }
+
+    /* Faculty Feedback Note Box */
+    .faculty-feedback-given {
+        background: #FFFBEB;
+        border: 1px solid #FCD34D;
+        border-radius: 10px;
+        padding: 0.85rem;
+        font-size: 0.85rem;
+        color: #92400E;
+        line-height: 1.45;
+        margin-top: 0.75rem;
+    }
+  </style>
+</head>
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Top App Header -->
+  <header style="background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%); padding: 1.2rem 2rem; color: white;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 max-w-1300 mx-auto w-100">
+      <div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; margin: 0;">AI Academic Project Mentor</h1>
+        <p style="font-size: 0.85rem; color: #BFDBFE; margin: 0; font-weight: 500;">Royal Blue Educational Hub</p>
+      </div>
+
+      <nav class="d-flex align-items-center gap-1 flex-wrap">
+        <a href="register.html" class="nav-pill-btn">Register</a>
+        <a href="login.html" class="nav-pill-btn">Login</a>
+        <a href="dashboard.html" class="nav-pill-btn">Dashboard</a>
+        <a href="assessment.html" class="nav-pill-btn">Assessment</a>
+        <a href="submit-project.html" class="nav-pill-btn">Submit Idea</a>
+        <a href="agent-hub.html" class="nav-pill-btn">Agent Hub</a>
+        <a href="ai-mentor.html" class="nav-pill-btn">AI Mentor</a>
+        <a href="report-view.html" class="nav-pill-btn">Reports</a>
+        <a href="faculty.html" class="nav-pill-btn active">Faculty View</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container-fluid my-4 px-md-5 flex-grow-1 max-w-1300 mx-auto w-100">
+    
+    <!-- Title Header -->
+    <div class="mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Faculty Monitoring Dashboard Page</h2>
+        <p class="text-secondary m-0" style="font-size: 0.95rem;">
+          Passive monitoring interface for faculty advisors to review project health, evaluate AI summaries, and give direct guidance feedback.
+        </p>
+      </div>
+      <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 0.85rem;">
+        <i class="fas fa-chalkboard-teacher me-1"></i> Faculty Evaluation Console Online
+      </span>
+    </div>
+
+    <!-- Dynamic Submitted Student Project Section (Active Student) -->
+    <div id="user-submitted-faculty-container" class="mb-4" style="display: none;">
+      <h6 class="fw-bold text-primary mb-3" style="font-size: 0.95rem;">
+        <i class="fas fa-star text-warning me-2"></i>Active Submitted Student Project (Live Monitoring Card):
+      </h6>
+      <div id="user-submitted-card-holder"></div>
+    </div>
+
+    <!-- Enrolled Student Teams Grid -->
+    <h6 class="fw-bold text-dark mb-3" style="font-size: 0.95rem;">All Enrolled Student Teams:</h6>
+    <div class="row g-4 mb-4">
+      
+      <!-- Team Card 1: Aarav Sharma & Team -->
+      <div class="col-xl-4 col-md-6">
+        <div class="team-health-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="fw-bold text-dark m-0" style="font-size: 1.1rem;">Aarav Sharma & Team</h5>
+              <span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ On Track</span>
+            </div>
+            <p class="text-muted small mb-2 font-monospace" style="font-size: 0.8rem;">STU-101</p>
+            
+            <h6 class="fw-bold text-primary mb-2" style="font-size: 0.92rem;">AI-Powered Plant Disease Detector</h6>
+            <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+              <strong>Progress: 65%</strong> | Confidence: <strong>88%</strong>
+            </p>
+
+            <div class="ai-summary-box mb-3">
+              <strong>AI Summary:</strong> Team completed dataset curation (2,000 images). Successfully trained baseline CNN with 89% accuracy. Confidence is high; recommended moving to mobile layout integration next week.
+            </div>
+
+            <div id="feedback-display-STU-101"></div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
+            <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Aarav Sharma & Team', 'AI-Powered Plant Disease Detector', 'STU-101')">
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+            </button>
+            <a href="report-view.html" class="btn btn-outline-primary btn-sm px-3 py-1" style="border-radius: 14px; font-size: 0.8rem;">Review Blueprint</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Card 2: Priya Patel & Team -->
+      <div class="col-xl-4 col-md-6">
+        <div class="team-health-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="fw-bold text-dark m-0" style="font-size: 1.1rem;">Priya Patel & Team</h5>
+              <span class="badge bg-warning bg-opacity-10 text-warning fw-bold border border-warning border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">⚠️ Needs Guidance</span>
+            </div>
+            <p class="text-muted small mb-2 font-monospace" style="font-size: 0.8rem;">STU-102</p>
+            
+            <h6 class="fw-bold text-primary mb-2" style="font-size: 0.92rem;">Smart Student Mental Well-being Companion</h6>
+            <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+              <strong>Progress: 40%</strong> | Confidence: <strong>62%</strong>
+            </p>
+
+            <div class="ai-summary-box mb-3">
+              <strong>AI Summary:</strong> Encountered minor blocker with API latency during real-time sentiment analysis. Mentored team to switch from heavy LLM calls to lightweight DistilBERT local classifier.
+            </div>
+
+            <div id="feedback-display-STU-102"></div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
+            <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Priya Patel & Team', 'Smart Student Mental Well-being Companion', 'STU-102')">
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+            </button>
+            <a href="report-view.html" class="btn btn-outline-primary btn-sm px-3 py-1" style="border-radius: 14px; font-size: 0.8rem;">Review Blueprint</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Card 3: Rohan Verma & Team -->
+      <div class="col-xl-4 col-md-6">
+        <div class="team-health-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="fw-bold text-dark m-0" style="font-size: 1.1rem;">Rohan Verma & Team</h5>
+              <span class="badge bg-danger bg-opacity-10 text-danger fw-bold border border-danger border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">❌ At Risk</span>
+            </div>
+            <p class="text-muted small mb-2 font-monospace" style="font-size: 0.8rem;">STU-103</p>
+            
+            <h6 class="fw-bold text-primary mb-2" style="font-size: 0.92rem;">IoT Smart Energy Saver for Labs</h6>
+            <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+              <strong>Progress: 25%</strong> | Confidence: <strong>45%</strong>
+            </p>
+
+            <div class="ai-summary-box mb-3">
+              <strong>AI Summary:</strong> Hardware sensor delivery delayed. Team feeling anxious about timeline. Mentored team to pivot to simulated sensor data stream via Python script to maintain software progress.
+            </div>
+
+            <div id="feedback-display-STU-103"></div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
+            <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Rohan Verma & Team', 'IoT Smart Energy Saver for Labs', 'STU-103')">
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+            </button>
+            <a href="report-view.html" class="btn btn-outline-primary btn-sm px-3 py-1" style="border-radius: 14px; font-size: 0.8rem;">Review Blueprint</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team Card 4: Ananya Roy & Team -->
+      <div class="col-xl-4 col-md-6">
+        <div class="team-health-card">
+          <div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h5 class="fw-bold text-dark m-0" style="font-size: 1.1rem;">Ananya Roy & Team</h5>
+              <span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ On Track</span>
+            </div>
+            <p class="text-muted small mb-2 font-monospace" style="font-size: 0.8rem;">STU-104</p>
+            
+            <h6 class="fw-bold text-primary mb-2" style="font-size: 0.92rem;">Adaptive Learning Recommendation System</h6>
+            <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+              <strong>Progress: 75%</strong> | Confidence: <strong>92%</strong>
+            </p>
+
+            <div class="ai-summary-box mb-3">
+              <strong>AI Summary:</strong> Collaborative filtering module successfully built and tested with 50 synthetic student profiles. Team is working on synopsis and documentation generation.
+            </div>
+
+            <div id="feedback-display-STU-104"></div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
+            <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Ananya Roy & Team', 'Adaptive Learning Recommendation System', 'STU-104')">
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+            </button>
+            <a href="report-view.html" class="btn btn-outline-primary btn-sm px-3 py-1" style="border-radius: 14px; font-size: 0.8rem;">Review Blueprint</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Interactive Faculty Feedback Modal -->
+  <div class="modal fade" id="facultyFeedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="border-radius: 16px; border: 1.5px solid #CBD5E1;">
+        <div class="modal-header bg-primary text-white" style="border-top-left-radius: 14px; border-top-right-radius: 14px;">
+          <h5 class="modal-title fw-bold" id="feedbackModalLabel">
+            <i class="fas fa-chalkboard-teacher me-2"></i>Give Faculty Guidance Feedback
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="faculty-feedback-form">
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Target Student Team</label>
+              <input type="text" id="modal-team-name" class="form-control form-control-sm bg-light" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Project Title</label>
+              <input type="text" id="modal-project-title" class="form-control form-control-sm bg-light" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Faculty Evaluation Status</label>
+              <select id="modal-feedback-status" class="form-select form-select-sm" style="border-radius: 8px;">
+                <option value="On Track">+ On Track & Approved</option>
+                <option value="Needs Guidance" selected>⚠️ Needs Guidance & Technical Advice</option>
+                <option value="At Risk">❌ At Risk - Urgent Meeting Required</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-dark">Teacher's Guidance & Feedback Note</label>
+              <textarea id="modal-feedback-note" class="form-control form-control-sm" rows="4" style="border-radius: 8px;" placeholder="Provide technical advice, resolve blockers, or guide the team on their next milestone deliverables..." required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer bg-light" style="border-bottom-left-radius: 14px; border-bottom-right-radius: 14px;">
+            <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-sm px-4 fw-bold" style="border-radius: 20px; background: #0284c7; border: none;">
+              Send Feedback to Student Team 🚀
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let currentModalTeamId = "";
+
+    document.addEventListener("DOMContentLoaded", function() {
+        renderUserSubmittedProjectCard();
+        loadExistingFeedbackNotes();
+        setupFacultyFeedbackForm();
+    });
+
+    function renderUserSubmittedProjectCard() {
+        const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea"));
+        const currentUser = JSON.parse(localStorage.getItem("currentUser")) || { fullName: "Alex Morgan" };
+        const checkinWeek = parseInt(localStorage.getItem("completedCheckinWeek") || "0");
+
+        if (activeProj && activeProj.description) {
+            const container = document.getElementById("user-submitted-faculty-container");
+            const holder = document.getElementById("user-submitted-card-holder");
+
+            const studentName = currentUser.fullName || "Student Team";
+            const title = activeProj.projectTitle || activeProj.description.substring(0, 45) + "...";
+            const teamSize = activeProj.teamSize || "2";
+
+            let progressPct = "25%";
+            let confidenceScore = "85%";
+            let statusBadge = `<span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ On Track</span>`;
+            let aiSummaryText = `Project idea submitted and initialized via Agent Hub. Team size: ${teamSize} member(s). Multi-agent pipeline executed feasibility index (88% rating). Milestone 1 architecture setup active.`;
+
+            if (checkinWeek >= 1 && checkinWeek < 3) {
+                progressPct = "45%";
+                confidenceScore = "88%";
+                aiSummaryText = `Team logged Week ${checkinWeek} check-in update. Milestone 1 completed (100%). Feasibility & scope specs finalized; team actively building API microframework.`;
+            } else if (checkinWeek >= 3 && checkinWeek < 5) {
+                progressPct = "68%";
+                confidenceScore = "90%";
+                aiSummaryText = `Team logged Week ${checkinWeek} check-in update. Milestones 1 & 2 completed (100%). Core agent pipeline & UI status gauges active. Risk mitigations applied.`;
+            } else if (checkinWeek >= 5) {
+                progressPct = "85%";
+                confidenceScore = "94%";
+                aiSummaryText = `Team logged Week ${checkinWeek} check-in update. Milestones 1, 2 & 3 completed (100%). Team is finalizing faculty documentation and presentation slide outline for final defense.`;
+            }
+
+            if (container && holder) {
+                holder.innerHTML = `
+                  <div class="row">
+                    <div class="col-xl-6 col-md-8">
+                      <div class="team-health-card active-user-card">
+                        <div>
+                          <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="fw-bold text-dark m-0" style="font-size: 1.15rem;">${studentName} & Team</h5>
+                            ${statusBadge}
+                          </div>
+                          <p class="text-muted small mb-2 font-monospace" style="font-size: 0.8rem;">STU-ACTIVE (Your Team)</p>
+                          
+                          <h6 class="fw-bold text-primary mb-2" style="font-size: 0.95rem;">${title}</h6>
+                          <p class="small text-secondary mb-3" style="font-size: 0.85rem;">
+                            <strong>Progress: ${progressPct}</strong> | Confidence: <strong>${confidenceScore}</strong>
+                          </p>
+
+                          <div class="ai-summary-box mb-3">
+                            <strong>AI Summary:</strong> ${aiSummaryText}
+                          </div>
+
+                          <div id="feedback-display-STU-ACTIVE"></div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
+                          <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('${studentName} & Team', '${title}', 'STU-ACTIVE')">
+                            <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+                          </button>
+                          <a href="agent-hub.html" class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;">View Agent Hub</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                container.style.display = "block";
+            }
+        }
+    }
+
+    function openFacultyFeedbackModal(teamName, projectTitle, teamId) {
+        currentModalTeamId = teamId;
+        document.getElementById("modal-team-name").value = teamName;
+        document.getElementById("modal-project-title").value = projectTitle;
+        
+        // Pre-fill existing feedback if available
+        const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
+        if (allNotes[teamId]) {
+            document.getElementById("modal-feedback-note").value = allNotes[teamId].note || "";
+            document.getElementById("modal-feedback-status").value = allNotes[teamId].status || "Needs Guidance";
+        } else {
+            document.getElementById("modal-feedback-note").value = "";
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById("facultyFeedbackModal"));
+        modal.show();
+    }
+
+    function setupFacultyFeedbackForm() {
+        const form = document.getElementById("faculty-feedback-form");
+        if (!form) return;
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+            const noteText = document.getElementById("modal-feedback-note").value.trim();
+            const statusVal = document.getElementById("modal-feedback-status").value;
+            const teamName = document.getElementById("modal-team-name").value;
+
+            if (!noteText) return;
+
+            const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
+            allNotes[currentModalTeamId] = {
+                teamName: teamName,
+                status: statusVal,
+                note: noteText,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Save globally in localStorage so student view displays it!
+            localStorage.setItem("facultyFeedbackNotes", JSON.stringify(allNotes));
+
+            // Hide Modal
+            const modalEl = document.getElementById("facultyFeedbackModal");
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            loadExistingFeedbackNotes();
+            alert(`Faculty Feedback successfully transmitted to ${teamName}!`);
+        });
+    }
+
+    function loadExistingFeedbackNotes() {
+        const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
+        Object.keys(allNotes).forEach(teamId => {
+            const displayDiv = document.getElementById(`feedback-display-${teamId}`);
+            if (displayDiv) {
+                const noteObj = allNotes[teamId];
+                displayDiv.innerHTML = `
+                  <div class="faculty-feedback-given">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <strong>👨‍🏫 Faculty Feedback Sent:</strong>
+                      <span class="badge bg-warning text-dark font-monospace">${noteObj.status}</span>
+                    </div>
+                    <div>"${noteObj.note}"</div>
+                    <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Sent: ${noteObj.timestamp}</small>
+                  </div>
+                `;
+            }
+        });
+    }
+  </script>
+</body>
+</html>
