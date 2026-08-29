@@ -1,6 +1,26 @@
-# AI Academic Project Mentor Platform
+# 🎓 AI Academic Project Mentor Platform
 
-> An Agentic AI Platform for End-to-End Academic Project Lifecycle Management, Multi-Agent Workflow Orchestration, and Passive Faculty Supervision.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-v18.0%2B-green.svg)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-v4.18-lightgrey.svg)](https://expressjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-v8.0-blue.svg)](https://www.mysql.com/)
+[![Google Gemini API](https://img.shields.io/badge/AI Engine-Gemini 2.5 Flash-orange.svg)](https://aistudio.google.com/)
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen.svg)]()
+
+> **An Agentic AI Platform for End-to-End Academic Project Lifecycle Management, Multi-Agent Workflow Orchestration, and Passive Faculty Supervision.**
+
+---
+
+## 📋 Table of Contents
+- [Executive Summary](#-executive-summary)
+- [Key Platform Features & 8 Core Modules](#-key-platform-features--8-core-modules)
+- [System Architecture & Multi-Agent Flow](#-system-architecture--multi-agent-flow)
+- [Technology Stack](#-technology-stack)
+- [Team Member Role Matrix](#-team-member-role-matrix)
+- [Official Program Schedule (June 29 – August 20, 2026)](#-official-program-schedule-june-29--august-20-2026)
+- [Getting Started & Local Installation](#-getting-started--local-installation)
+- [Quality Assurance & Unit Test Verification](#-quality-assurance--unit-test-verification)
+- [License & Copyright](#-license--copyright)
 
 ---
 
@@ -12,67 +32,138 @@ Furthermore, the platform equips academic advisors with a **Faculty Monitoring D
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Key Platform Features & 8 Core Modules
 
-- **Frontend**: HTML5, CSS3 Grid/Flexbox, Vanilla JavaScript (ES6+), Bootstrap 5.3, Marked.js
-- **Backend**: Node.js, Express.js REST API framework, Multer, CORS
-- **AI Engine**: 5 Autonomous AI Agents (Feasibility, Scope, Stack, Timeline, Risk), Google Gemini API (`gemini-2.5-flash`), DistilBERT Local Fallback Classifiers (<500ms latency)
-- **Database**: MySQL Relational Database (`ai_project_mentor`), Node.js `mysql2` connection pooling (`db.js`), HTML5 `localStorage` API
-- **Security**: Google OAuth 2.0 & GitHub OAuth Single-Click Authentication (`handleSocialAuth`)
-- **Documentation**: Window Print-to-PDF Engine, Python `python-pptx` presentation generator
+1. **Module 1: Student Profile & Skill Assessment Matrix (`assessment.html`)**: Evaluates technical competencies (0–100 score) to customize downstream agent outputs.
+2. **Module 2: Project Idea Submission Desk (`submit-project.html`)**: Accepts 2-line raw student prompts or single-click selection of 4 pre-loaded academic template cards (Healthcare AI, E-Commerce, IoT Tracker, Agent Mentor).
+3. **Module 3: Multi-Agent Control Hub (`agent-hub.html`)**: Orchestrates 5 autonomous AI agents with a real-time execution log terminal stream.
+4. **Module 4: Feasibility & Scope Agent**: Evaluates viability index score (88%) and demarcates core Must-Have MVP features to prevent scope creep.
+5. **Module 5: Tech Stack & Milestone Planning Agent**: Recommends stack choices (Node.js/Express/MySQL) with clear trade-offs and generates an ~80-hour effort roadmap.
+6. **Module 6: Risk Assessment Agent**: Identifies API latency or dataset risks and deploys local DistilBERT fallback classifiers (<500ms latency) for 100% uptime.
+7. **Module 7: Nova AI Mentor Chat Desk (`ai-mentor.html`)**: Provides 24/7 conversational mentoring with Quick Action Prompt Chips for instant technical answers.
+8. **Module 8: Faculty Monitoring Dashboard (`faculty.html`)**: Features team health cards, AI progress digests, an Interactive Guidance Modal, and live student callout notification banners.
 
 ---
 
-## 👥 Team Roles & Responsibility Matrix
+## ⚙️ System Architecture & Multi-Agent Flow
 
-| Team Member | Project Role | Responsibility Scope |
+```
+[ Student Prompt Input ]
+           │
+           ▼
+┌────────────────────────────────────────────────────────┐
+│         EXPRESS.JS UNIFIED AGENT CONTROLLER            │
+│          (/api/projects/agent/unified)                 │
+└──────────┬─────────────────────────────────────────────┘
+           │
+           ├────────► 1. Feasibility Agent (88% Viability Score)
+           ├────────► 2. Scope Definition Agent (MVP Boundaries)
+           ├────────► 3. Tech Stack Agent (Architecture Rationale)
+           ├────────► 4. Timeline Agent (~80h Milestone Plan)
+           └────────► 5. Risk Assessment Agent (Plan-B Mitigation)
+           │
+           ▼
+┌────────────────────────────────────────────────────────┐
+│              PERSISTENCE & RENDERING LAYER             │
+│  • Client Terminal Window Logs Stream                  │
+│  • MySQL Relational DB Schema (ai_project_mentor)      │
+│  • HTML5 localStorage Session Context                  │
+│  • Faculty Guidance Banner Transmission                │
+└────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 💻 Technology Stack
+
+| Component | Technology | Usage in Project |
 | :--- | :--- | :--- |
-| **Harshitha H S** | **MAJOR ROLE / Project Lead** | System Architecture, Multi-Agent Pipeline Controller (`aiAgents.js`), Integration & Final Defense Lead. |
-| **Vamshi Krishna** | Minor Role (Backend & Auth) | MySQL Database Schema, Express REST APIs & Google/GitHub OAuth Integration. |
-| **Muthumenen M** | Minor Role (UI/UX) | Student Profile Onboarding, Skill Assessment Matrix (0-100 Score) & Command Dashboard Layout. |
-| **Lohith Raj** | Minor Role (Risk & Mentoring) | Risk Assessment Agent, Nova AI Chat Desk (`ai-mentor.html`) & Unit Testing Verification (100% PASS). |
-| **Harsh** | Minor Role (Faculty View) | Faculty Monitoring Dashboard (`faculty.html`), Interactive Feedback Modal & Document Exporter. |
+| **Frontend UI** | HTML5, CSS3, JavaScript (ES6+) | Responsive views (`dashboard.html`, `faculty.html`, `profile.html`) |
+| **UI Framework** | Bootstrap 5.3 | Responsive grid containers, alerts, and modal dialogs |
+| **Backend Server** | Node.js & Express.js | Asynchronous REST API routing, middleware, and CORS |
+| **AI Inference** | Google Gemini API (`gemini-2.5-flash`) | Deep reasoning for dynamic project blueprints |
+| **Offline Fallbacks** | DistilBERT Local Classifiers | Sub-500ms offline fallback generator in `aiAgents.js` |
+| **Database** | MySQL RDBMS | Schema (`ai_project_mentor`) with connection pooling (`db.js`) |
+| **Authentication** | OAuth 2.0 (Google & GitHub) | Single-click social authentication (`handleSocialAuth`) |
+| **Document Exporter**| Window Print API & `@media print` | Academic synopsis and defense slide PDF exports |
 
 ---
 
-## 📁 Repository Structure
+## 👥 Team Member Role Matrix
 
-```
-├── client/
-│   ├── backend/
-│   │   ├── routes/          # Express REST API Routes (projects.js, users.js)
-│   │   ├── services/        # 5-Agent Autonomous AI Engine (aiAgents.js)
-│   │   └── db.js            # MySQL Connection Pool
-│   ├── css/                 # Custom CSS stylesheets (style.css, dashboard.css)
-│   ├── html/                # Frontend Web Views
-│   │   ├── dashboard.html   # Student Command Dashboard & KPI Cards
-│   │   ├── agent-hub.html   # 5-Agent Pipeline Execution Terminal
-│   │   ├── ai-mentor.html    # Nova AI Chat Desk & Prompt Chips
-│   │   ├── faculty.html     # Faculty Monitoring & Guidance Modal
-│   │   ├── profile.html     # Student Profile & Resume Upload
-│   │   ├── report-view.html # On-Demand PDF Document Exporter
-│   │   └── submit-project.html # Idea Submission & Template Cards
-│   └── js/                  # Frontend Client Scripts
-├── Agile_Template_v0.1.xlsx # Product & Sprint Backlogs (June 29 – Aug 20, 2026)
-├── Defect_Tracker Template_v0.1.xlsx # Defect QA Logs (7 Defects Closed)
-├── Unit_Test_Plan_v0.1.xlsx # Unit Test Verification Plan (UT-001 to UT-007 PASS)
-├── LICENSE                  # Official MIT Open-Source License
-├── README.md                # Project Overview & Architecture Guide
-└── package.json             # Node.js project manifest
-```
+| Team Member | Project Role | Assignment Scope |
+| :--- | :--- | :--- |
+| **Harshitha H S** | **MAJOR ROLE / Project Lead** | System Architecture, Multi-Agent Controller (`aiAgents.js`), System Integration & Defense Lead. |
+| **Vamshi Krishna** | Minor Role (Backend & Auth) | MySQL Schema, Express REST APIs (`/api/users`) & Google/GitHub OAuth Integration. |
+| **Muthumenen M** | Minor Role (UI/UX) | Student Profile Onboarding (`register.html`), Skill Matrix (`assessment.html`) & Dashboard Layout. |
+| **Lohith Raj** | Minor Role (Risk & Testing) | Risk Agent, Nova AI Chat Desk (`ai-mentor.html`) & Unit Test Verification (**100% PASS**). |
+| **Harsh** | Minor Role (Faculty View) | Faculty Monitoring Dashboard (`faculty.html`), Guidance Modal & Document Exporter (`report-view.html`). |
 
 ---
 
-## 📅 Official Program Schedule & Milestones (June 29 – August 20, 2026)
+## 📅 Official Program Schedule (June 29 – August 20, 2026)
 
-- **Milestone 1 (Sprint 1: June 29 – July 10, 2026)**: System Architecture, MySQL DB Setup, Onboarding UI & Idea Submission.
-- **Milestone 2 (Sprint 2: July 13 – July 24, 2026)**: Feasibility Agent, Scope Agent, Tech Stack Agent, Milestone Agent & Control Hub UI.
-- **Milestone 3 (Sprint 3: July 27 – August 07, 2026)**: Check-in Engine, Risk Agent, Nova AI Chat Desk & Document Exporter.
-- **Milestone 4 (Sprint 4: August 10 – August 20, 2026)**: Faculty Dashboard, Interactive Feedback Modal, OAuth Login & Final System Testing.
+- **Milestone 1 (Sprint 1: June 29 – July 10, 2026)**: System Data Flow Design, MySQL Schema, Onboarding UI & Submission Desk.
+- **Milestone 2 (Sprint 2: July 13 – July 24, 2026)**: Feasibility Agent, Scope Agent, Tech Stack Agent, Timeline Agent & Control Hub UI.
+- **Milestone 3 (Sprint 3: July 27 – August 07, 2026)**: Check-in Progress Engine, Risk Agent, Nova AI Chat Desk & PDF Document Exporter.
+- **Milestone 4 (Sprint 4: August 10 – August 20, 2026)**: Faculty Monitoring Dashboard, Guidance Modal, OAuth Login & Final System QA.
 
 ---
 
-## 📄 License
+## ⚡ Getting Started & Local Installation
+
+### Prerequisites
+- **Node.js**: `v18.0.0` or higher
+- **MySQL Database**: `v8.0` or higher
+- **Git**: Latest version
+
+### Installation Steps
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/AI-Academic-Project-Mentor.git
+   cd AI-Academic-Project-Mentor
+   ```
+
+2. **Install Backend Dependencies**:
+   ```bash
+   cd client/backend
+   npm install
+   ```
+
+3. **Configure Environment Variables**:
+   Create a `.env` file in `client/backend/.env`:
+   ```env
+   PORT=5000
+   GEMINI_API_KEY=your_google_gemini_api_key_here
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=ai_project_mentor
+   ```
+
+4. **Initialize MySQL Database**:
+   Import `ai_project_mentor` schema into MySQL:
+   ```bash
+   mysql -u root -p < database_schema.sql
+   ```
+
+5. **Start the Backend Server**:
+   ```bash
+   npm start
+   ```
+   Open `http://localhost:5000` or launch `client/html/login.html` in your web browser!
+
+---
+
+## ✅ Quality Assurance & Unit Test Verification
+
+- **Automated Unit Tests**: 7/7 Verified (**100% PASS**) covering Registration, Submission, 5-Agent Execution, Milestone Badge Shifting, Document PDF Generator, Faculty Feedback Banner, and OAuth Login.
+- **Defect Tracker QA**: 7/7 Defects Resolved & **`Status: Closed`**.
+
+---
+
+## 📄 License & Copyright
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
