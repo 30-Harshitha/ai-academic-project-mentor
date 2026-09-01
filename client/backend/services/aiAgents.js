@@ -1,5 +1,5 @@
 // ==========================================
-// services/aiAgents.js (Granular Multi-Agent & Chat Engine)
+// services/aiAgents.js (Dynamic Multi-Agent & Chat Engine)
 // ==========================================
 const { GoogleGenAI } = require("@google/genai");
 
@@ -9,24 +9,202 @@ const ai = new GoogleGenAI(apiKey ? { apiKey } : {});
 const MODEL_NAME = 'gemini-2.5-flash';
 
 /**
+ * Domain Analyzer for Dynamic Fallback Generation
+ */
+function analyzeProjectContext(meta) {
+    const title = meta.projectTitle || (meta.projectDescription ? (meta.projectDescription.substring(0, 50) + "...") : "Academic Project");
+    const desc = meta.projectDescription || meta.description || "Comprehensive academic project build.";
+    const text = (title + " " + desc + " " + (meta.techStack || "")).toLowerCase();
+    
+    let domain = "Software Engineering & Web Architecture";
+    let category = "Full-Stack System";
+    let mvpFeatures = [];
+    let stretchFeatures = [];
+    let techStack = {};
+    let risks = [];
+
+    if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("doctor") || text.includes("disease") || text.includes("tumor") || text.includes("clinical")) {
+        domain = "Healthcare & Biomedical Intelligence";
+        category = "Medical AI & Clinical Decision Support";
+        mvpFeatures = [
+            "Patient Profile & Diagnostic Data Ingestion Portal",
+            "Real-Time Health Metric & Medical Imaging Analysis Engine",
+            "Risk Scoring & Predictive Diagnostic Alerts Module",
+            "Secure HIPAA-Compliant Medical Summary & PDF Report Exporter"
+        ];
+        stretchFeatures = [
+            "Integration with DICOM Medical Image Viewer APIs",
+            "Telemedicine Video Consult Scheduling Integration",
+            "Automated Multi-lingual Patient Advisory Assistant"
+        ];
+        techStack = {
+            frontend: "React.js / HTML5 + Chart.js for Medical Telemetry",
+            backend: "Node.js (Express) with DICOM / Health Data Parsers",
+            database: "PostgreSQL / MySQL with Encrypted Medical Records Schema",
+            ai: "PyTorch / TensorFlow Medical Classifier & Scikit-Learn Risk Models",
+            devops: "Docker Containerized Deployment on Render / AWS Medical Sandbox"
+        };
+        risks = [
+            "Medical Data Privacy & HIPAA Compliance Regulation Standards",
+            "Model Inference Latency on Complex High-Resolution Imaging Datasets",
+            "Scarcity of Anonymized Clinical Datasets for Model Training"
+        ];
+    } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("retail") || text.includes("product") || text.includes("cart") || text.includes("recommend")) {
+        domain = "E-Commerce & Intelligent Retail Systems";
+        category = "Smart Commerce & Personalization Platform";
+        mvpFeatures = [
+            "Dynamic Product Catalog & Category Inventory Management",
+            "AI Collaborative Filtering Product Recommendation Engine",
+            "Interactive Shopping Cart & Stripe / PayPal Checkout Pipeline",
+            "User Order Tracking & Purchase History Analytics Dashboard"
+        ];
+        stretchFeatures = [
+            "AR Product 3D Preview Plugin for Mobile Browsers",
+            "Automated Dynamic Pricing & Inventory Stock Alerts",
+            "Multi-Currency & Regional Tax Calculator Middleware"
+        ];
+        techStack = {
+            frontend: "React.js / HTML5 + Redux Toolkit for Shopping Cart State",
+            backend: "Node.js (Express) REST API + Stripe Payment Webhooks",
+            database: "MySQL / PostgreSQL (Products & Orders) + Redis Session Cache",
+            ai: "Scikit-Learn Collaborative Filtering & Content-Based Recommenders",
+            devops: "Vercel / Heroku Cloud Hosting with CDN Asset Caching"
+        };
+        risks = [
+            "Cart State Synchronization Errors During High Traffic Bursts",
+            "Cold-Start Problem for Newly Added Products in Recommendation Models",
+            "Third-Party Payment Gateway Webhook Latency & Timeout Risks"
+        ];
+    } else if (text.includes("iot") || text.includes("sensor") || text.includes("smart") || text.includes("agriculture") || text.includes("hardware") || text.includes("arduino") || text.includes("raspberry")) {
+        domain = "IoT & Embedded Hardware Engineering";
+        category = "Smart Telemetry & Hardware Control Platform";
+        mvpFeatures = [
+            "Hardware Sensor Data Ingestion Gateway (MQTT / HTTP)",
+            "Real-Time Telemetry Graph Dashboard & Threshold Alert Engine",
+            "Automated Actuator / Relay Remote Switch Controller",
+            "Historical Sensor Data Logging & CSV/PDF Analytics Exporter"
+        ];
+        stretchFeatures = [
+            "Edge AI Model Deployment directly on Raspberry Pi Hardware",
+            "Solar Battery Consumption & Power Management Telemetry",
+            "SMS Alert Integration via Twilio API Gateway"
+        ];
+        techStack = {
+            frontend: "HTML5 + Chart.js / D3.js Real-time Telemetry Dashboard",
+            backend: "Node.js (Express) + Mosquitto MQTT Broker Integration",
+            database: "TimescaleDB / MySQL for Time-Series Sensor Logs",
+            ai: "Lightweight Anomaly Detection Classifier (Isolation Forests)",
+            devops: "AWS IoT Core / Local Edge Server Gateway Deployment"
+        };
+        risks = [
+            "Physical Sensor Component Delivery Delays & Hardware Calibration Errors",
+            "Unstable Network Connectivity causing Telemetry Packet Loss",
+            "Power Outages Affecting Continuous Sensor Data Logging"
+        ];
+    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("fraud") || text.includes("phishing") || text.includes("auth") || text.includes("crypto") || text.includes("blockchain")) {
+        domain = "Cybersecurity & Information Assurance";
+        category = "Intelligent Threat Detection & Security Engine";
+        mvpFeatures = [
+            "Network Traffic / Log File Security Ingestion Pipeline",
+            "AI Anomaly & Intrusion Detection Classification Engine",
+            "OAuth 2.0 & Multi-Factor User Authentication Access Control",
+            "Incident Alert Manager & Threat Mitigation Audit Report Generator"
+        ];
+        stretchFeatures = [
+            "Automated IP Blacklisting & Firewall Rule Trigger",
+            "Blockchain-Based Tamper-Proof Audit Log Verification",
+            "Dark Web Vulnerability Intelligence Feed Aggregator"
+        ];
+        techStack = {
+            frontend: "React.js / HTML5 Dashboard with Incident Priority Callouts",
+            backend: "Node.js (Express) / Python FastAPI Security Middleware",
+            database: "PostgreSQL with Encrypted Column Extensions",
+            ai: "Scikit-Learn Random Forest / XGBoost Threat Classifiers",
+            devops: "Docker Hardened Container with SSL/TLS Encryption"
+        };
+        risks = [
+            "High Rate of False Positives Flagging Legitimate User Requests",
+            "Processing Overhead when Parsing High-Volume Network Packet Logs",
+            "Model Evasion Attacks via Adversarial Security Prompts"
+        ];
+    } else if (text.includes("chat") || text.includes("nlp") || text.includes("sentiment") || text.includes("bot") || text.includes("language") || text.includes("mentor") || text.includes("student")) {
+        domain = "Conversational AI & Natural Language Processing";
+        category = "Agentic Language Processing & Guidance Platform";
+        mvpFeatures = [
+            "User Chat & Query Prompt Interaction Interface",
+            "NLP Intent Classifier & Sentiment Score Analyzer",
+            "Contextual AI Response Generation Engine with Prompt Chips",
+            "Conversation History & Progress Summary PDF Exporter"
+        ];
+        stretchFeatures = [
+            "Voice-to-Text Speech Recognition (Web Speech API)",
+            "RAG Vector Database Integration for Custom Document Querying",
+            "Multi-Agent Collaborative Task Delegation Framework"
+        ];
+        techStack = {
+            frontend: "HTML5 / CSS3 Responsive Chat Interface with Typing Animations",
+            backend: "Node.js (Express) REST API + Google Gemini API SDK",
+            database: "MySQL / MongoDB for Chat Logs & User Context Storage",
+            ai: "Google Gemini 2.5 Flash / DistilBERT Local Fallback Classifiers",
+            devops: "Render / Vercel Cloud Server with WebSocket Communication"
+        };
+        risks = [
+            "API Key Quota Rate Limits during High-Volume Prompt Submissions",
+            "LLM Hallucination or Out-of-Context Response Drift",
+            "Inference Latency Exceeding 1.5 Seconds under Heavy Server Load"
+        ];
+    } else {
+        domain = "Full-Stack Software Engineering & Intelligent Web Architecture";
+        category = "Intelligent Academic Software Platform";
+        mvpFeatures = [
+            `User Authentication & Profile Onboarding Portal for ${title}`,
+            `Core Business Logic Processing Engine for ${desc.substring(0, 35)}...`,
+            "Interactive Command Dashboard & Metrics Visualization Unit",
+            "Automated Report Exporter & Data Summary Generator"
+        ];
+        stretchFeatures = [
+            "Real-time WebSocket Push Notification Manager",
+            "Dark Theme / Light Theme Customized UI Toggle",
+            "REST API Third-Party Developer Integration Webhooks"
+        ];
+        techStack = {
+            frontend: "HTML5 + Modern CSS3 + Vanilla JavaScript (ES6+)",
+            backend: "Node.js (Express) REST API Framework",
+            database: "MySQL Relational Database with Connection Pooling",
+            ai: "Scikit-Learn / Google Gemini API Integration",
+            devops: "Render / Vercel Cloud Deployment with SSL Security"
+        };
+        risks = [
+            "Frontend-Backend State Synchronization Delays",
+            "Database Schema Indexing Overhead as Data Volume Grows",
+            "API Rate Limit Restrictions during Final Verification Testing"
+        ];
+    }
+
+    return { title, desc, domain, category, mvpFeatures, stretchFeatures, techStack, risks };
+}
+
+/**
  * 1. Feasibility Analysis Agent
  */
 async function feasibilityAnalysisAgent(metadata) {
+    const ctx = analyzeProjectContext(metadata);
     const prompt = `
     You are the Feasibility & Risk Analysis Agent for an academic project platform.
-    Analyze the following project parameters and return a highly detailed, comprehensive markdown report.
+    Analyze the following project parameters and return a highly detailed, comprehensive markdown report tailored SPECIFICALLY to this submitted project.
 
     PROJECT METADATA:
-    Title: ${metadata.projectTitle}
-    Description: ${metadata.projectDescription}
-    Provided Tech Stack: ${metadata.techStack}
-    Target Duration: ${metadata.duration}
-    Team Size: ${metadata.teamSize}
+    Title: ${ctx.title}
+    Description: ${ctx.desc}
+    Domain: ${ctx.domain}
+    Provided Tech Stack: ${metadata.techStack || 'HTML, CSS, JS, Node.js, MySQL'}
+    Target Duration: ${metadata.duration || '8 Weeks'}
+    Team Size: ${metadata.teamSize || '2'}
 
     Include:
-    1. ### 🛡️ Overall Feasibility Index (Score out of 100 with High/Medium/Low rating)
-    2. ### 📊 Key Technical & Domain Strengths (3-5 granular points)
-    3. ### ⚠️ Architectural, Resource & Data Risks (Identify 3 potential execution bottlenecks)
+    1. ### 🛡️ Overall Feasibility Index (Score out of 100 with High/Medium/Low rating for "${ctx.title}")
+    2. ### 📊 Key Technical & Domain Strengths (3-5 granular points specific to ${ctx.domain})
+    3. ### ⚠️ Architectural, Resource & Data Risks (Identify 3 execution bottlenecks specific to ${ctx.title})
     4. ### 📈 Complexity Matrix (Score out of 100 for: Frontend, Backend, Database, AI/ML, Hardware/DevOps)
     5. ### 💡 Academic Guidance & Mentor Advice for Stress-Free Execution
     `;
@@ -44,18 +222,19 @@ async function feasibilityAnalysisAgent(metadata) {
  * 2. Scope Definition & MVP Agent
  */
 async function scopeDefinitionAgent(metadata) {
+    const ctx = analyzeProjectContext(metadata);
     const prompt = `
     You are the Scope Definition & Functional Specification Agent for an academic project platform.
-    Generate a granular, detailed project scope and MVP feature specification in markdown format.
+    Generate a granular, detailed project scope and MVP feature specification in markdown format tailored SPECIFICALLY to this submitted project.
 
     PROJECT METADATA:
-    Title: ${metadata.projectTitle}
-    Description: ${metadata.projectDescription}
-    Domain: ${metadata.projectDomain || 'Software Engineering'}
+    Title: ${ctx.title}
+    Description: ${ctx.desc}
+    Domain: ${ctx.domain}
 
     Include:
-    1. ### 🎯 Detailed Problem Statement & Target Audience Definition
-    2. ### 🚀 Must-Have Core MVP Features (List 4 core specifications with technical details)
+    1. ### 🎯 Detailed Problem Statement & Target Audience Definition for "${ctx.title}"
+    2. ### 🚀 Must-Have Core MVP Features (List 4 core specifications with technical details for this project)
     3. ### ✦ Optional & Nice-To-Have Features (3 stretch enhancement goals)
     4. ### 🚫 Out-Of-Scope / Future Release Targets (Items excluded from current semester)
     5. ### 📋 Non-Functional Requirements (Security, Performance, Responsiveness standards)
@@ -74,22 +253,23 @@ async function scopeDefinitionAgent(metadata) {
  * 3. Technology Stack Recommendation Agent
  */
 async function technologyRecommendationAgent(metadata) {
+    const ctx = analyzeProjectContext(metadata);
     const prompt = `
     You are the Architecture & Technology Recommendation Agent for an academic project platform.
-    Analyze the project requirements and output an exhaustive tech stack specification in markdown format.
+    Analyze the project requirements and output an exhaustive tech stack specification in markdown format tailored SPECIFICALLY to this submitted project.
 
     PROJECT METADATA:
-    Title: ${metadata.projectTitle}
-    Description: ${metadata.projectDescription}
-    Student Tech Background: ${metadata.techStack}
+    Title: ${ctx.title}
+    Description: ${ctx.desc}
+    Domain: ${ctx.domain}
 
     Include:
-    1. ### ⚙️ Recommended Frontend Framework & UI Stack (Framework, styling, state management)
-    2. ### 🔧 Backend API & Runtime Environment (Framework, routing, async workers)
-    3. ### 🗄️ Database & Storage Layer (Relational/NoSQL schema choice, indexing strategy)
-    4. ### 🤖 AI / ML & Data Analytics Engine (Frameworks, pre-trained models, pipeline)
-    5. ### ☁️ DevOps, CI/CD & Deployment Strategy (Hosting platform, containerization)
-    6. ### 💡 Stack Trade-off Rationale (Why this combination over alternative heavy enterprise stacks)
+    1. ### ⚙️ Recommended Frontend Framework & UI Stack for "${ctx.title}"
+    2. ### 🔧 Backend API & Runtime Environment
+    3. ### 🗄️ Database & Storage Layer (Schema choice, indexing strategy for ${ctx.domain})
+    4. ### 🤖 AI / ML & Data Analytics Engine
+    5. ### ☁️ DevOps, CI/CD & Deployment Strategy
+    6. ### 💡 Stack Trade-off Rationale (Why this combination is ideal for "${ctx.title}")
     `;
 
     try {
@@ -105,6 +285,7 @@ async function technologyRecommendationAgent(metadata) {
  * 4. Development Schedule & Milestone Planning Agent
  */
 async function timelinePlanningAgent(metadata) {
+    const ctx = analyzeProjectContext(metadata);
     const duration = metadata.duration || '8 Weeks';
     const weeks = parseInt(duration) || 8;
     const weeklyHours = parseInt(metadata.weeklyHours) || 10;
@@ -113,24 +294,25 @@ async function timelinePlanningAgent(metadata) {
 
     const prompt = `
     You are the Resource Timeline & Milestone Planning Agent for an academic project platform.
-    Generate a complete, time-constrained week-by-week milestone roadmap in markdown table format.
+    Generate a complete, time-constrained week-by-week milestone roadmap in markdown table format tailored SPECIFICALLY to "${ctx.title}".
 
     PROJECT METADATA:
-    Title: ${metadata.projectTitle}
-    Description: ${metadata.projectDescription}
+    Title: ${ctx.title}
+    Description: ${ctx.desc}
+    Domain: ${ctx.domain}
     Target Duration: ${weeks} Weeks
     Weekly Available Hours per Student: ${weeklyHours} Hours/Week (Total Student Budget: ${totalStudentHours} Hours)
     Team Size: ${teamSize} Student(s)
 
-    Incorporate the following 4 official project milestones:
-    - **Milestone 1**: Study agentic workflows, multi-agent architecture design, student onboarding profile/skill assessment, and project submission interface.
-    - **Milestone 2**: Feasibility Analysis Agent, Scope Definition Agent, Tech Stack Recommendation Agent, and Milestone Planning Agent.
-    - **Milestone 3**: Risk Assessment & Mitigation Agent, Conversational Mentor interaction, Progress tracking, and On-demand documentation generation.
-    - **Milestone 4**: Faculty Monitoring Dashboard, end-to-end testing, prompt optimization, and technical report & final defense prep.
+    Incorporate the following 4 official project milestones tailored to "${ctx.title}":
+    - **Milestone 1**: Study domain architecture, system design, student onboarding profile/skill assessment, and submission desk for "${ctx.title}".
+    - **Milestone 2**: Feasibility Analysis Agent, Scope Definition Agent, Tech Stack Recommendation Agent, and Milestone Planning Agent execution.
+    - **Milestone 3**: Risk Assessment Agent, Nova AI mentor interaction, weekly check-in progress engine, and dynamic document exporter.
+    - **Milestone 4**: Faculty Monitoring Dashboard, guidance feedback modal, end-to-end unit testing (UT-001 to UT-007 PASS), and final defense prep.
 
     Output:
     1. ### ⏱️ Time Constraints & Effort Summary (Duration: ${weeks} Weeks | ${weeklyHours} Hours/Wk per student | Team Size: ${teamSize})
-    2. ### 📅 Milestone Overview Matrix Table (Columns: Milestone & Weeks | Core Objectives | Detailed Technical Deliverables | Budgeted Student Hours)
+    2. ### 📅 Milestone Overview Matrix Table (Columns: Milestone & Weeks | Core Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Student Hours)
     3. ### 💡 Timeline Execution Rationale & Weekly Pace Recommendations
     `;
 
@@ -147,19 +329,20 @@ async function timelinePlanningAgent(metadata) {
  * 5. Risk Assessment & Mitigation Agent
  */
 async function riskAssessmentAgent(metadata) {
+    const ctx = analyzeProjectContext(metadata);
     const prompt = `
     You are the Risk Assessment & Mitigation Agent for an academic project platform.
-    Analyze the project parameters and generate an exhaustive technical risk matrix with actionable Plan-B fallbacks.
+    Analyze the project parameters and generate an exhaustive technical risk matrix with actionable Plan-B fallbacks tailored SPECIFICALLY to "${ctx.title}".
 
     PROJECT METADATA:
-    Title: ${metadata.projectTitle}
-    Description: ${metadata.projectDescription}
-    Tech Stack: ${metadata.techStack}
+    Title: ${ctx.title}
+    Description: ${ctx.desc}
+    Domain: ${ctx.domain}
 
     Include:
-    1. ### 🛡️ Technical & Architecture Risks (Identify latency, database, and system integration bottlenecks)
-    2. ### 📊 Dataset & Resource Dependency Risks (Data availability, hardware delivery delays, API rate limits)
-    3. ### ⏰ Deadline & Scope Creep Risks (Time allocation risks)
+    1. ### 🛡️ Technical & Architecture Risks (Identify latency, database, and system integration bottlenecks for "${ctx.title}")
+    2. ### 📊 Dataset & Resource Dependency Risks (Data availability, API rate limits, hardware component risks for ${ctx.domain})
+    3. ### ⏰ Deadline & Scope Creep Risks
     4. ### 💡 Concrete Plan-B Resolutions & Actionable Mitigations for Each Identified Risk
     `;
 
@@ -173,7 +356,7 @@ async function riskAssessmentAgent(metadata) {
 }
 
 /**
- * Single-request Unified Multi-Agent Pipeline for Project Planning
+ * Unified Pipeline Call
  */
 async function processUnifiedProjectPipeline(metadata) {
     const [feasibility, scope, stack, timeline, risk] = await Promise.all([
@@ -188,7 +371,7 @@ async function processUnifiedProjectPipeline(metadata) {
 }
 
 /**
- * Interactive AI Mentor Chat Service
+ * Interactive Mentor Chat
  */
 async function interactiveMentorAgent({ studentName, message, projectContext }) {
     const contextPrompt = `
@@ -210,48 +393,59 @@ async function interactiveMentorAgent({ studentName, message, projectContext }) 
     }
 }
 
-// Rich Fallback Generators (Offline support if API key is missing/exceeded)
+// Dynamic Project-Specific Fallback Generators (100% Tailored to User's Submitted Project Idea)
+
 function generateFallbackFeasibility(meta) {
+    const ctx = analyzeProjectContext(meta);
     return `### 🛡️ Feasibility & Risk Analysis Report
+* **Project Analyzed**: **"${ctx.title}"** (${ctx.domain})
 * **Overall Feasibility Rating**: **88/100 (HIGH ACADEMIC VIABILITY)**
-* **Key Strengths**:
-  * Clear project scope aligned with student skills (${meta.techStack || 'JavaScript/Python'}).
-  * Manageable dataset and resource requirements within semester timeframe.
-  * Direct practical utility and strong academic evaluation potential.
-* **Architectural & Execution Risks**:
-  * Risk 1: Integration latency between frontend UI and analytical backend APIs.
-  * Risk 2: High time expenditure on unexpected third-party library syntax.
+* **Key Technical & Domain Strengths**:
+  * **Targeted Domain Alignment**: Aligns with core principles of **${ctx.domain}**.
+  * **Scope Manageability**: Detailed features can be built incrementally within semester limits.
+  * **Resource & Tooling Availability**: Supported by open-source libraries and standard API standards.
+* **Architectural & Execution Risks Identified**:
+  * **Risk 1**: ${ctx.risks[0]}
+  * **Risk 2**: ${ctx.risks[1]}
+  * **Risk 3**: ${ctx.risks[2]}
 * **Complexity Metrics**:
-  * Frontend UI: 70/100 | Backend API: 75/100 | Database Schema: 65/100 | AI/ML Pipeline: 70/100 | Overall Complexity: Moderate
+  * Frontend UI: 72/100 | Backend API: 78/100 | Database Schema: 70/100 | AI/ML Engine: 75/100 | Overall Complexity: Moderate
 * **💡 Mentor Insight**: Focus on completing Milestone 1 tasks early. Keep core features modular so testing remains stress-free!`;
 }
 
 function generateFallbackScope(meta) {
+    const ctx = analyzeProjectContext(meta);
     return `### 🎯 Project Scope & Functional Specifications
-* **Target Audience**: Academic evaluators, domain end-users, and project reviewers.
+* **Project Title**: **"${ctx.title}"**
+* **Project Domain**: **${ctx.domain}** (${ctx.category})
+* **Problem Statement Summary**: ${ctx.desc}
 * **Must-Have Core MVP Features**:
-  1. **User Authentication & Profile Control**: Role-based access and student settings.
-  2. **Core Processing Engine**: Ingestion pipeline for ${meta.projectTitle || 'project logic'}.
-  3. **Interactive Data Dashboard**: Real-time progress gauges, charts, and metrics.
-  4. **Report Export Module**: One-click summary exports (PDF/JSON format).
+  1. **${ctx.mvpFeatures[0]}**: Core user interface and ingestion pipeline.
+  2. **${ctx.mvpFeatures[1]}**: Data processing and analytical engine.
+  3. **${ctx.mvpFeatures[2]}**: Real-time status scoring, alerts, and dashboard.
+  4. **${ctx.mvpFeatures[3]}**: Structured report exporter and summary views.
 * **Optional Stretch Features**:
-  * Real-time WebSocket push notifications for instant alerts.
-  * Multi-language UI localization (i18n).
+  * **${ctx.stretchFeatures[0]}**
+  * **${ctx.stretchFeatures[1]}**
+  * **${ctx.stretchFeatures[2]}**
 * **Out-of-Scope Targets**:
-  * High-concurrency enterprise cloud deployment (deferred to post-graduation).`;
+  * High-concurrency enterprise multi-region cloud deployment (deferred to post-graduation).`;
 }
 
 function generateFallbackTech(meta) {
+    const ctx = analyzeProjectContext(meta);
     return `### ⚙️ Recommended Technology Architecture
-* **Frontend**: HTML5 + Modern CSS3 + JavaScript (Vite / React optional) for lightweight responsiveness.
-* **Backend**: Node.js (Express) / Python (FastAPI/Flask) for high-performance RESTful routing.
-* **Database & Storage**: Relational Schema (PostgreSQL / SQLite / MySQL) with query optimization.
-* **AI & Analytics Engine**: Scikit-Learn / PyTorch / OpenCV pre-trained models.
-* **DevOps & Hosting**: Containerized Render / Vercel cloud deployment.
-* **💡 Stack Trade-off Rationale**: Avoids bloated enterprise frameworks, saving 2+ weeks of setup time so you can focus on building core deliverables.`;
+* **Target Project**: **"${ctx.title}"**
+* **Frontend UI Stack**: ${ctx.techStack.frontend}
+* **Backend API Framework**: ${ctx.techStack.backend}
+* **Database & Storage Layer**: ${ctx.techStack.database}
+* **AI & Analytical Engine**: ${ctx.techStack.ai}
+* **DevOps & Hosting Strategy**: ${ctx.techStack.devops}
+* **💡 Stack Trade-off Rationale**: This stack avoids bloated enterprise overhead, saving 2+ weeks of initial setup time while offering full support for building **"${ctx.title}"**.`;
 }
 
 function generateFallbackTimeline(meta) {
+    const ctx = analyzeProjectContext(meta);
     const duration = meta.duration || '8 Weeks';
     const weeks = parseInt(duration) || 8;
     const weeklyHours = parseInt(meta.weeklyHours) || 10;
@@ -266,31 +460,34 @@ function generateFallbackTimeline(meta) {
 
     return `### 📅 Time-Constrained Milestone & Timeline Roadmap
 
-> ⏱️ **Entered Time Constraints**: **${weeks} Weeks Total** | **${weeklyHours} Hours/Week per student** | **Team Size: ${teamSize} Member(s)**  
+> 📌 **Project**: **"${ctx.title}"** (${ctx.domain})  
+> ⏱️ **Time Constraints**: **${weeks} Weeks Total** | **${weeklyHours} Hours/Week per student** | **Team Size: ${teamSize} Member(s)**  
 > 📊 **Budgeted Effort**: **~${totalStudentHours} Hours per Student** (${totalTeamHours} Total Team Hours)
 
-| Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables & Task Checklist | Budgeted Hours |
+| Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Hours |
 | :--- | :--- | :--- | :--- |
-| **Milestone 1** (W1-${Math.max(1, Math.round(weeks * 0.25))}) | Study & Architecture Setup | 1. Study agentic AI workflows & project mentoring methodologies.<br>2. Design multi-agent system architecture, agent roles, and student-project data models.<br>3. Develop student onboarding — profile creation & skill assessment functionality.<br>4. Implement project idea submission interface & trigger mechanism for agent pipeline. | ~${m1_hrs} Hours / student |
-| **Milestone 2** (W${Math.max(1, Math.round(weeks * 0.25))+1}-${Math.round(weeks * 0.50)}) | Core Agent Pipeline Build | 1. Develop Feasibility Analysis Agent & Scope Definition Agent.<br>2. Implement Technology Stack Recommendation Agent with reasoning output.<br>3. Build Milestone & Timeline Planning Agent — generates week-wise execution plan.<br>4. Validate end-to-end pipeline using sample student project ideas. | ~${m2_hrs} Hours / student |
-| **Milestone 3** (W${Math.round(weeks * 0.50)+1}-${Math.round(weeks * 0.75)}) | Risk, Mentor & Reports | 1. Develop Risk Assessment & Mitigation Agent — identifies blockers & suggests resolutions.<br>2. Implement conversational mentor interaction for ongoing weekly student check-ins.<br>3. Build progress tracking — student updates trigger plan adjustments via agent pipeline.<br>4. Develop on-demand documentation generation for synopsis, methodology, and progress reports. | ~${m3_hrs} Hours / student |
-| **Milestone 4** (W${Math.round(weeks * 0.75)+1}-${weeks}) | Dashboard & Defense Prep | 1. Develop faculty monitoring dashboard — project health indicators & auto-generated mentor summaries.<br>2. Conduct end-to-end testing across all agents & interaction workflows.<br>3. Optimize agent prompt quality, response accuracy, and pipeline reliability.<br>4. Prepare technical documentation, project report, and final demonstration. | ~${m4_hrs} Hours / student |`;
+| **Milestone 1** (W1-${Math.max(1, Math.round(weeks * 0.25))}) | Study & Architecture Setup | 1. Study domain architecture for ${ctx.domain}.<br>2. Design system data flow and user schema.<br>3. Develop student profile onboarding & skill assessment.<br>4. Build project submission desk for "${ctx.title}". | ~${m1_hrs} Hours / student |
+| **Milestone 2** (W${Math.max(1, Math.round(weeks * 0.25))+1}-${Math.round(weeks * 0.50)}) | Core Agent Blueprint Execution | 1. Feasibility Analysis Agent execution for "${ctx.title}".<br>2. Scope Agent MVP specification (${ctx.mvpFeatures[0]}).<br>3. Tech Stack Agent rationale (${ctx.techStack.backend}).<br>4. Timeline Planning Agent milestone matrix generation. | ~${m2_hrs} Hours / student |
+| **Milestone 3** (W${Math.round(weeks * 0.50)+1}-${Math.round(weeks * 0.75)}) | Risk, Mentor & Reports | 1. Risk Assessment Agent — mitigate ${ctx.risks[0]}.<br>2. Conversational Nova AI mentor interaction.<br>3. Weekly progress check-in engine.<br>4. On-demand documentation exporter (Synopsis, Methodologies). | ~${m3_hrs} Hours / student |
+| **Milestone 4** (W${Math.round(weeks * 0.75)+1}-${weeks}) | Dashboard & Defense Prep | 1. Faculty Monitoring Dashboard & Feedback Modal.<br>2. Conduct end-to-end system testing (UT-001 to UT-007 PASS).<br>3. Optimize agent prompt quality and response accuracy.<br>4. Prepare technical report and final presentation defense. | ~${m4_hrs} Hours / student |`;
 }
 
 function generateFallbackRisk(meta) {
+    const ctx = analyzeProjectContext(meta);
     return `### 🛡️ Risk Assessment & Actionable Mitigation Plan
+* **Target Project**: **"${ctx.title}"** (${ctx.domain})
 
-1. **High Model Inference Latency on Mobile / Client Devices**
-   * **Blocker Identified**: Remote API calls or heavy models cause response delays > 1.5 seconds.
-   * **Suggested Resolution / Mitigation**: Use compressed lightweight architectures (such as DistilBERT, MobileNet, or ONNX runtimes) with async API workers to maintain response times strictly under 500ms.
+1. **${ctx.risks[0]}**
+   * **Identified Bottleneck**: Potential execution delays specific to ${ctx.domain}.
+   * **Suggested Resolution / Mitigation**: Use modular architecture and lightweight fallback handlers to guarantee smooth execution under 500ms.
 
-2. **Dataset Quality & Insufficient Training Samples**
-   * **Blocker Identified**: Dataset scarcity for specialized student project domain.
-   * **Suggested Resolution / Mitigation**: Leverage open-source benchmark datasets combined with data augmentation techniques (SMOTE, synthetic text sampling, or TF-IDF vectorization).
+2. **${ctx.risks[1]}**
+   * **Identified Bottleneck**: Domain resource or dataset availability bottleneck.
+   * **Suggested Resolution / Mitigation**: Leverage open-source synthetic sample datasets combined with local processing fallbacks.
 
-3. **Integration Overrun & Hardware Delivery Delays**
-   * **Blocker Identified**: Unexpected third-party API syntax or delayed physical sensors.
-   * **Suggested Resolution / Mitigation**: Pivot to simulated data streams via Python scripts to maintain software pipeline progress while keeping MVP scope modular.`;
+3. **${ctx.risks[2]}**
+   * **Identified Bottleneck**: Third-party API syntax or component integration risks.
+   * **Suggested Resolution / Mitigation**: Implement local mocked data providers to keep MVP deliverables fully functional during faculty evaluation.`;
 }
 
 module.exports = {
