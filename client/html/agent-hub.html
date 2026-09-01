@@ -86,25 +86,27 @@
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
     }
 
-    .mentor-insight-box {
-        background: #F0FDF4;
-        border: 1px solid #BBF7D0;
-        border-radius: 10px;
-        padding: 1rem 1.25rem;
-        color: #166534;
-        font-size: 0.88rem;
-        line-height: 1.5;
-        margin-top: 1rem;
+    /* Separate Milestone UI Cards */
+    .milestone-separate-card {
+        background: #FFFFFF;
+        border: 2px solid #E2E8F0;
+        border-left: 6px solid #CBD5E1;
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
     }
-
-    .milestone-item-card {
-        background: #F8FAFC;
-        border: 1.5px solid #E2E8F0;
-        border-left: 4px solid #2563EB;
-        border-radius: 10px;
-        padding: 1rem 1.25rem;
-        margin-bottom: 0.85rem;
-        transition: all 0.2s ease;
+    .milestone-separate-card.active-milestone-card {
+        border-color: #3B82F6;
+        border-left-color: #2563EB;
+        background: #F0F7FF;
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.12);
+    }
+    .milestone-separate-card.completed-milestone-card {
+        border-color: #A7F3D0;
+        border-left-color: #10B981;
+        background: #F0FDF4;
     }
 
     .m3-checkin-box {
@@ -285,14 +287,20 @@
         </div>
       </div>
 
-      <!-- 4. Milestone & Timeline Planning Agent Output -->
+      <!-- 4. Milestone & Timeline Planning Agent Output (4 SEPARATE CARDS & SHIFTING STATE ENGINE) -->
       <div class="output-section-card" id="timeline-output-card">
-        <h5 class="fw-bold text-dark mb-3" style="font-size: 1.15rem;">
-          <i class="fas fa-calendar-alt text-primary me-2"></i>Milestone & Timeline Planning Agent Output
-        </h5>
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <h5 class="fw-bold text-dark m-0" style="font-size: 1.15rem;">
+            <i class="fas fa-calendar-alt text-primary me-2"></i>Milestone & Timeline Planning Agent Output
+          </h5>
+          <span class="badge bg-primary px-3 py-1.5 fw-bold" id="milestone-current-phase-tag">
+            Phase 1 Active
+          </span>
+        </div>
 
-        <div id="dynamic-timeline-content">
-          <!-- Dynamically populated based on activeProjectIdea -->
+        <!-- 4 SEPARATE MILESTONE CARDS CONTAINER -->
+        <div id="dynamic-milestone-cards-container">
+          <!-- Populated dynamically with 4 distinct UI cards -->
         </div>
 
         <!-- INTERACTIVE WEEKLY CHECK-IN & MENTOR DOUBT DESK -->
@@ -300,45 +308,41 @@
           <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
             <div>
               <h6 class="fw-bold text-primary mb-1" style="font-size: 1rem;">
-                <i class="fas fa-comments text-primary me-2"></i>Weekly Progress Check-in & Mentor Doubt Desk
+                <i class="fas fa-comments text-primary me-2"></i>Weekly Progress Check-in & Active Milestone Shifter
               </h6>
               <p class="text-secondary small m-0" style="font-size: 0.85rem;">
-                Log your team's weekly progress, report technical blockers, and ask Nova AI Mentor for immediate doubts & guidance.
+                Submitting your weekly check-in marks the current active milestone as <strong>Completed (100%)</strong> and shifts progress to the next Milestone!
               </p>
             </div>
-            <span class="badge bg-primary px-3 py-1.5 fw-bold" style="font-size: 0.8rem;">Active Weekly Monitoring</span>
+            <span class="badge bg-success px-3 py-1.5 fw-bold" style="font-size: 0.8rem;">Live Milestone Progress Engine</span>
           </div>
 
           <form id="m3-checkin-form">
             <div class="row g-3 mb-3">
               <div class="col-md-3">
-                <label class="form-label small fw-bold text-dark">Current Check-in Week</label>
+                <label class="form-label small fw-bold text-dark">Check-in Milestone Action</label>
                 <select id="m3-select-week" class="form-select form-select-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;">
-                  <option value="1">Week 1 (Requirements & Setup)</option>
-                  <option value="2">Week 2 (Architecture & Schema)</option>
-                  <option value="3">Week 3 (Core Model & Agent Build)</option>
-                  <option value="4">Week 4 (API Endpoints Integration)</option>
-                  <option value="5" selected>Week 5 (Progress Check-in & Mid-Sprint)</option>
-                  <option value="6">Week 6 (UI Workspace & Gauges)</option>
-                  <option value="7">Week 7 (Faculty Dashboard Testing)</option>
-                  <option value="8">Week 8 (Final Documentation & Defense)</option>
+                  <option value="1">Complete Milestone 1 -> Activate Milestone 2</option>
+                  <option value="2">Complete Milestone 2 -> Activate Milestone 3</option>
+                  <option value="3">Complete Milestone 3 -> Activate Milestone 4</option>
+                  <option value="4">Complete Milestone 4 -> Final Defense Ready!</option>
                 </select>
               </div>
 
               <div class="col-md-9">
-                <label class="form-label small fw-bold text-dark">Weekly Accomplishments & Completed Tasks</label>
-                <input type="text" id="m3-completed-tasks" class="form-control form-control-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Completed dataset preparation (2,000 samples) and connected baseline API endpoints..." required>
+                <label class="form-label small fw-bold text-dark">Weekly Accomplishments & Completed Technical Tasks</label>
+                <input type="text" id="m3-completed-tasks" class="form-control form-control-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Completed database schema setup and initial REST API endpoints for active project..." required>
               </div>
             </div>
 
             <div class="mb-3">
               <label class="form-label small fw-bold text-dark">Ask Nova AI Mentor a Doubt / Report Technical Blocker</label>
-              <textarea id="m3-student-doubt" class="form-control form-control-sm" rows="2" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Having a doubt regarding API latency during real-time sentiment inference. What is the recommended fix?"></textarea>
+              <textarea id="m3-student-doubt" class="form-control form-control-sm" rows="2" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Having a doubt regarding database index optimization or API latency. What is the recommended fix?"></textarea>
             </div>
 
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
               <button type="submit" id="m3-submit-btn" class="btn btn-primary btn-sm px-4 py-2 fw-bold" style="border-radius: 20px; background: #0284c7; border: none;">
-                Submit Weekly Check-in & Query Mentor <i class="fas fa-paper-plane ms-1"></i>
+                Submit Check-in & Shift Active Milestone <i class="fas fa-arrow-right ms-1"></i>
               </button>
               
               <a href="ai-mentor.html" class="btn btn-outline-primary btn-sm px-3 py-1.5 fw-semibold" style="border-radius: 20px;">
@@ -392,7 +396,7 @@
         // Always auto-run pipeline for dynamic project processing
         runCompletePipeline(activeProj);
 
-        // Setup Milestone 3 Interactive Check-in Form Listener
+        // Setup Milestone Interactive Check-in Form Listener
         setupMilestone3Form();
 
         // Render Faculty Feedback Notice if teacher sent guidance
@@ -441,6 +445,325 @@
         }
     }
 
+    // Dynamic 4 Separate Milestone Cards Generator & Active Shifting Engine
+    function renderSeparateMilestoneCards(proj) {
+        const activeProj = proj || JSON.parse(localStorage.getItem("activeProjectIdea")) || {};
+        const title = activeProj.projectTitle || "Submitted Project";
+        const weeks = parseInt(activeProj.duration) || 8;
+        const hrsPerWk = parseInt(activeProj.weeklyHours) || 10;
+        const teamCount = parseInt(activeProj.teamSize) || 2;
+        const completedWeek = parseInt(localStorage.getItem("completedCheckinWeek") || "0");
+
+        const totalStudentHours = weeks * hrsPerWk;
+        const totalTeamHours = totalStudentHours * teamCount;
+
+        const p1_end = Math.max(1, Math.round(weeks * 0.25));
+        const p2_start = p1_end + 1;
+        const p2_end = Math.round(weeks * 0.50);
+        const p3_start = p2_end + 1;
+        const p3_end = Math.round(weeks * 0.75);
+        const p4_start = p3_end + 1;
+        const p4_end = weeks;
+
+        const m1_hrs = Math.round(totalStudentHours * 0.25);
+        const m2_hrs = Math.round(totalStudentHours * 0.25);
+        const m3_hrs = Math.round(totalStudentHours * 0.25);
+        const m4_hrs = Math.round(totalStudentHours * 0.25);
+
+        // Project Domain-Specific Task Breakdown
+        const text = (title + " " + (activeProj.description || "")).toLowerCase();
+        let tasks_m1, tasks_m2, tasks_m3, tasks_m4;
+
+        if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("disease") || text.includes("tumor") || text.includes("diagnostic")) {
+            tasks_m1 = [
+                `Study literature on DICOM image processing & AI diagnostic models for "${title}".`,
+                `Design relational database ERD for Patients, Diagnostic Scans, and Physician Reports.`,
+                `Build student onboarding & project setup interface for "${title}".`,
+                `Set up anonymized clinical image dataset (500+ test scans).`
+            ];
+            tasks_m2 = [
+                `Develop CNN diagnostic classification model in PyTorch / TensorFlow for "${title}".`,
+                `Implement Node.js REST API endpoints (/api/diagnose, /api/patients).`,
+                `Build React frontend interface with health telemetry gauges & diagnostic file dropzone.`,
+                `Validate Feasibility & Scope Agent specifications for clinical workflow.`
+            ];
+            tasks_m3 = [
+                `Execute Risk Assessment Agent — resolve DICOM image inference latency bottlenecks.`,
+                `Integrate Nova AI Medical Mentor desk for student query support.`,
+                `Log Weekly Progress Check-ins & test automated patient summary report exporter.`,
+                `Apply faculty guidance notes on medical data encryption.`
+            ];
+            tasks_m4 = [
+                `Launch Faculty Monitoring Dashboard with real-time student health digest badges.`,
+                `Conduct end-to-end automated unit testing (UT-001 to UT-007 PASS).`,
+                `Optimize diagnostic model inference speed under 500ms.`,
+                `Prepare 25-slide final defense presentation deck & technical report.`
+            ];
+        } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("recommend") || text.includes("cart")) {
+            tasks_m1 = [
+                `Analyze e-commerce catalog structures and recommendation patterns for "${title}".`,
+                `Design MySQL database schema for Users, Products, Shopping Cart, and Orders.`,
+                `Build project submission desk & competency skill matrix.`,
+                `Set up sample product inventory catalog with 200+ items.`
+            ];
+            tasks_m2 = [
+                `Build Collaborative Filtering product recommendation engine in Scikit-Learn.`,
+                `Implement Node.js REST API endpoints (/api/products, /api/cart, /api/checkout).`,
+                `Develop React frontend shopping cart UI with Stripe checkout webhook simulation.`,
+                `Validate product recommendation accuracy against test order histories.`
+            ];
+            tasks_m3 = [
+                `Execute Risk Assessment Agent — resolve cart state synchronization issues.`,
+                `Connect Nova AI Commerce Mentor desk for weekly check-in guidance.`,
+                `Build automated merchant sales analytics dashboard & summary report exporter.`,
+                `Log Weekly Progress updates and process faculty feedback callouts.`
+            ];
+            tasks_m4 = [
+                `Finalize Faculty Monitoring Dashboard for live e-commerce project tracking.`,
+                `Run full automated unit testing (UT-001 to UT-007 PASS) for cart & checkout.`,
+                `Conduct performance tuning & API speed optimization (<200ms).`,
+                `Prepare final defense presentation slides & project demonstration.`
+            ];
+        } else if (text.includes("blockchain") || text.includes("crypto")) {
+            tasks_m1 = [
+                `Study Solidity smart contract standards and EVM architecture for "${title}".`,
+                `Design immutable ledger schema and IPFS document hashing data flow.`,
+                `Set up local Hardhat / Anvil blockchain testnet environment.`,
+                `Initialize student onboarding & crypto project submission desk.`
+            ];
+            tasks_m2 = [
+                `Write and compile Solidity smart contracts for "${title}".`,
+                `Connect Ethers.js / Web3.js frontend wallet login & transaction triggers.`,
+                `Implement Node.js REST API middleware for blockchain transaction indexing.`,
+                `Test smart contract execution against local Ethereum testnet.`
+            ];
+            tasks_m3 = [
+                `Run Risk Assessment Agent — audit smart contract reentrancy vulnerabilities.`,
+                `Enable Nova AI Blockchain Mentor for weekly student check-ins.`,
+                `Build transaction log audit report exporter.`,
+                `Apply faculty guidance notes regarding gas fee optimization.`
+            ];
+            tasks_m4 = [
+                `Deploy smart contracts to Sepolia Testnet & verify on Etherscan.`,
+                `Execute automated unit tests (UT-001 to UT-007 PASS).`,
+                `Optimize transaction latency & contract gas consumption.`,
+                `Prepare project defense report & presentation deck.`
+            ];
+        } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
+            tasks_m1 = [
+                `Specify hardware component pinouts (ESP32/Arduino/Raspberry Pi) for "${title}".`,
+                `Design time-series database schema for telemetry sensor data.`,
+                `Set up Mosquitto MQTT broker and test sensor publish/subscribe loops.`,
+                `Build student project submission interface for IoT hardware telemetry.`
+            ];
+            tasks_m2 = [
+                `Build real-time IoT dashboard in HTML5/React with live Chart.js gauges.`,
+                `Implement Node.js API endpoints (/api/telemetry, /api/actuators).`,
+                `Deploy Isolation Forest anomaly detection algorithm on sensor readings.`,
+                `Connect physical/simulated sensor streams to backend MQTT broker.`
+            ];
+            tasks_m3 = [
+                `Execute Risk Assessment Agent — set up offline packet buffer for connection drops.`,
+                `Connect Nova AI Hardware Mentor for weekly student check-in guidance.`,
+                `Build historical sensor log PDF/CSV report exporter.`,
+                `Record weekly progress updates (Weeks 5-6).`
+            ];
+            tasks_m4 = [
+                `Conduct stress testing on hardware telemetry under 1,000 readings/min.`,
+                `Run unit tests (UT-001 to UT-007 PASS) for sensor ingestion pipeline.`,
+                `Finalize Faculty Monitoring Dashboard for live hardware health tracking.`,
+                `Complete project defense presentation deck & final demonstration.`
+            ];
+        } else {
+            tasks_m1 = [
+                `Study domain requirements and architecture for "${title}".`,
+                `Design database ERD tables and REST API endpoint contracts.`,
+                `Build student onboarding profile & project submission desk.`,
+                `Initialize version control repository and core project structure.`
+            ];
+            tasks_m2 = [
+                `Build backend Node.js Express REST API (/api/projects, /api/users).`,
+                `Develop frontend interactive UI pages with responsive Bootstrap layout.`,
+                `Implement core business processing engine for "${title}".`,
+                `Test database connection pooling and CRUD operations.`
+            ];
+            tasks_m3 = [
+                `Run Risk Assessment Agent — optimize API response times.`,
+                `Integrate Nova AI mentor chat desk for ongoing weekly check-ins.`,
+                `Build progress tracking & document exporter.`,
+                `Process faculty advisor feedback notes.`
+            ];
+            tasks_m4 = [
+                `Launch Faculty Monitoring Dashboard with student health digests.`,
+                `Conduct end-to-end unit tests (UT-001 to UT-007 PASS).`,
+                `Optimize system performance and prompt quality.`,
+                `Prepare technical documentation and final defense presentation.`
+            ];
+        }
+
+        // Active Shifting Logic
+        let m1_class = "milestone-separate-card", m1_badge = "";
+        let m2_class = "milestone-separate-card", m2_badge = "";
+        let m3_class = "milestone-separate-card", m3_badge = "";
+        let m4_class = "milestone-separate-card", m4_badge = "";
+
+        if (completedWeek === 0) {
+            m1_class += " active-milestone-card";
+            m1_badge = `<span class="badge bg-primary fs-6"><i class="fas fa-spinner fa-spin me-1"></i> ACTIVE MILESTONE (In Progress ~25%)</span>`;
+            
+            m2_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+            m3_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+            m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+
+            if (document.getElementById("milestone-current-phase-tag")) {
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 1 Active (Requirements & Setup)";
+            }
+        } else if (completedWeek === 1) {
+            m1_class += " completed-milestone-card";
+            m1_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m2_class += " active-milestone-card";
+            m2_badge = `<span class="badge bg-primary fs-6"><i class="fas fa-spinner fa-spin me-1"></i> ACTIVE MILESTONE (In Progress ~50%)</span>`;
+
+            m3_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+            m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+
+            if (document.getElementById("milestone-current-phase-tag")) {
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 2 Active (Core Multi-Agent Build)";
+            }
+        } else if (completedWeek === 2) {
+            m1_class += " completed-milestone-card";
+            m1_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m2_class += " completed-milestone-card";
+            m2_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m3_class += " active-milestone-card";
+            m3_badge = `<span class="badge bg-primary fs-6"><i class="fas fa-spinner fa-spin me-1"></i> ACTIVE MILESTONE (In Progress ~75%)</span>`;
+
+            m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
+
+            if (document.getElementById("milestone-current-phase-tag")) {
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 3 Active (Risk & Progress Tracking)";
+            }
+        } else {
+            m1_class += " completed-milestone-card";
+            m1_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m2_class += " completed-milestone-card";
+            m2_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m3_class += " completed-milestone-card";
+            m3_badge = `<span class="badge bg-success fs-6"><i class="fas fa-check-circle me-1"></i> COMPLETED (100%)</span>`;
+
+            m4_class += " active-milestone-card";
+            m4_badge = `<span class="badge bg-primary fs-6"><i class="fas fa-spinner fa-spin me-1"></i> ACTIVE MILESTONE (Final Defense Prep ~90%)</span>`;
+
+            if (document.getElementById("milestone-current-phase-tag")) {
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 4 Active (Final Defense & Testing)";
+            }
+        }
+
+        const container = document.getElementById("dynamic-milestone-cards-container");
+        if (container) {
+            container.innerHTML = `
+              <div class="alert alert-primary bg-primary bg-opacity-10 border-primary border-opacity-25 mb-4 p-3 rounded-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <div>
+                    <strong>⏱️ Time Constraint Budget for "${title}":</strong> 
+                    <span class="badge bg-primary ms-1">${weeks} Weeks Total</span>
+                    <span class="badge bg-secondary ms-1">${hrsPerWk} Hours/Wk per student</span>
+                    <span class="badge bg-dark ms-1">Team Size: ${teamCount} Student(s)</span>
+                  </div>
+                  <div>
+                    <strong class="text-primary font-monospace">~${totalStudentHours} Hours / Student</strong> (${totalTeamHours} Total Team Hours)
+                  </div>
+                </div>
+              </div>
+
+              <!-- CARD 1: MILESTONE 1 -->
+              <div class="${m1_class}">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                  <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
+                    <i class="fas fa-flag text-primary me-2"></i>Milestone 1 (Week 1${p1_end > 1 ? '-' + p1_end : ''}) — Requirements, Domain Architecture & Setup
+                  </h5>
+                  <div class="d-flex align-items-center gap-2">
+                    ${m1_badge}
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m1_hrs} Hours / student</span>
+                  </div>
+                </div>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                  <li>${tasks_m1[0]}</li>
+                  <li>${tasks_m1[1]}</li>
+                  <li>${tasks_m1[2]}</li>
+                  <li>${tasks_m1[3]}</li>
+                </ul>
+              </div>
+
+              <!-- CARD 2: MILESTONE 2 -->
+              <div class="${m2_class}">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                  <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
+                    <i class="fas fa-cogs text-primary me-2"></i>Milestone 2 (Week ${p2_start}-${p2_end}) — Core Architecture, Database & Multi-Agent Build
+                  </h5>
+                  <div class="d-flex align-items-center gap-2">
+                    ${m2_badge}
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m2_hrs} Hours / student</span>
+                  </div>
+                </div>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                  <li>${tasks_m2[0]}</li>
+                  <li>${tasks_m2[1]}</li>
+                  <li>${tasks_m2[2]}</li>
+                  <li>${tasks_m2[3]}</li>
+                </ul>
+              </div>
+
+              <!-- CARD 3: MILESTONE 3 -->
+              <div class="${m3_class}">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                  <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
+                    <i class="fas fa-shield-alt text-primary me-2"></i>Milestone 3 (Week ${p3_start}-${p3_end}) — Risk Assessment, Nova AI Mentor & Progress Tracking
+                  </h5>
+                  <div class="d-flex align-items-center gap-2">
+                    ${m3_badge}
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m3_hrs} Hours / student</span>
+                  </div>
+                </div>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                  <li>${tasks_m3[0]}</li>
+                  <li>${tasks_m3[1]}</li>
+                  <li>${tasks_m3[2]}</li>
+                  <li>${tasks_m3[3]}</li>
+                </ul>
+              </div>
+
+              <!-- CARD 4: MILESTONE 4 -->
+              <div class="${m4_class}">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+                  <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
+                    <i class="fas fa-graduation-cap text-primary me-2"></i>Milestone 4 (Week ${p4_start}-${p4_end}) — Faculty Dashboard, End-to-End Testing & Defense Prep
+                  </h5>
+                  <div class="d-flex align-items-center gap-2">
+                    ${m4_badge}
+                    <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m4_hrs} Hours / student</span>
+                  </div>
+                </div>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
+                  <li>${tasks_m4[0]}</li>
+                  <li>${tasks_m4[1]}</li>
+                  <li>${tasks_m4[2]}</li>
+                  <li>${tasks_m4[3]}</li>
+                </ul>
+              </div>
+            `;
+        }
+    }
+
     function setupMilestone3Form() {
         const form = document.getElementById("m3-checkin-form");
         if (!form) return;
@@ -448,17 +771,21 @@
         form.addEventListener("submit", async function(e) {
             e.preventDefault();
 
-            const week = document.getElementById("m3-select-week").value;
+            const actionVal = parseInt(document.getElementById("m3-select-week").value) || 1;
             const tasks = document.getElementById("m3-completed-tasks").value.trim();
             const doubt = document.getElementById("m3-student-doubt").value.trim();
 
             const submitBtn = document.getElementById("m3-submit-btn");
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `Analyzing Check-in & Doubt <i class="fas fa-spinner fa-spin ms-1"></i>`;
+            submitBtn.innerHTML = `Shifting Active Milestone & Analyzing Doubt <i class="fas fa-spinner fa-spin ms-1"></i>`;
 
-            appendTerminalLog(`[Weekly Check-in] Logging Week ${week} completion & update...`);
+            appendTerminalLog(`[Weekly Check-in] Logging Milestone ${actionVal} completion...`);
 
-            localStorage.setItem("completedCheckinWeek", week);
+            // Shift active milestone state!
+            localStorage.setItem("completedCheckinWeek", actionVal.toString());
+            
+            // Re-render the 4 Separate Milestone Cards live!
+            renderSeparateMilestoneCards();
 
             let mentorReplyText = "";
             try {
@@ -466,7 +793,7 @@
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        message: `[Milestone 3 Check-in - Week ${week}] Accomplishments: "${tasks}". Doubt/Blocker: "${doubt || 'None'}"`
+                        message: `[Milestone ${actionVal} Check-in] Accomplishments: "${tasks}". Doubt/Blocker: "${doubt || 'None'}"`
                     })
                 });
                 const data = await res.json();
@@ -478,7 +805,7 @@
             }
 
             if (!mentorReplyText) {
-                mentorReplyText = generateM3LocalFeedback(week, tasks, doubt);
+                mentorReplyText = generateM3LocalFeedback(actionVal, tasks, doubt);
             }
 
             const responseBox = document.getElementById("m3-mentor-response-box");
@@ -490,10 +817,10 @@
                 responseBox.scrollIntoView({ behavior: 'smooth' });
             }
 
-            appendTerminalLog(`[Milestone 3] Week ${week} Check-in Logged! Mentor Doubt Resolution Ready.`);
+            appendTerminalLog(`[Milestone Engine] Milestone ${actionVal} COMPLETED (100%)! Shifted Active Progress to Milestone ${Math.min(4, actionVal + 1)}.`);
 
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `Submit Weekly Check-in & Query Mentor <i class="fas fa-paper-plane ms-1"></i>`;
+            submitBtn.innerHTML = `Submit Check-in & Shift Active Milestone <i class="fas fa-arrow-right ms-1"></i>`;
         });
     }
 
@@ -509,17 +836,18 @@
                 doubtAdvice = `**Doubt Resolution:** To address "${doubt}", break down the logic into modular unit tests first. Test backend endpoints independently via cURL before binding to frontend UI components.`;
             }
         } else {
-            doubtAdvice = `**Weekly Status:** Excellent work! No active technical blockers reported for Week ${week}.`;
+            doubtAdvice = `**Milestone Status:** Excellent work! Milestone ${week} check-in logged and verified.`;
         }
 
-        return `### 🌟 Milestone 3 Progress Check-in (Week ${week})
-- **Check-in Status**: **LOGGED & VERIFIED (Health: ON TRACK - 88% Confidence)**
-- **Completed Tasks Evaluated**: *"<sup>${tasks}</sup>"*
+        return `### 🌟 Milestone ${week} Progress Verification & Shift Complete
+- **Status**: **LOGGED & VERIFIED (Health: ON TRACK - 92% Confidence)**
+- **Completed Deliverables Evaluated**: *"<sup>${tasks}</sup>"*
+- **Next Active Milestone Activated**: **Milestone ${Math.min(4, parseInt(week) + 1)}**
 
 ${doubtAdvice}
 
-#### 💡 Next Steps for Week ${parseInt(week) + 1}:
-1. Focus on finalizing your core UI interaction components and progress tracking gauges.
+#### 💡 Next Steps for Active Milestone ${Math.min(4, parseInt(week) + 1)}:
+1. Proceed with the task breakdown listed inside the newly activated Milestone ${Math.min(4, parseInt(week) + 1)} card above.
 2. Generate an updated **Academic Progress Report** from the Reports page for your faculty mentor review.`;
     }
 
@@ -575,6 +903,9 @@ ${doubtAdvice}
         // Inject Dynamic Markdown Reports directly into 5 Output Cards!
         renderDynamicAgentOutputs(agentData);
 
+        // Render 4 Separate Milestone Cards & Shifting Engine!
+        renderSeparateMilestoneCards(activeProj);
+
         appendTerminalLog(`[1.2s] Multi-Agent Pipeline Execution Completed. All 5 Agents Synced!`);
 
         if (btn) {
@@ -611,13 +942,7 @@ ${doubtAdvice}
             techCard.innerHTML = typeof marked !== "undefined" ? marked.parse(data.stack) : data.stack;
         }
 
-        // 4. Milestone & Timeline Card Rendering (DYNAMIC REPLACER!)
-        const timelineContainer = document.getElementById("dynamic-timeline-content");
-        if (timelineContainer && data.timeline) {
-            timelineContainer.innerHTML = typeof marked !== "undefined" ? marked.parse(data.timeline) : data.timeline;
-        }
-
-        // 5. Risk Card Rendering
+        // 4. Risk Card Rendering
         const riskCard = document.getElementById("risk-body-content");
         if (riskCard && data.risk) {
             riskCard.innerHTML = typeof marked !== "undefined" ? marked.parse(data.risk) : data.risk;
@@ -629,18 +954,6 @@ ${doubtAdvice}
         const desc = meta.description || "Comprehensive academic project build.";
         const text = (title + " " + desc).toLowerCase();
         
-        const duration = meta.duration || '8';
-        const weeks = parseInt(duration) || 8;
-        const hrsPerWk = parseInt(meta.weeklyHours) || 10;
-        const teamCount = parseInt(meta.teamSize) || 2;
-        const totalStudentHours = weeks * hrsPerWk;
-        const totalTeamHours = totalStudentHours * teamCount;
-
-        const m1_hrs = Math.round(totalStudentHours * 0.25);
-        const m2_hrs = Math.round(totalStudentHours * 0.25);
-        const m3_hrs = Math.round(totalStudentHours * 0.25);
-        const m4_hrs = Math.round(totalStudentHours * 0.25);
-
         let domain = "Software Systems";
         let score = 88;
         let rating = "HIGH ACADEMIC VIABILITY";
@@ -662,11 +975,29 @@ ${doubtAdvice}
         }
 
         return {
-            feasibility: `### 🛡️ Feasibility & Risk Analysis Report\n* **Project Analyzed**: **"${title}"** (${domain})\n* **Overall Feasibility Index**: **${score}/100 (${rating})**\n* **Key Strengths**: Aligns with ${domain} best practices, clear MVP boundaries.\n* **Complexity**: Frontend 75/100 | Backend 80/100 | Database 70/100 | Overall: Moderate`,
-            scope: `### 🎯 Project Scope & MVP Specifications for "${title}"\n* **Domain**: ${domain}\n* **Problem Statement**: ${desc}\n* **Must-Have Core MVP Features**:\n  1. Authentication & Profile Management Portal\n  2. Ingestion & Core Data Processing Engine for ${title}\n  3. Interactive Dashboard & Metrics Visualization\n  4. Report Exporter & PDF Summary Module`,
-            stack: `### ⚙️ Technology Stack Recommendation for "${title}"\n* **Frontend UI**: HTML5 / CSS3 / JavaScript (React/Vite optional)\n* **Backend API**: Node.js (Express REST API)\n* **Database**: MySQL Relational Database (Connection Pool db.js)\n* **AI / Analytics**: Google Gemini API / Scikit-Learn / DistilBERT Local Fallbacks\n* **DevOps**: Docker Containerized Hosting on Render / Vercel`,
-            timeline: `### 📅 Time-Constrained Milestone & Timeline Roadmap for "${title}"\n\n> 📌 **Project**: **"${title}"** (${domain})  \n> ⏱️ **Time Budget**: **${weeks} Weeks Total** | **${hrsPerWk} Hours/Week per student** | **Team Size: ${teamCount} Student(s)**  \n> 📊 **Total Effort Budget**: **~${totalStudentHours} Hours per Student** (${totalTeamHours} Total Team Hours)\n\n| Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables for "${title}" | Budgeted Student Hours |\n| :--- | :--- | :--- | :--- |\n| **Milestone 1** (Week 1-${Math.max(1, Math.round(weeks*0.25))}) | Requirements & System Architecture | 1. Study ${domain} architecture.<br>2. Design student profile & project submission desk for "${title}". | ~${m1_hrs} Hours / student |\n| **Milestone 2** (Week ${Math.max(1, Math.round(weeks*0.25))+1}-${Math.round(weeks*0.50)}) | Core Agent Pipeline Execution | 1. Execute Feasibility Analysis & Scope MVP Agents for "${title}".<br>2. Generate Tech Stack & Timeline Matrix. | ~${m2_hrs} Hours / student |\n| **Milestone 3** (Week ${Math.round(weeks*0.50)+1}-${Math.round(weeks*0.75)}) | Risk, Mentor Desk & Reports | 1. Execute Risk Assessment Agent.<br>2. Implement Nova AI weekly progress check-in & report exporter. | ~${m3_hrs} Hours / student |\n| **Milestone 4** (Week ${Math.round(weeks*0.75)+1}-${weeks}) | Faculty Dashboard & Defense Prep | 1. Launch Faculty Monitoring Dashboard & Feedback Modal.<br>2. Complete unit tests (UT-001 to UT-007 PASS) & final defense prep. | ~${m4_hrs} Hours / student |`,
-            risk: `### 🛡️ Risk Assessment & Mitigation Plan for "${title}"\n1. **API Inference Latency Bottleneck** — Use local DistilBERT/ONNX classifiers (<500ms response time).\n2. **Dataset Scarcity** — Combine open-source benchmarks with synthetic data augmentation.\n3. **Deadline Integration Overrun** — Maintain strict MVP scope and modularize API dependencies.`
+            feasibility: `### 🛡️ Feasibility & Risk Analysis Report
+* **Project Analyzed**: **"${title}"** (${domain})
+* **Overall Feasibility Index**: **${score}/100 (${rating})**
+* **Key Strengths**: Aligns with ${domain} best practices, clear MVP boundaries.
+* **Complexity**: Frontend 75/100 | Backend 80/100 | Database 70/100 | Overall: Moderate`,
+            scope: `### 🎯 Project Scope & MVP Specifications for "${title}"
+* **Domain**: ${domain}
+* **Problem Statement**: ${desc}
+* **Must-Have Core MVP Features**:
+  1. Authentication & Profile Management Portal
+  2. Ingestion & Core Data Processing Engine for ${title}
+  3. Interactive Dashboard & Metrics Visualization
+  4. Report Exporter & PDF Summary Module`,
+            stack: `### ⚙️ Technology Stack Recommendation for "${title}"
+* **Frontend UI**: HTML5 / CSS3 / JavaScript (React/Vite optional)
+* **Backend API**: Node.js (Express REST API)
+* **Database**: MySQL Relational Database (Connection Pool db.js)
+* **AI / Analytics**: Google Gemini API / Scikit-Learn / DistilBERT Local Fallbacks
+* **DevOps**: Docker Containerized Hosting on Render / Vercel`,
+            risk: `### 🛡️ Risk Assessment & Mitigation Plan for "${title}"
+1. **API Inference Latency Bottleneck** — Use local DistilBERT/ONNX classifiers (<500ms response time).
+2. **Dataset Scarcity** — Combine open-source benchmarks with synthetic data augmentation.
+3. **Deadline Integration Overrun** — Maintain strict MVP scope and modularize API dependencies.`
         };
     }
   </script>

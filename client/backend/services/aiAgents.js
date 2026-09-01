@@ -1,5 +1,5 @@
 // ==========================================
-// services/aiAgents.js (Dynamic Multi-Agent & Dynamic Feasibility Scoring)
+// services/aiAgents.js (Granular Multi-Agent Engine & Dynamic Project Analytics)
 // ==========================================
 const { GoogleGenAI } = require("@google/genai");
 
@@ -9,33 +9,35 @@ const ai = new GoogleGenAI(apiKey ? { apiKey } : {});
 const MODEL_NAME = 'gemini-2.5-flash';
 
 /**
- * Dynamic Feasibility Calculator Engine
+ * Dynamic Feasibility Score Calculator
  */
 function calculateDynamicFeasibilityScore(meta, text) {
-    let score = 84; // Baseline standard score
+    let score = 85; // Baseline standard score
     
     // Domain & Tech Complexity Adjustments
     if (text.includes("blockchain") || text.includes("quantum") || text.includes("robotics") || text.includes("satellite") || text.includes("crypto")) {
-        score -= 14; // High-complexity hardware/crypto challenge (e.g., ~70%)
+        score -= 14; // High-complexity hardware/crypto challenge (~71%)
     } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("crud") || text.includes("management") || text.includes("portal") || text.includes("catalog")) {
-        score += 8; // Highly feasible web/mobile system (e.g., ~92%)
-    } else if (text.includes("health") || text.includes("medical") || text.includes("iot") || text.includes("sensor")) {
-        score += 4; // Moderate-high feasibility (e.g., ~88%)
+        score += 9; // Highly feasible web/mobile system (~94%)
+    } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("diagnostic")) {
+        score += 4; // Moderate-high feasibility (~89%)
+    } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
+        score += 2; // IoT system (~87%)
     } else if (text.includes("ai") || text.includes("nlp") || text.includes("vision") || text.includes("detect")) {
-        score += 2; // AI/ML project with manageable scope (e.g., ~86%)
+        score += 3; // AI/ML project (~88%)
     }
 
     // Team Size Adjustments
     const teamSize = parseInt(meta.teamSize) || 2;
     if (teamSize >= 4) score += 4;
     else if (teamSize === 3) score += 2;
-    else if (teamSize === 1) score -= 6; // Single-student project penalizes buffer time
+    else if (teamSize === 1) score -= 6; // Single-student project
 
     // Duration Adjustments
     const weeks = parseInt(meta.duration) || 8;
     if (weeks >= 12) score += 4;
     else if (weeks >= 8) score += 1;
-    else if (weeks <= 4) score -= 8; // Very short timeline increases execution risk
+    else if (weeks <= 4) score -= 8;
 
     // Clamp score strictly between 62% and 96%
     score = Math.max(62, Math.min(96, score));
@@ -48,15 +50,20 @@ function calculateDynamicFeasibilityScore(meta, text) {
 }
 
 /**
- * Domain Analyzer for Dynamic Multi-Agent Generation
+ * Rich Project Context Analyzer
  */
 function analyzeProjectContext(meta) {
     const title = meta.projectTitle || (meta.projectDescription ? (meta.projectDescription.substring(0, 50) + "...") : "Academic Project");
     const desc = meta.projectDescription || meta.description || "Comprehensive academic project build.";
     const text = (title + " " + desc + " " + (meta.techStack || "")).toLowerCase();
     
-    // Dynamic Feasibility Calculation
     const { score: feasibilityScore, rating: feasibilityRating } = calculateDynamicFeasibilityScore(meta, text);
+
+    const weeks = parseInt(meta.duration) || 8;
+    const hrsPerWk = parseInt(meta.weeklyHours) || 10;
+    const teamSize = parseInt(meta.teamSize) || 2;
+    const totalStudentHours = weeks * hrsPerWk;
+    const totalTeamHours = totalStudentHours * teamSize;
 
     let domain = "Software Engineering & Web Architecture";
     let category = "Full-Stack System";
@@ -64,24 +71,25 @@ function analyzeProjectContext(meta) {
     let stretchFeatures = [];
     let techStack = {};
     let risks = [];
+    let milestoneDetails = {};
 
-    if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("doctor") || text.includes("disease") || text.includes("tumor") || text.includes("clinical")) {
+    if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("doctor") || text.includes("disease") || text.includes("tumor") || text.includes("diagnostic")) {
         domain = "Healthcare & Biomedical Intelligence";
         category = "Medical AI & Clinical Decision Support";
         mvpFeatures = [
-            "Patient Profile & Diagnostic Data Ingestion Portal",
-            "Real-Time Health Metric & Medical Imaging Analysis Engine",
-            "Risk Scoring & Predictive Diagnostic Alerts Module",
-            "Secure HIPAA-Compliant Medical Summary & PDF Report Exporter"
+            "Patient Profile & Diagnostic Data Ingestion Portal (Support DICOM / Image Uploads)",
+            "Real-Time Health Metric & Medical Imaging Analysis Engine using CNN / PyTorch",
+            "Risk Scoring & Predictive Diagnostic Alerts Module for Clinical Reviews",
+            "Secure HIPAA-Compliant Medical Summary & PDF Report Exporter for Physicians"
         ];
         stretchFeatures = [
-            "Integration with DICOM Medical Image Viewer APIs",
-            "Telemedicine Video Consult Scheduling Integration",
-            "Automated Multi-lingual Patient Advisory Assistant"
+            "Integration with DICOM Web Medical Viewer APIs for Interactive Radiology Views",
+            "Telemedicine Video Consult Scheduling Integration via WebRTC",
+            "Automated Multi-lingual Patient Advisory Assistant using Gemini Flash LLM"
         ];
         techStack = {
-            frontend: "React.js / HTML5 + Chart.js for Medical Telemetry",
-            backend: "Node.js (Express) with DICOM / Health Data Parsers",
+            frontend: "React.js 18 + HTML5 / Chart.js for Medical Telemetry Visualization",
+            backend: "Node.js (Express) REST API + Python FastAPI for Model Inference",
             database: "PostgreSQL / MySQL with Encrypted Medical Records Schema",
             ai: "PyTorch / TensorFlow Medical Classifier & Scikit-Learn Risk Models",
             devops: "Docker Containerized Deployment on Render / AWS Medical Sandbox"
@@ -91,23 +99,29 @@ function analyzeProjectContext(meta) {
             "Model Inference Latency on Complex High-Resolution Imaging Datasets",
             "Scarcity of Anonymized Clinical Datasets for Model Training"
         ];
+        milestoneDetails = {
+            m1: `• Conduct literature survey on medical image processing algorithms for ${title}.\n• Design database schema for patient profiles, medical imaging metadata, and diagnosis logs.\n• Build student onboarding & project setup interface for ${title}.\n• Set up local DICOM image sample dataset (500+ anonymized scans).`,
+            m2: `• Develop CNN diagnostic model in PyTorch/TensorFlow for ${title}.\n• Build REST API endpoints (/api/diagnose, /api/patients) in Node.js/FastAPI.\n• Connect React frontend with health telemetry gauges & diagnostic file dropzone.\n• Execute Feasibility and Scope Agent validation scripts.`,
+            m3: `• Conduct Risk Assessment Agent evaluation — mitigate DICOM inference latency.\n• Implement Nova AI Medical Advisor chat desk for student query support.\n• Log Weekly Check-ins (Weeks 5-6) & test patient report PDF exporter.\n• Conduct faculty guidance review & apply feedback callouts.`,
+            m4: `• Build Faculty Monitoring Dashboard with student health digest badges.\n• Run automated end-to-end unit tests (UT-001 to UT-007 PASS).\n• Optimize medical model inference speed below 500ms.\n• Prepare 25-slide defense presentation deck & final technical project synopsis.`
+        };
     } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("retail") || text.includes("product") || text.includes("cart") || text.includes("recommend")) {
         domain = "E-Commerce & Intelligent Retail Systems";
         category = "Smart Commerce & Personalization Platform";
         mvpFeatures = [
-            "Dynamic Product Catalog & Category Inventory Management",
-            "AI Collaborative Filtering Product Recommendation Engine",
-            "Interactive Shopping Cart & Stripe / PayPal Checkout Pipeline",
-            "User Order Tracking & Purchase History Analytics Dashboard"
+            "Dynamic Product Catalog & Category Inventory Management with Search & Filtering",
+            "AI Collaborative Filtering Product Recommendation Engine tailored to user history",
+            "Interactive Shopping Cart & Stripe / PayPal Checkout Webhook Integration",
+            "User Order Tracking & Purchase History Analytics Dashboard for Merchants"
         ];
         stretchFeatures = [
-            "AR Product 3D Preview Plugin for Mobile Browsers",
-            "Automated Dynamic Pricing & Inventory Stock Alerts",
+            "AR Product 3D Preview Plugin for Mobile Web Browsers",
+            "Automated Dynamic Pricing & Inventory Low-Stock Email Alerts",
             "Multi-Currency & Regional Tax Calculator Middleware"
         ];
         techStack = {
-            frontend: "React.js / HTML5 + Redux Toolkit for Shopping Cart State",
-            backend: "Node.js (Express) REST API + Stripe Payment Webhooks",
+            frontend: "React.js 18 + HTML5 + Redux Toolkit for Shopping Cart State",
+            backend: "Node.js (Express) REST API + Stripe Payment Gateway Webhooks",
             database: "MySQL / PostgreSQL (Products & Orders) + Redis Session Cache",
             ai: "Scikit-Learn Collaborative Filtering & Content-Based Recommenders",
             devops: "Vercel / Heroku Cloud Hosting with CDN Asset Caching"
@@ -117,14 +131,20 @@ function analyzeProjectContext(meta) {
             "Cold-Start Problem for Newly Added Products in Recommendation Models",
             "Third-Party Payment Gateway Webhook Latency & Timeout Risks"
         ];
-    } else if (text.includes("blockchain") || text.includes("quantum") || text.includes("crypto")) {
+        milestoneDetails = {
+            m1: `• Analyze e-commerce workflows and catalog structures for ${title}.\n• Design relational database ERD for Users, Products, Shopping Cart, and Orders.\n• Build project idea submission desk and skill assessment matrix.\n• Mock sample product inventory catalog with 200+ items.`,
+            m2: `• Build AI Collaborative Filtering recommendation pipeline in Scikit-Learn.\n• Implement Node.js Express REST API routes (/api/products, /api/cart, /api/checkout).\n• Develop frontend interactive shopping cart & Stripe webhook simulator.\n• Validate product recommendation accuracy against test order histories.`,
+            m3: `• Execute Risk Assessment Agent — resolve shopping cart session sync issues.\n• Integrate Nova AI Commerce Mentor for weekly student check-in guidance.\n• Build automated merchant analytics dashboard & sales summary exporter.\n• Log Milestone 3 progress updates and faculty feedback notes.`,
+            m4: `• Finalize Faculty Supervisory View for real-time e-commerce project tracking.\n• Run full unit test suite (UT-001 to UT-007 PASS) for cart & payment pipelines.\n• Conduct UI responsiveness & speed optimization (<200ms API response).\n• Prepare final presentation slides & project defense demonstration.`
+        };
+    } else if (text.includes("blockchain") || text.includes("crypto") || text.includes("quantum")) {
         domain = "Blockchain & Distributed Ledger Security";
         category = "Decentralized Smart Contract Architecture";
         mvpFeatures = [
-            "Decentralized User Wallet Authentication & Identity Verification",
+            "Decentralized User Wallet Authentication & Identity Verification (MetaMask / Ethers.js)",
             "Solidity Smart Contract Execution & Immutable Ledger Audit Engine",
             "Transaction Gas Fee Calculator & Receipt Generation Module",
-            "Decentralized File Storage Integration (IPFS)"
+            "Decentralized File Storage Integration (IPFS) for Document Hashing"
         ];
         stretchFeatures = [
             "Zero-Knowledge Proof (zk-SNARKs) Transaction Anonymization",
@@ -143,13 +163,19 @@ function analyzeProjectContext(meta) {
             "Smart Contract Security Reentrancy & Vulnerability Exploits",
             "Complexity of Testing Decentralized Nodes in Local Environment"
         ];
+        milestoneDetails = {
+            m1: `• Study Solidity smart contract patterns and EVM architecture for ${title}.\n• Design immutable ledger schema and IPFS hashing data flow.\n• Set up local Hardhat / Anvil blockchain test network environment.\n• Initialize student onboarding & crypto project submission desk.`,
+            m2: `• Write and compile Solidity smart contracts for ${title}.\n• Connect Web3.js / Ethers.js frontend wallet login & transaction triggers.\n• Implement Node.js API middleware for transaction history indexing.\n• Test smart contract execution against local Ethereum testnet.`,
+            m3: `• Run Risk Assessment Agent — audit smart contract reentrancy vulnerabilities.\n• Enable Nova AI Blockchain Mentor for weekly student check-ins.\n• Build transaction log audit report exporter.\n• Apply faculty guidance callouts regarding gas fee optimization.`,
+            m4: `• Deploy smart contracts to Sepolia Testnet & verify on Etherscan.\n• Execute automated unit tests (UT-001 to UT-007 PASS).\n• Optimize transaction latency & contract gas consumption.\n• Prepare project defense report & presentation deck.`
+        };
     } else if (text.includes("iot") || text.includes("sensor") || text.includes("smart") || text.includes("agriculture") || text.includes("hardware") || text.includes("arduino") || text.includes("raspberry")) {
         domain = "IoT & Embedded Hardware Engineering";
         category = "Smart Telemetry & Hardware Control Platform";
         mvpFeatures = [
-            "Hardware Sensor Data Ingestion Gateway (MQTT / HTTP)",
-            "Real-Time Telemetry Graph Dashboard & Threshold Alert Engine",
-            "Automated Actuator / Relay Remote Switch Controller",
+            "Hardware Sensor Data Ingestion Gateway via MQTT & HTTP Protocols",
+            "Real-Time Telemetry Graph Dashboard & Threshold Alert Engine for Sensors",
+            "Automated Actuator / Relay Remote Switch Controller Module",
             "Historical Sensor Data Logging & CSV/PDF Analytics Exporter"
         ];
         stretchFeatures = [
@@ -169,34 +195,14 @@ function analyzeProjectContext(meta) {
             "Unstable Network Connectivity causing Telemetry Packet Loss",
             "Power Outages Affecting Continuous Sensor Data Logging"
         ];
-    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("fraud") || text.includes("phishing") || text.includes("auth")) {
-        domain = "Cybersecurity & Information Assurance";
-        category = "Intelligent Threat Detection & Security Engine";
-        mvpFeatures = [
-            "Network Traffic / Log File Security Ingestion Pipeline",
-            "AI Anomaly & Intrusion Detection Classification Engine",
-            "OAuth 2.0 & Multi-Factor User Authentication Access Control",
-            "Incident Alert Manager & Threat Mitigation Audit Report Generator"
-        ];
-        stretchFeatures = [
-            "Automated IP Blacklisting & Firewall Rule Trigger",
-            "Blockchain-Based Tamper-Proof Audit Log Verification",
-            "Dark Web Vulnerability Intelligence Feed Aggregator"
-        ];
-        techStack = {
-            frontend: "React.js / HTML5 Dashboard with Incident Priority Callouts",
-            backend: "Node.js (Express) / Python FastAPI Security Middleware",
-            database: "PostgreSQL with Encrypted Column Extensions",
-            ai: "Scikit-Learn Random Forest / XGBoost Threat Classifiers",
-            devops: "Docker Hardened Container with SSL/TLS Encryption"
+        milestoneDetails = {
+            m1: `• Specify hardware component pinouts (ESP32/Arduino/Raspberry Pi) for ${title}.\n• Design time-series database schema for telemetry sensor data.\n• Set up Mosquitto MQTT broker and test sensor publish/subscribe loops.\n• Build student project submission interface for IoT hardware telemetry.`,
+            m2: `• Build real-time IoT dashboard in HTML5/React with live Chart.js gauges.\n• Implement Node.js API endpoints (/api/telemetry, /api/actuators).\n• Deploy Isolation Forest anomaly detection algorithm on sensor readings.\n• Connect physical/simulated sensor streams to backend MQTT broker.`,
+            m3: `• Execute Risk Assessment Agent — set up offline packet buffer for connection drops.\n• Connect Nova AI Hardware Mentor for weekly student check-in guidance.\n• Build historical sensor log PDF/CSV report exporter.\n• Record weekly progress updates (Weeks 5-6).`,
+            m4: `• Conduct stress testing on hardware telemetry under 1,000 readings/min.\n• Run unit tests (UT-001 to UT-007 PASS) for sensor ingestion pipeline.\n• Finalize Faculty Monitoring Dashboard for live hardware health tracking.\n• Complete project defense presentation deck & final demonstration.`
         };
-        risks = [
-            "High Rate of False Positives Flagging Legitimate User Requests",
-            "Processing Overhead when Parsing High-Volume Network Packet Logs",
-            "Model Evasion Attacks via Adversarial Security Prompts"
-        ];
     } else {
-        domain = "Full-Stack Software Engineering & Web Architecture";
+        domain = "Full-Stack Software Engineering & Intelligent Web Architecture";
         category = "Intelligent Academic Software Platform";
         mvpFeatures = [
             `User Authentication & Profile Onboarding Portal for ${title}`,
@@ -210,7 +216,7 @@ function analyzeProjectContext(meta) {
             "REST API Third-Party Developer Integration Webhooks"
         ];
         techStack = {
-            frontend: "HTML5 + Modern CSS3 + Vanilla JavaScript (ES6+)",
+            frontend: "HTML5 + Modern CSS3 + Vanilla JavaScript (ES6+) / React",
             backend: "Node.js (Express) REST API Framework",
             database: "MySQL Relational Database with Connection Pooling",
             ai: "Scikit-Learn / Google Gemini API Integration",
@@ -221,9 +227,15 @@ function analyzeProjectContext(meta) {
             "Database Schema Indexing Overhead as Data Volume Grows",
             "API Rate Limit Restrictions during Final Verification Testing"
         ];
+        milestoneDetails = {
+            m1: `• Study domain requirements and architecture for ${title}.\n• Design database ERD tables and API endpoint contracts.\n• Build student onboarding profile & project submission desk.\n• Initialize version control repository and core project structure.`,
+            m2: `• Build backend Node.js Express REST API (/api/projects, /api/users).\n• Develop frontend interactive UI pages with responsive Bootstrap layout.\n• Implement core business processing engine for ${title}.\n• Test database connection pooling and CRUD operations.`,
+            m3: `• Run Risk Assessment Agent — optimize API response times.\n• Integrate Nova AI mentor chat desk for ongoing weekly check-ins.\n• Build progress tracking & document exporter.\n• Process faculty advisor feedback notes.`,
+            m4: `• Launch Faculty Monitoring Dashboard with student health digests.\n• Conduct end-to-end unit tests (UT-001 to UT-007 PASS).\n• Optimize system performance and prompt quality.\n• Prepare technical documentation and final defense presentation.`
+        };
     }
 
-    return { title, desc, domain, category, mvpFeatures, stretchFeatures, techStack, risks, feasibilityScore, feasibilityRating };
+    return { title, desc, domain, category, mvpFeatures, stretchFeatures, techStack, risks, feasibilityScore, feasibilityRating, weeks, hrsPerWk, teamSize, totalStudentHours, totalTeamHours, milestoneDetails };
 }
 
 /**
@@ -235,7 +247,7 @@ async function feasibilityAnalysisAgent(metadata) {
     You are the Feasibility & Risk Analysis Agent for an academic project platform.
     Analyze the following project parameters and return a highly detailed, comprehensive markdown report tailored SPECIFICALLY to this submitted project.
 
-    CRITICAL INSTRUCTION: Calculate a dynamic Feasibility Index Score (out of 100) specifically for "${ctx.title}" based on technical complexity, team size (${metadata.teamSize}), target duration (${metadata.duration}), and domain (${ctx.domain}). Do NOT use a hardcoded score.
+    CRITICAL INSTRUCTION: Calculate a dynamic Feasibility Index Score (out of 100) specifically for "${ctx.title}" based on technical complexity, team size (${metadata.teamSize}), target duration (${metadata.duration}), and domain (${ctx.domain}).
 
     PROJECT METADATA:
     Title: ${ctx.title}
@@ -246,8 +258,8 @@ async function feasibilityAnalysisAgent(metadata) {
     Team Size: ${metadata.teamSize || '2'}
 
     Include:
-    1. ### 🛡️ Overall Feasibility Index (Numerical Score out of 100 with Rating for "${ctx.title}")
-    2. ### 📊 Key Technical & Domain Strengths (3-5 granular points specific to ${ctx.domain})
+    1. ### 🛡️ Overall Feasibility Index (Score out of 100 with Rating for "${ctx.title}")
+    2. ### 📊 Key Technical & Domain Strengths (4 granular points specific to ${ctx.domain})
     3. ### ⚠️ Architectural, Resource & Data Risks (Identify 3 execution bottlenecks specific to ${ctx.title})
     4. ### 📈 Complexity Matrix (Score out of 100 for: Frontend, Backend, Database, AI/ML, Hardware/DevOps)
     5. ### 💡 Academic Guidance & Mentor Advice for Stress-Free Execution
@@ -330,11 +342,6 @@ async function technologyRecommendationAgent(metadata) {
  */
 async function timelinePlanningAgent(metadata) {
     const ctx = analyzeProjectContext(metadata);
-    const duration = metadata.duration || '8 Weeks';
-    const weeks = parseInt(duration) || 8;
-    const weeklyHours = parseInt(metadata.weeklyHours) || 10;
-    const teamSize = parseInt(metadata.teamSize) || 2;
-    const totalStudentHours = weeks * weeklyHours;
 
     const prompt = `
     You are the Resource Timeline & Milestone Planning Agent for an academic project platform.
@@ -344,20 +351,15 @@ async function timelinePlanningAgent(metadata) {
     Title: ${ctx.title}
     Description: ${ctx.desc}
     Domain: ${ctx.domain}
-    Target Duration: ${weeks} Weeks
-    Weekly Available Hours per Student: ${weeklyHours} Hours/Week (Total Student Budget: ${totalStudentHours} Hours)
-    Team Size: ${teamSize} Student(s)
+    Target Duration: ${ctx.weeks} Weeks
+    Weekly Available Hours per Student: ${ctx.hrsPerWk} Hours/Week (Total Student Budget: ${ctx.totalStudentHours} Hours)
+    Team Size: ${ctx.teamSize} Student(s)
 
-    Incorporate the following 4 official project milestones tailored to "${ctx.title}":
-    - **Milestone 1**: Study domain architecture, system design, student onboarding profile/skill assessment, and submission desk for "${ctx.title}".
-    - **Milestone 2**: Feasibility Analysis Agent, Scope Definition Agent, Tech Stack Recommendation Agent, and Milestone Planning Agent execution.
-    - **Milestone 3**: Risk Assessment Agent, Nova AI mentor interaction, weekly check-in progress engine, and dynamic document exporter.
-    - **Milestone 4**: Faculty Monitoring Dashboard, guidance feedback modal, end-to-end unit testing (UT-001 to UT-007 PASS), and final defense prep.
-
-    Output:
-    1. ### ⏱️ Time Constraints & Effort Summary (Duration: ${weeks} Weeks | ${weeklyHours} Hours/Wk per student | Team Size: ${teamSize})
-    2. ### 📅 Milestone Overview Matrix Table (Columns: Milestone & Weeks | Core Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Student Hours)
-    3. ### 💡 Timeline Execution Rationale & Weekly Pace Recommendations
+    Output detailed tasks for 4 milestones:
+    Milestone 1 (Requirements & Setup): ${ctx.milestoneDetails.m1}
+    Milestone 2 (Core Build): ${ctx.milestoneDetails.m2}
+    Milestone 3 (Risk & Mentor): ${ctx.milestoneDetails.m3}
+    Milestone 4 (Dashboard & Defense): ${ctx.milestoneDetails.m4}
     `;
 
     try {
@@ -437,7 +439,7 @@ async function interactiveMentorAgent({ studentName, message, projectContext }) 
     }
 }
 
-// Dynamic Project-Specific Fallback Generators with DYNAMIC FEASIBILITY SCORE
+// Rich Fallback Generators
 
 function generateFallbackFeasibility(meta) {
     const ctx = analyzeProjectContext(meta);
@@ -445,9 +447,10 @@ function generateFallbackFeasibility(meta) {
 * **Project Analyzed**: **"${ctx.title}"** (${ctx.domain})
 * **Overall Feasibility Index**: **${ctx.feasibilityScore}/100 (${ctx.feasibilityRating})**
 * **Key Technical & Domain Strengths**:
-  * **Targeted Domain Alignment**: Aligns with core principles of **${ctx.domain}**.
-  * **Scope Manageability**: Detailed features can be built incrementally within semester limits.
-  * **Resource & Tooling Availability**: Supported by open-source libraries and standard API standards.
+  * **Targeted Domain Alignment**: Fully aligns with core principles of **${ctx.domain}**.
+  * **Scope Manageability**: Core MVP features can be built incrementally within the ${ctx.weeks}-week timeline.
+  * **Resource & Tooling Availability**: Supported by robust open-source libraries and standard API protocols.
+  * **Team Capability Match**: Balanced workload allocation (~${ctx.totalStudentHours} hours/student).
 * **Architectural & Execution Risks Identified**:
   * **Risk 1**: ${ctx.risks[0]}
   * **Risk 2**: ${ctx.risks[1]}
@@ -464,10 +467,10 @@ function generateFallbackScope(meta) {
 * **Project Domain**: **${ctx.domain}** (${ctx.category})
 * **Problem Statement Summary**: ${ctx.desc}
 * **Must-Have Core MVP Features**:
-  1. **${ctx.mvpFeatures[0]}**: Core user interface and ingestion pipeline.
-  2. **${ctx.mvpFeatures[1]}**: Data processing and analytical engine.
-  3. **${ctx.mvpFeatures[2]}**: Real-time status scoring, alerts, and dashboard.
-  4. **${ctx.mvpFeatures[3]}**: Structured report exporter and summary views.
+  1. **${ctx.mvpFeatures[0]}**
+  2. **${ctx.mvpFeatures[1]}**
+  3. **${ctx.mvpFeatures[2]}**
+  4. **${ctx.mvpFeatures[3]}**
 * **Optional Stretch Features**:
   * **${ctx.stretchFeatures[0]}**
   * **${ctx.stretchFeatures[1]}**
@@ -490,30 +493,23 @@ function generateFallbackTech(meta) {
 
 function generateFallbackTimeline(meta) {
     const ctx = analyzeProjectContext(meta);
-    const duration = meta.duration || '8 Weeks';
-    const weeks = parseInt(duration) || 8;
-    const weeklyHours = parseInt(meta.weeklyHours) || 10;
-    const teamSize = parseInt(meta.teamSize) || 2;
-    const totalStudentHours = weeks * weeklyHours;
-    const totalTeamHours = totalStudentHours * teamSize;
+    const m1_hrs = Math.round(ctx.totalStudentHours * 0.25);
+    const m2_hrs = Math.round(ctx.totalStudentHours * 0.25);
+    const m3_hrs = Math.round(ctx.totalStudentHours * 0.25);
+    const m4_hrs = Math.round(ctx.totalStudentHours * 0.25);
 
-    const m1_hrs = Math.round(totalStudentHours * 0.25);
-    const m2_hrs = Math.round(totalStudentHours * 0.25);
-    const m3_hrs = Math.round(totalStudentHours * 0.25);
-    const m4_hrs = Math.round(totalStudentHours * 0.25);
-
-    return `### 📅 Time-Constrained Milestone & Timeline Roadmap
+    return `### 📅 Time-Constrained Milestone & Timeline Roadmap for "${ctx.title}"
 
 > 📌 **Project**: **"${ctx.title}"** (${ctx.domain})  
-> ⏱️ **Time Constraints**: **${weeks} Weeks Total** | **${weeklyHours} Hours/Week per student** | **Team Size: ${teamSize} Member(s)**  
-> 📊 **Budgeted Effort**: **~${totalStudentHours} Hours per Student** (${totalTeamHours} Total Team Hours)
+> ⏱️ **Time Constraints**: **${ctx.weeks} Weeks Total** | **${ctx.hrsPerWk} Hours/Week per student** | **Team Size: ${ctx.teamSize} Student(s)**  
+> 📊 **Budgeted Effort**: **~${ctx.totalStudentHours} Hours per Student** (${ctx.totalTeamHours} Total Team Hours)
 
-| Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Hours |
+| Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Student Hours |
 | :--- | :--- | :--- | :--- |
-| **Milestone 1** (W1-${Math.max(1, Math.round(weeks * 0.25))}) | Study & Architecture Setup | 1. Study domain architecture for ${ctx.domain}.<br>2. Design system data flow and user schema.<br>3. Develop student profile onboarding & skill assessment.<br>4. Build project submission desk for "${ctx.title}". | ~${m1_hrs} Hours / student |
-| **Milestone 2** (W${Math.max(1, Math.round(weeks * 0.25))+1}-${Math.round(weeks * 0.50)}) | Core Agent Blueprint Execution | 1. Feasibility Analysis Agent execution for "${ctx.title}".<br>2. Scope Agent MVP specification (${ctx.mvpFeatures[0]}).<br>3. Tech Stack Agent rationale (${ctx.techStack.backend}).<br>4. Timeline Planning Agent milestone matrix generation. | ~${m2_hrs} Hours / student |
-| **Milestone 3** (W${Math.round(weeks * 0.50)+1}-${Math.round(weeks * 0.75)}) | Risk, Mentor & Reports | 1. Risk Assessment Agent — mitigate ${ctx.risks[0]}.<br>2. Conversational Nova AI mentor interaction.<br>3. Weekly progress check-in engine.<br>4. On-demand documentation exporter (Synopsis, Methodologies). | ~${m3_hrs} Hours / student |
-| **Milestone 4** (W${Math.round(weeks * 0.75)+1}-${weeks}) | Dashboard & Defense Prep | 1. Faculty Monitoring Dashboard & Feedback Modal.<br>2. Conduct end-to-end system testing (UT-001 to UT-007 PASS).<br>3. Optimize agent prompt quality and response accuracy.<br>4. Prepare technical report and final presentation defense. | ~${m4_hrs} Hours / student |`;
+| **Milestone 1** (Week 1-${Math.max(1, Math.round(ctx.weeks * 0.25))}) | Requirements & Setup | ${ctx.milestoneDetails.m1.replace(/\n/g, '<br>')} | ~${m1_hrs} Hours / student |
+| **Milestone 2** (Week ${Math.max(1, Math.round(ctx.weeks * 0.25)) + 1}-${Math.round(ctx.weeks * 0.50)}) | Core Agent Pipeline Build | ${ctx.milestoneDetails.m2.replace(/\n/g, '<br>')} | ~${m2_hrs} Hours / student |
+| **Milestone 3** (Week ${Math.round(ctx.weeks * 0.50) + 1}-${Math.round(ctx.weeks * 0.75)}) | Risk, Mentor & Progress | ${ctx.milestoneDetails.m3.replace(/\n/g, '<br>')} | ~${m3_hrs} Hours / student |
+| **Milestone 4** (Week ${Math.round(ctx.weeks * 0.75) + 1}-${ctx.weeks}) | Dashboard & Defense Prep | ${ctx.milestoneDetails.m4.replace(/\n/g, '<br>')} | ~${m4_hrs} Hours / student |`;
 }
 
 function generateFallbackRisk(meta) {
@@ -541,5 +537,6 @@ module.exports = {
     scopeDefinitionAgent,
     technologyRecommendationAgent,
     timelinePlanningAgent,
-    riskAssessmentAgent
+    riskAssessmentAgent,
+    analyzeProjectContext
 };
