@@ -1,5 +1,5 @@
 // ==========================================
-// services/aiAgents.js (100% Dynamic Multi-Agent Engine for Any Submitted Project)
+// services/aiAgents.js (100% Student Project-Focused Multi-Agent Engine)
 // ==========================================
 const { GoogleGenAI } = require("@google/genai");
 
@@ -19,6 +19,8 @@ function calculateDynamicFeasibilityScore(meta, text) {
         score -= 14; // High-complexity hardware/crypto challenge (~71%)
     } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("crud") || text.includes("management") || text.includes("portal") || text.includes("catalog")) {
         score += 9; // Highly feasible web/mobile system (~94%)
+    } else if (text.includes("upi") || text.includes("fraud") || text.includes("finance") || text.includes("payment") || text.includes("bank")) {
+        score += 5; // Financial tech / Fraud detection system (~90%)
     } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("diagnostic")) {
         score += 4; // Moderate-high feasibility (~89%)
     } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
@@ -50,7 +52,7 @@ function calculateDynamicFeasibilityScore(meta, text) {
 }
 
 /**
- * Universal Dynamic Project Context Analyzer (Generates Custom Details for ANY Project Idea)
+ * Universal Student Project Context Analyzer (Builds 100% Project-Specific Deliverables for ANY Idea)
  */
 function analyzeProjectContext(meta) {
     const title = meta.projectTitle || (meta.projectDescription ? (meta.projectDescription.substring(0, 45) + "...") : "Academic Project");
@@ -65,7 +67,6 @@ function analyzeProjectContext(meta) {
     const totalStudentHours = weeks * hrsPerWk;
     const totalTeamHours = totalStudentHours * teamSize;
 
-    // Extract key action verbs & noun phrases from submitted project text for deep customization
     const cleanTitle = title.replace(/[^a-zA-Z0-9\s]/g, "").trim();
     const shortDesc = desc.length > 80 ? desc.substring(0, 80) + "..." : desc;
 
@@ -73,7 +74,10 @@ function analyzeProjectContext(meta) {
     let domain = "Software Engineering & Web Architecture";
     let category = "Full-Stack System";
 
-    if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("doctor") || text.includes("disease") || text.includes("tumor") || text.includes("clinical")) {
+    if (text.includes("upi") || text.includes("fraud") || text.includes("finance") || text.includes("bank") || text.includes("payment") || text.includes("credit card")) {
+        domain = "FinTech & Automated Fraud Analytics";
+        category = "Real-Time Transaction Risk Analysis & Fraud Detection System";
+    } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("doctor") || text.includes("disease") || text.includes("tumor") || text.includes("diagnostic")) {
         domain = "Healthcare & Biomedical Intelligence";
         category = "Clinical Decision Support & Medical Intelligence";
     } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("retail") || text.includes("product") || text.includes("cart") || text.includes("recommend")) {
@@ -85,70 +89,70 @@ function analyzeProjectContext(meta) {
     } else if (text.includes("iot") || text.includes("sensor") || text.includes("smart") || text.includes("agriculture") || text.includes("hardware") || text.includes("arduino") || text.includes("raspberry")) {
         domain = "IoT & Embedded Hardware Engineering";
         category = "Smart Telemetry & Hardware Control Platform";
-    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("fraud") || text.includes("phishing") || text.includes("auth")) {
+    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("phishing") || text.includes("auth")) {
         domain = "Cybersecurity & Information Assurance";
         category = "Intelligent Threat Detection Engine";
-    } else if (text.includes("nlp") || text.includes("chat") || text.includes("sentiment") || text.includes("bot") || text.includes("mentor")) {
+    } else if (text.includes("nlp") || text.includes("chat") || text.includes("sentiment") || text.includes("bot")) {
         domain = "Conversational AI & Natural Language Processing";
-        category = "Agentic Language Processing & Guidance Platform";
+        category = "Agentic Language Processing Platform";
     } else if (text.includes("vision") || text.includes("image") || text.includes("video") || text.includes("opencv")) {
         domain = "Computer Vision & Visual Data Intelligence";
         category = "Automated Visual Analytics Engine";
     }
 
-    // Dynamically build Must-Have MVP features tailored to submitted project title and description
+    // Build Must-Have MVP features 100% focused on the submitted project itself
     const mvpFeatures = [
-        `User Profile Onboarding & Input Data Ingestion Interface tailored for "${cleanTitle}"`,
-        `Core Business Logic & AI Data Processing Engine for processing: ${shortDesc}`,
-        `Interactive Command Dashboard with Real-Time Progress Gauges & Visual Status Metrics for "${cleanTitle}"`,
-        `Automated Summary Exporter & Academic Progress PDF/CSV Report Generator`
+        `User Input & Data Ingestion Pipeline for "${cleanTitle}"`,
+        `Core Analytics / ML Classifier Engine tailored to: ${shortDesc}`,
+        `Interactive Control Dashboard with Real-Time Risk Gauges & Metrics for "${cleanTitle}"`,
+        `Automated Summary Exporter & PDF/CSV Analytics Generator for "${cleanTitle}"`
     ];
 
     const stretchFeatures = [
-        `Third-Party REST API Webhook Integration for real-time external data syncing`,
-        `Advanced AI Predictive Analytics & Sentiment / Risk Analytics Module for "${cleanTitle}"`,
-        `Role-Based Access Control (Student, Team Lead, Faculty Advisor) with Multi-Factor Authentication`
+        `Real-Time Webhook / Push Alert Notification Module for instant alerts`,
+        `Advanced AI Predictive Scoring Engine for "${cleanTitle}"`,
+        `Role-Based Access Control (User, Manager, Administrator) with Multi-Factor Authentication`
     ];
 
     const techStack = {
-        frontend: "React.js 18 / Modern HTML5 + Bootstrap 5 + Chart.js Visualization UI",
-        backend: "Node.js (Express REST API) + Python FastAPI / Flask Asynchronous Workers",
-        database: "MySQL Relational Database / PostgreSQL with ORM Connection Pool (db.js)",
-        ai: "Google Gemini 2.5 Flash API + Scikit-Learn Machine Learning Models / DistilBERT Local Fallbacks",
+        frontend: "React.js 18 / Modern HTML5 + Bootstrap 5 + Chart.js Visualization Dashboard",
+        backend: "Node.js (Express REST API) + Python FastAPI / Flask Data Processing Workers",
+        database: "MySQL Relational Database / PostgreSQL with ORM Connection Pool",
+        ai: "Scikit-Learn (XGBoost / Random Forest / Isolation Forest) / TensorFlow ML Models",
         devops: "Docker Containerized Deployment on Render / Vercel Cloud Platform with SSL Security"
     };
 
     const risks = [
-        `System Latency & API Rate Limits during real-time data processing for "${cleanTitle}"`,
-        `Data Ingestion Format Mismatch & Sample Dataset Scarcity during initial model training`,
-        `Scope Creep & Milestone Deliverable Integration Overrun near semester evaluation deadline`
+        `System Latency & Processing Overhead during high-volume data analysis for "${cleanTitle}"`,
+        `Sample Training Dataset Imbalance & Edge Case Ingestion Mismatch`,
+        `Feature Integration Overrun near project deadline`
     ];
 
-    // Build 4 100% Project-Tailored Milestone Deliverables!
+    // Build 4 100% Student Project-Focused Milestone Cards (No platform meta-tasks!)
     const milestoneDetails = {
         m1: [
-            `Conduct domain research and requirement analysis specifically for "${cleanTitle}".`,
-            `Design relational database ERD tables (Users, Projects, Analytics, Logs) tailored to: "${shortDesc}".`,
-            `Build student profile onboarding & project submission desk for "${cleanTitle}".`,
-            `Set up project repository, environment configuration, and sample dataset ingestion pipeline.`
+            `Conduct domain research and literature survey on algorithms for "${cleanTitle}".`,
+            `Design relational database schema (tables for users, transactions/logs, and alerts) for "${cleanTitle}".`,
+            `Set up project repository, development environment, and sample training dataset ingestion.`,
+            `Define REST API payload structures and data preprocessing pipeline for "${cleanTitle}".`
         ],
         m2: [
-            `Develop core backend API endpoints (/api/projects, /api/users, /api/process) in Node.js/Express for "${cleanTitle}".`,
-            `Implement AI analytics engine and data processing logic tailored to: "${shortDesc}".`,
-            `Build frontend interactive user workspace cards & dashboard status metrics for "${cleanTitle}".`,
-            `Execute Feasibility and Scope Agent validation scripts against submitted project metadata.`
+            `Develop core ML classifier / analytical processing engine (e.g. Random Forest / XGBoost) for "${cleanTitle}".`,
+            `Build backend Node.js / Python REST API endpoints (/api/analyze, /api/transactions) for "${cleanTitle}".`,
+            `Develop frontend interactive user interface & real-time metric visualization gauges.`,
+            `Test initial model prediction accuracy and feature scoring against test data.`
         ],
         m3: [
-            `Execute Risk Assessment Agent — resolve API latency and database query bottlenecks for "${cleanTitle}".`,
-            `Integrate Nova AI Mentor chat desk for weekly student doubt resolution & check-in guidance.`,
-            `Log Weekly Progress Check-ins & test automated report exporter (Synopsis, Methodologies).`,
-            `Process faculty guidance notes and render live advisor callout banners.`
+            `Conduct system performance optimization — reduce API inference response time under 300ms for "${cleanTitle}".`,
+            `Implement risk mitigations (handling missing data fields, API rate limits, edge case fallback rules).`,
+            `Build automated analytics summary exporter & PDF report generation module for "${cleanTitle}".`,
+            `Conduct system integration testing and stress testing under high-volume input.`
         ],
         m4: [
-            `Launch Faculty Monitoring Dashboard with real-time student health digest badges for "${cleanTitle}".`,
-            `Conduct comprehensive automated unit testing across all modules (UT-001 to UT-007 PASS).`,
-            `Optimize API response speed (<300ms) and agent prompt accuracy.`,
-            `Prepare final 25-slide defense presentation deck & technical report synopsis for "${cleanTitle}".`
+            `Conduct comprehensive end-to-end unit & integration testing (UT-001 to UT-007 PASS) for "${cleanTitle}".`,
+            `Finalize user interface responsiveness, theme styling, and error callout handling.`,
+            `Compile complete technical documentation, system architecture flowcharts, and project synopsis.`,
+            `Prepare final 25-slide presentation defense deck and live demonstration for "${cleanTitle}".`
         ]
     };
 
@@ -264,6 +268,8 @@ async function timelinePlanningAgent(metadata) {
     You are the Resource Timeline & Milestone Planning Agent for an academic project platform.
     Generate a complete, time-constrained week-by-week milestone roadmap in markdown table format tailored SPECIFICALLY to "${ctx.title}".
 
+    CRITICAL DIRECTIVE: Every single task in Milestones 1, 2, 3, and 4 MUST be strictly about building "${ctx.title}". Do NOT include meta platform tasks like building AI agents or faculty dashboards. Focus 100% on the student project deliverables.
+
     PROJECT METADATA:
     Title: ${ctx.title}
     Description: ${ctx.desc}
@@ -275,8 +281,8 @@ async function timelinePlanningAgent(metadata) {
     Output detailed tasks for 4 milestones tailored strictly to "${ctx.title}":
     Milestone 1 (Requirements & Setup): ${ctx.milestoneDetails.m1.join(' ')}
     Milestone 2 (Core Build): ${ctx.milestoneDetails.m2.join(' ')}
-    Milestone 3 (Risk & Mentor): ${ctx.milestoneDetails.m3.join(' ')}
-    Milestone 4 (Dashboard & Defense): ${ctx.milestoneDetails.m4.join(' ')}
+    Milestone 3 (Risk & Performance): ${ctx.milestoneDetails.m3.join(' ')}
+    Milestone 4 (Testing & Defense): ${ctx.milestoneDetails.m4.join(' ')}
     `;
 
     try {
@@ -356,7 +362,7 @@ async function interactiveMentorAgent({ studentName, message, projectContext }) 
     }
 }
 
-// Rich Fallback Generators tailored 100% to submitted project title and description
+// Fallback Generators 100% focused on student project deliverables
 
 function generateFallbackFeasibility(meta) {
     const ctx = analyzeProjectContext(meta);
@@ -424,9 +430,9 @@ function generateFallbackTimeline(meta) {
 | Milestone & Schedule | Core Phase Objectives | Detailed Technical Deliverables for "${ctx.title}" | Budgeted Student Hours |
 | :--- | :--- | :--- | :--- |
 | **Milestone 1** (Week 1-${Math.max(1, Math.round(ctx.weeks * 0.25))}) | Requirements & Setup | ${ctx.milestoneDetails.m1.join('<br>')} | ~${m1_hrs} Hours / student |
-| **Milestone 2** (Week ${Math.max(1, Math.round(ctx.weeks * 0.25)) + 1}-${Math.round(ctx.weeks * 0.50)}) | Core Agent Pipeline Build | ${ctx.milestoneDetails.m2.join('<br>')} | ~${m2_hrs} Hours / student |
-| **Milestone 3** (Week ${Math.round(ctx.weeks * 0.50) + 1}-${Math.round(ctx.weeks * 0.75)}) | Risk, Mentor & Progress | ${ctx.milestoneDetails.m3.join('<br>')} | ~${m3_hrs} Hours / student |
-| **Milestone 4** (Week ${Math.round(ctx.weeks * 0.75) + 1}-${ctx.weeks}) | Dashboard & Defense Prep | ${ctx.milestoneDetails.m4.join('<br>')} | ~${m4_hrs} Hours / student |`;
+| **Milestone 2** (Week ${Math.max(1, Math.round(ctx.weeks * 0.25)) + 1}-${Math.round(ctx.weeks * 0.50)}) | Core ML & API Build | ${ctx.milestoneDetails.m2.join('<br>')} | ~${m2_hrs} Hours / student |
+| **Milestone 3** (Week ${Math.round(ctx.weeks * 0.50) + 1}-${Math.round(ctx.weeks * 0.75)}) | Integration & Optimization | ${ctx.milestoneDetails.m3.join('<br>')} | ~${m3_hrs} Hours / student |
+| **Milestone 4** (Week ${Math.round(ctx.weeks * 0.75) + 1}-${ctx.weeks}) | Testing & Final Defense Prep | ${ctx.milestoneDetails.m4.join('<br>')} | ~${m4_hrs} Hours / student |`;
 }
 
 function generateFallbackRisk(meta) {

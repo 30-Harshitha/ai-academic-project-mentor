@@ -287,14 +287,14 @@
         </div>
       </div>
 
-      <!-- 4. Milestone & Timeline Planning Agent Output (4 SEPARATE CARDS & SHIFTING STATE ENGINE) -->
+      <!-- 4. Milestone & Timeline Planning Agent Output (4 SEPARATE CARDS 100% PROJECT FOCUSED) -->
       <div class="output-section-card" id="timeline-output-card">
         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
           <h5 class="fw-bold text-dark m-0" style="font-size: 1.15rem;">
             <i class="fas fa-calendar-alt text-primary me-2"></i>Milestone & Timeline Planning Agent Output
           </h5>
           <span class="badge bg-primary px-3 py-1.5 fw-bold" id="milestone-current-phase-tag">
-            Phase 1 Active
+            Milestone 1 Active
           </span>
         </div>
 
@@ -331,13 +331,13 @@
 
               <div class="col-md-9">
                 <label class="form-label small fw-bold text-dark">Weekly Accomplishments & Completed Technical Tasks</label>
-                <input type="text" id="m3-completed-tasks" class="form-control form-control-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Completed database schema setup and initial REST API endpoints for active project..." required>
+                <input type="text" id="m3-completed-tasks" class="form-control form-control-sm" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Completed dataset preparation and initial REST API endpoints for active project..." required>
               </div>
             </div>
 
             <div class="mb-3">
               <label class="form-label small fw-bold text-dark">Ask Nova AI Mentor a Doubt / Report Technical Blocker</label>
-              <textarea id="m3-student-doubt" class="form-control form-control-sm" rows="2" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Having a doubt regarding database index optimization or API latency. What is the recommended fix?"></textarea>
+              <textarea id="m3-student-doubt" class="form-control form-control-sm" rows="2" style="border-radius: 8px; border: 1.5px solid #CBD5E1;" placeholder="Having a doubt regarding API latency or model prediction accuracy. What is the recommended fix?"></textarea>
             </div>
 
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
@@ -445,7 +445,7 @@
         }
     }
 
-    // Dynamic 4 Separate Milestone Cards Generator & Active Shifting Engine
+    // Dynamic 4 Separate Milestone Cards Generator (100% Focused on Student Project Deliverables)
     function renderSeparateMilestoneCards(proj) {
         const activeProj = proj || JSON.parse(localStorage.getItem("activeProjectIdea")) || {};
         const title = activeProj.projectTitle || "Submitted Project";
@@ -470,136 +470,34 @@
         const m3_hrs = Math.round(totalStudentHours * 0.25);
         const m4_hrs = Math.round(totalStudentHours * 0.25);
 
-        // Project Domain-Specific Task Breakdown
-        const text = (title + " " + (activeProj.description || "")).toLowerCase();
-        let tasks_m1, tasks_m2, tasks_m3, tasks_m4;
+        // 100% Student Project-Focused Task Breakdown (No platform meta-tasks!)
+        const tasks_m1 = [
+            `Conduct domain research & literature survey on algorithms for "${title}".`,
+            `Design relational database schema (tables for users, transactions/logs, and alerts) for "${title}".`,
+            `Set up project repository, development environment, and sample dataset ingestion pipeline.`,
+            `Define REST API payload structures and data preprocessing pipeline for "${title}".`
+        ];
 
-        if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("disease") || text.includes("tumor") || text.includes("diagnostic")) {
-            tasks_m1 = [
-                `Study literature on DICOM image processing & AI diagnostic models for "${title}".`,
-                `Design relational database ERD for Patients, Diagnostic Scans, and Physician Reports.`,
-                `Build student onboarding & project setup interface for "${title}".`,
-                `Set up anonymized clinical image dataset (500+ test scans).`
-            ];
-            tasks_m2 = [
-                `Develop CNN diagnostic classification model in PyTorch / TensorFlow for "${title}".`,
-                `Implement Node.js REST API endpoints (/api/diagnose, /api/patients).`,
-                `Build React frontend interface with health telemetry gauges & diagnostic file dropzone.`,
-                `Validate Feasibility & Scope Agent specifications for clinical workflow.`
-            ];
-            tasks_m3 = [
-                `Execute Risk Assessment Agent — resolve DICOM image inference latency bottlenecks.`,
-                `Integrate Nova AI Medical Mentor desk for student query support.`,
-                `Log Weekly Progress Check-ins & test automated patient summary report exporter.`,
-                `Apply faculty guidance notes on medical data encryption.`
-            ];
-            tasks_m4 = [
-                `Launch Faculty Monitoring Dashboard with real-time student health digest badges.`,
-                `Conduct end-to-end automated unit testing (UT-001 to UT-007 PASS).`,
-                `Optimize diagnostic model inference speed under 500ms.`,
-                `Prepare 25-slide final defense presentation deck & technical report.`
-            ];
-        } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("recommend") || text.includes("cart")) {
-            tasks_m1 = [
-                `Analyze e-commerce catalog structures and recommendation patterns for "${title}".`,
-                `Design MySQL database schema for Users, Products, Shopping Cart, and Orders.`,
-                `Build project submission desk & competency skill matrix.`,
-                `Set up sample product inventory catalog with 200+ items.`
-            ];
-            tasks_m2 = [
-                `Build Collaborative Filtering product recommendation engine in Scikit-Learn.`,
-                `Implement Node.js REST API endpoints (/api/products, /api/cart, /api/checkout).`,
-                `Develop React frontend shopping cart UI with Stripe checkout webhook simulation.`,
-                `Validate product recommendation accuracy against test order histories.`
-            ];
-            tasks_m3 = [
-                `Execute Risk Assessment Agent — resolve cart state synchronization issues.`,
-                `Connect Nova AI Commerce Mentor desk for weekly check-in guidance.`,
-                `Build automated merchant sales analytics dashboard & summary report exporter.`,
-                `Log Weekly Progress updates and process faculty feedback callouts.`
-            ];
-            tasks_m4 = [
-                `Finalize Faculty Monitoring Dashboard for live e-commerce project tracking.`,
-                `Run full automated unit testing (UT-001 to UT-007 PASS) for cart & checkout.`,
-                `Conduct performance tuning & API speed optimization (<200ms).`,
-                `Prepare final defense presentation slides & project demonstration.`
-            ];
-        } else if (text.includes("blockchain") || text.includes("crypto")) {
-            tasks_m1 = [
-                `Study Solidity smart contract standards and EVM architecture for "${title}".`,
-                `Design immutable ledger schema and IPFS document hashing data flow.`,
-                `Set up local Hardhat / Anvil blockchain testnet environment.`,
-                `Initialize student onboarding & crypto project submission desk.`
-            ];
-            tasks_m2 = [
-                `Write and compile Solidity smart contracts for "${title}".`,
-                `Connect Ethers.js / Web3.js frontend wallet login & transaction triggers.`,
-                `Implement Node.js REST API middleware for blockchain transaction indexing.`,
-                `Test smart contract execution against local Ethereum testnet.`
-            ];
-            tasks_m3 = [
-                `Run Risk Assessment Agent — audit smart contract reentrancy vulnerabilities.`,
-                `Enable Nova AI Blockchain Mentor for weekly student check-ins.`,
-                `Build transaction log audit report exporter.`,
-                `Apply faculty guidance notes regarding gas fee optimization.`
-            ];
-            tasks_m4 = [
-                `Deploy smart contracts to Sepolia Testnet & verify on Etherscan.`,
-                `Execute automated unit tests (UT-001 to UT-007 PASS).`,
-                `Optimize transaction latency & contract gas consumption.`,
-                `Prepare project defense report & presentation deck.`
-            ];
-        } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
-            tasks_m1 = [
-                `Specify hardware component pinouts (ESP32/Arduino/Raspberry Pi) for "${title}".`,
-                `Design time-series database schema for telemetry sensor data.`,
-                `Set up Mosquitto MQTT broker and test sensor publish/subscribe loops.`,
-                `Build student project submission interface for IoT hardware telemetry.`
-            ];
-            tasks_m2 = [
-                `Build real-time IoT dashboard in HTML5/React with live Chart.js gauges.`,
-                `Implement Node.js API endpoints (/api/telemetry, /api/actuators).`,
-                `Deploy Isolation Forest anomaly detection algorithm on sensor readings.`,
-                `Connect physical/simulated sensor streams to backend MQTT broker.`
-            ];
-            tasks_m3 = [
-                `Execute Risk Assessment Agent — set up offline packet buffer for connection drops.`,
-                `Connect Nova AI Hardware Mentor for weekly student check-in guidance.`,
-                `Build historical sensor log PDF/CSV report exporter.`,
-                `Record weekly progress updates (Weeks 5-6).`
-            ];
-            tasks_m4 = [
-                `Conduct stress testing on hardware telemetry under 1,000 readings/min.`,
-                `Run unit tests (UT-001 to UT-007 PASS) for sensor ingestion pipeline.`,
-                `Finalize Faculty Monitoring Dashboard for live hardware health tracking.`,
-                `Complete project defense presentation deck & final demonstration.`
-            ];
-        } else {
-            tasks_m1 = [
-                `Study domain requirements and architecture for "${title}".`,
-                `Design database ERD tables and REST API endpoint contracts.`,
-                `Build student onboarding profile & project submission desk.`,
-                `Initialize version control repository and core project structure.`
-            ];
-            tasks_m2 = [
-                `Build backend Node.js Express REST API (/api/projects, /api/users).`,
-                `Develop frontend interactive UI pages with responsive Bootstrap layout.`,
-                `Implement core business processing engine for "${title}".`,
-                `Test database connection pooling and CRUD operations.`
-            ];
-            tasks_m3 = [
-                `Run Risk Assessment Agent — optimize API response times.`,
-                `Integrate Nova AI mentor chat desk for ongoing weekly check-ins.`,
-                `Build progress tracking & document exporter.`,
-                `Process faculty advisor feedback notes.`
-            ];
-            tasks_m4 = [
-                `Launch Faculty Monitoring Dashboard with student health digests.`,
-                `Conduct end-to-end unit tests (UT-001 to UT-007 PASS).`,
-                `Optimize system performance and prompt quality.`,
-                `Prepare technical documentation and final defense presentation.`
-            ];
-        }
+        const tasks_m2 = [
+            `Develop core analytical / ML model processing engine for "${title}".`,
+            `Build backend Node.js / Python REST API endpoints (/api/analyze, /api/data) for "${title}".`,
+            `Develop frontend interactive user workspace & real-time metric visualization gauges.`,
+            `Test initial model prediction accuracy and feature scoring against sample test data.`
+        ];
+
+        const tasks_m3 = [
+            `Conduct performance optimization — reduce API inference response time under 300ms for "${title}".`,
+            `Implement risk mitigations (handling missing data fields, API rate limits, edge case fallback rules).`,
+            `Build automated analytics summary exporter & PDF/CSV report generation module for "${title}".`,
+            `Conduct system integration testing and stress testing under high-volume input.`
+        ];
+
+        const tasks_m4 = [
+            `Conduct comprehensive end-to-end unit & integration testing (UT-001 to UT-007 PASS) for "${title}".`,
+            `Finalize user interface responsiveness, styling theme, and error callout handling.`,
+            `Compile complete technical documentation, architecture flowcharts, and project synopsis for "${title}".`,
+            `Prepare final 25-slide presentation defense deck and live demonstration for "${title}".`
+        ];
 
         // Active Shifting Logic
         let m1_class = "milestone-separate-card", m1_badge = "";
@@ -616,7 +514,7 @@
             m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
 
             if (document.getElementById("milestone-current-phase-tag")) {
-                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 1 Active (Requirements & Setup)";
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 1 Active (Setup & Architecture)";
             }
         } else if (completedWeek === 1) {
             m1_class += " completed-milestone-card";
@@ -629,7 +527,7 @@
             m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
 
             if (document.getElementById("milestone-current-phase-tag")) {
-                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 2 Active (Core Multi-Agent Build)";
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 2 Active (Core Model & API Build)";
             }
         } else if (completedWeek === 2) {
             m1_class += " completed-milestone-card";
@@ -644,7 +542,7 @@
             m4_badge = `<span class="badge bg-secondary fs-6"><i class="fas fa-clock me-1"></i> PENDING / UPCOMING</span>`;
 
             if (document.getElementById("milestone-current-phase-tag")) {
-                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 3 Active (Risk & Progress Tracking)";
+                document.getElementById("milestone-current-phase-tag").innerText = "Milestone 3 Active (Integration & Optimization)";
             }
         } else {
             m1_class += " completed-milestone-card";
@@ -692,7 +590,7 @@
                     <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m1_hrs} Hours / student</span>
                   </div>
                 </div>
-                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Technical Tasks to Complete for "${title}":</h6>
                 <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
                   <li>${tasks_m1[0]}</li>
                   <li>${tasks_m1[1]}</li>
@@ -705,14 +603,14 @@
               <div class="${m2_class}">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                   <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
-                    <i class="fas fa-cogs text-primary me-2"></i>Milestone 2 (Week ${p2_start}-${p2_end}) — Core Architecture, Database & Multi-Agent Build
+                    <i class="fas fa-cogs text-primary me-2"></i>Milestone 2 (Week ${p2_start}-${p2_end}) — Core Algorithm, Database & REST API Build
                   </h5>
                   <div class="d-flex align-items-center gap-2">
                     ${m2_badge}
                     <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m2_hrs} Hours / student</span>
                   </div>
                 </div>
-                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Technical Tasks to Complete for "${title}":</h6>
                 <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
                   <li>${tasks_m2[0]}</li>
                   <li>${tasks_m2[1]}</li>
@@ -725,14 +623,14 @@
               <div class="${m3_class}">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                   <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
-                    <i class="fas fa-shield-alt text-primary me-2"></i>Milestone 3 (Week ${p3_start}-${p3_end}) — Risk Assessment, Nova AI Mentor & Progress Tracking
+                    <i class="fas fa-shield-alt text-primary me-2"></i>Milestone 3 (Week ${p3_start}-${p3_end}) — System Integration, Performance Optimization & Risk Mitigations
                   </h5>
                   <div class="d-flex align-items-center gap-2">
                     ${m3_badge}
                     <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m3_hrs} Hours / student</span>
                   </div>
                 </div>
-                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Technical Tasks to Complete for "${title}":</h6>
                 <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
                   <li>${tasks_m3[0]}</li>
                   <li>${tasks_m3[1]}</li>
@@ -745,14 +643,14 @@
               <div class="${m4_class}">
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
                   <h5 class="fw-bold text-dark m-0" style="font-size: 1.05rem;">
-                    <i class="fas fa-graduation-cap text-primary me-2"></i>Milestone 4 (Week ${p4_start}-${p4_end}) — Faculty Dashboard, End-to-End Testing & Defense Prep
+                    <i class="fas fa-graduation-cap text-primary me-2"></i>Milestone 4 (Week ${p4_start}-${p4_end}) — End-to-End Testing, Documentation & Final Defense Prep
                   </h5>
                   <div class="d-flex align-items-center gap-2">
                     ${m4_badge}
                     <span class="badge bg-primary bg-opacity-10 text-primary font-monospace p-2">~${m4_hrs} Hours / student</span>
                   </div>
                 </div>
-                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Project Deliverables & Tasks for "${title}":</h6>
+                <h6 class="fw-bold text-secondary mt-2 mb-2" style="font-size: 0.88rem;">Detailed Technical Tasks to Complete for "${title}":</h6>
                 <ul class="text-dark small mb-0 ps-3" style="font-size: 0.9rem; line-height: 1.6;">
                   <li>${tasks_m4[0]}</li>
                   <li>${tasks_m4[1]}</li>
@@ -958,7 +856,10 @@ ${doubtAdvice}
         let score = 88;
         let rating = "HIGH ACADEMIC VIABILITY";
 
-        if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("doctor")) {
+        if (text.includes("upi") || text.includes("fraud") || text.includes("finance") || text.includes("bank") || text.includes("payment")) {
+            domain = "FinTech & Automated Fraud Analytics";
+            score = 90;
+        } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("doctor")) {
             domain = "Healthcare & Biomedical AI";
             score = 89;
         } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("recommend") || text.includes("cart")) {
@@ -975,7 +876,7 @@ ${doubtAdvice}
         }
 
         return {
-            feasibility: `### 🛡️ Feasibility & Risk Analysis Report
+            feasibility: `### 🛡️ Feasibility & Risk Analysis Report for "${title}"
 * **Project Analyzed**: **"${title}"** (${domain})
 * **Overall Feasibility Index**: **${score}/100 (${rating})**
 * **Key Strengths**: Aligns with ${domain} best practices, clear MVP boundaries.
@@ -984,20 +885,20 @@ ${doubtAdvice}
 * **Domain**: ${domain}
 * **Problem Statement**: ${desc}
 * **Must-Have Core MVP Features**:
-  1. Authentication & Profile Management Portal
-  2. Ingestion & Core Data Processing Engine for ${title}
-  3. Interactive Dashboard & Metrics Visualization
-  4. Report Exporter & PDF Summary Module`,
+  1. User Input & Data Ingestion Pipeline for "${title}"
+  2. Core Analytics / ML Classifier Engine tailored to: ${desc.substring(0, 50)}...
+  3. Interactive Dashboard & Real-Time Metrics Visualization for "${title}"
+  4. Automated PDF/CSV Summary Exporter for "${title}"`,
             stack: `### ⚙️ Technology Stack Recommendation for "${title}"
-* **Frontend UI**: HTML5 / CSS3 / JavaScript (React/Vite optional)
-* **Backend API**: Node.js (Express REST API)
-* **Database**: MySQL Relational Database (Connection Pool db.js)
-* **AI / Analytics**: Google Gemini API / Scikit-Learn / DistilBERT Local Fallbacks
+* **Frontend UI**: React.js 18 / Modern HTML5 + Bootstrap 5
+* **Backend API**: Node.js (Express REST API) + Python FastAPI / Flask
+* **Database**: MySQL Relational Database / PostgreSQL
+* **AI / Analytics**: Scikit-Learn (XGBoost / Random Forest) / TensorFlow
 * **DevOps**: Docker Containerized Hosting on Render / Vercel`,
             risk: `### 🛡️ Risk Assessment & Mitigation Plan for "${title}"
-1. **API Inference Latency Bottleneck** — Use local DistilBERT/ONNX classifiers (<500ms response time).
-2. **Dataset Scarcity** — Combine open-source benchmarks with synthetic data augmentation.
-3. **Deadline Integration Overrun** — Maintain strict MVP scope and modularize API dependencies.`
+1. **API Inference Latency Bottleneck** — Use optimized model pipelines (<300ms response time).
+2. **Training Data Imbalance** — Combine benchmark datasets with synthetic data augmentation.
+3. **Feature Integration Overrun** — Maintain strict MVP scope and modularize API endpoints.`
         };
     }
   </script>
