@@ -60,6 +60,10 @@
         background: #F0F7FF;
         box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
     }
+    .team-health-card.onhold-user-card {
+        border: 2px solid #F59E0B;
+        background: #FFFBEB;
+    }
 
     /* AI Summary Highlight Bubble Box */
     .ai-summary-box {
@@ -130,7 +134,7 @@
       <div>
         <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Faculty Monitoring Dashboard Page</h2>
         <p class="text-secondary m-0" style="font-size: 0.95rem;">
-          Passive monitoring interface for faculty advisors to review project health, see where students are stuck, evaluate AI summaries, and transmit direct guidance.
+          Passive monitoring interface for faculty advisors to review active and on-hold project health, evaluate AI summaries, and transmit direct guidance.
         </p>
       </div>
       <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 0.85rem;">
@@ -336,7 +340,7 @@
         setupFacultyFeedbackForm();
     });
 
-    function generateAISummaryDigest(proj, idx, checkinWeek) {
+    function generateAISummaryDigest(proj, checkinWk) {
         const title = proj.projectTitle || proj.description.substring(0, 45);
         const text = (title + " " + proj.description).toLowerCase();
 
@@ -377,18 +381,14 @@
         }
 
         let milestoneStatusText = "";
-        if (idx === 0) {
-            if (checkinWeek === 0) {
-                milestoneStatusText = `Milestone 1 Active (~25% complete) — Repository setup, database schema design, and dataset ingestion in progress.`;
-            } else if (checkinWeek === 1) {
-                milestoneStatusText = `Milestone 2 Active (~50% complete) — Milestone 1 finalized (100%). Core REST API & ML classification pipeline build in progress.`;
-            } else if (checkinWeek === 2) {
-                milestoneStatusText = `Milestone 3 Active (~75% complete) — Milestones 1 & 2 completed (100%). Performance tuning (<300ms latency) & risk mitigations active.`;
-            } else {
-                milestoneStatusText = `Milestone 4 Active (~90% complete) — All technical deliverables completed. Final unit tests passed (UT-001 to UT-007) and defense deck ready.`;
-            }
+        if (checkinWk === 0) {
+            milestoneStatusText = `Milestone 1 Active (~25% complete) — Repository setup, database schema design, and dataset ingestion in progress.`;
+        } else if (checkinWk === 1) {
+            milestoneStatusText = `Milestone 2 Active (~50% complete) — Milestone 1 finalized (100%). Core REST API & ML classification pipeline build in progress.`;
+        } else if (checkinWk === 2) {
+            milestoneStatusText = `Milestone 3 Active (~75% complete) — Milestones 1 & 2 completed (100%). Performance tuning (<300ms latency) & risk mitigations active.`;
         } else {
-            milestoneStatusText = `Completed Submission (100% complete) — Archived project deliverables verified by faculty evaluation.`;
+            milestoneStatusText = `Milestone 4 Active (~90% complete) — All technical deliverables completed. Final unit tests passed (UT-001 to UT-007) and defense deck ready.`;
         }
 
         return { domain, score, stack, milestoneStatusText, blockerText, adviceSuggestion };
@@ -398,11 +398,9 @@
         let history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
         const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea"));
         const currentUser = JSON.parse(localStorage.getItem("currentUser")) || { fullName: "Alex Morgan" };
-        const checkinWeek = parseInt(localStorage.getItem("completedCheckinWeek") || "0");
 
-        // If history empty but activeProj exists, push activeProj
         if (history.length === 0 && activeProj && activeProj.description) {
-            history.push(activeProj);
+            history.push({ ...activeProj, status: "Active", completedCheckinWeek: 0 });
             localStorage.setItem("allSubmittedProjects", JSON.stringify(history));
         }
 
@@ -420,18 +418,47 @@
                 const dateStr = proj.timestamp ? new Date(proj.timestamp).toLocaleDateString() : "Recent";
                 const teamId = "STU-PROJ-" + (idx + 1);
 
-                const digest = generateAISummaryDigest(proj, idx, checkinWeek);
+                const projStatus = proj.status || (idx === 0 ? "Active" : "On Hold");
+                const checkinWk = parseInt(proj.completedCheckinWeek || "0");
 
-                let progressPct = idx === 0 ? (checkinWeek >= 5 ? "85%" : (checkinWeek >= 3 ? "68%" : (checkinWeek >= 1 ? "45%" : "25%"))) : "100%";
-                let statusBadge = idx === 0 
-                    ? `<span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ Active Project</span>`
-                    : `<span class="badge bg-success bg-opacity-10 text-success fw-bold border border-success border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">Completed Submission</span>`;
+                const digest = generateAISummaryDigest(proj, checkinWk);
+
+                let progressPct = `${Math.min(100, Math.max(25, (checkinWk + 1) * 25))}%`;
+
+                let cardClass = "team-health-card";
+                let statusBadge = "";
+                let actionBtnHTML = "";
+
+                if (projStatus === "Active") {
+                    cardClass += " active-user-card";
+                    statusBadge = `<span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">🟢 Active Project</span>`;
+                    actionBtnHTML = `
+                        <button class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;" onclick="inspectProjectInHub(${idx})">
+                          Inspect in Agent Hub <i class="fas fa-arrow-right ms-1"></i>
+                        </button>
+                    `;
+                } else if (projStatus === "On Hold") {
+                    cardClass += " onhold-user-card";
+                    statusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning fw-bold border border-warning border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">⏸️ On Hold (Paused at Milestone ${checkinWk + 1})</span>`;
+                    actionBtnHTML = `
+                        <button class="btn btn-warning btn-sm px-3 py-1 fw-bold text-dark" style="border-radius: 14px; font-size: 0.8rem;" onclick="resumeProject(${idx})">
+                          Resume Project ⏯️
+                        </button>
+                    `;
+                } else {
+                    statusBadge = `<span class="badge bg-success bg-opacity-10 text-success fw-bold border border-success border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">✅ Completed Submission (100%)</span>`;
+                    actionBtnHTML = `
+                        <button class="btn btn-outline-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;" onclick="inspectProjectInHub(${idx})">
+                          Inspect Archive <i class="fas fa-folder-open ms-1"></i>
+                        </button>
+                    `;
+                }
 
                 let safeTitle = title.replace(/'/g, "\'");
 
                 html += `
                   <div class="col-xl-6 col-md-12">
-                    <div class="team-health-card ${idx === 0 ? 'active-user-card' : ''}">
+                    <div class="${cardClass}">
                       <div>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                           <h5 class="fw-bold text-dark m-0" style="font-size: 1.15rem;">${studentName} & Team</h5>
@@ -445,7 +472,7 @@
                         </p>
 
                         <!-- Student Reported Blocker Box -->
-                        ${idx === 0 ? `
+                        ${projStatus === "Active" ? `
                         <div class="student-blocker-box">
                           <strong>🚨 Student Reported Technical Issue:</strong> <em>"${digest.blockerText}"</em>
                           <div class="text-danger small mt-1"><strong>💡 AI Faculty Suggestion:</strong> ${digest.adviceSuggestion}</div>
@@ -470,9 +497,7 @@
                         <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('${studentName} & Team', '${safeTitle}', '${teamId}')">
                           <i class="fas fa-comment-dots me-1 text-primary"></i> Give Guidance
                         </button>
-                        <button class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;" onclick="inspectProjectInHub(${idx})">
-                          Inspect in Agent Hub <i class="fas fa-arrow-right ms-1"></i>
-                        </button>
+                        ${actionBtnHTML}
                       </div>
                     </div>
                   </div>
@@ -487,10 +512,33 @@
         }
     }
 
+    function resumeProject(idx) {
+        let history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
+        if (history[idx]) {
+            // Update status: target project becomes Active, others become On Hold
+            history = history.map((p, i) => {
+                if (i === idx) {
+                    return { ...p, status: "Active" };
+                } else if (p.status === "Active") {
+                    return { ...p, status: "On Hold" };
+                }
+                return p;
+            });
+
+            localStorage.setItem("allSubmittedProjects", JSON.stringify(history));
+            localStorage.setItem("activeProjectIdea", JSON.stringify(history[idx]));
+            localStorage.setItem("completedCheckinWeek", (history[idx].completedCheckinWeek || 0).toString());
+
+            alert(`Resuming "${history[idx].projectTitle}" at Milestone ${(history[idx].completedCheckinWeek || 0) + 1}!`);
+            window.location.href = "agent-hub.html";
+        }
+    }
+
     function inspectProjectInHub(idx) {
         const history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
         if (history[idx]) {
             localStorage.setItem("activeProjectIdea", JSON.stringify(history[idx]));
+            localStorage.setItem("completedCheckinWeek", (history[idx].completedCheckinWeek || 0).toString());
             window.location.href = "agent-hub.html";
         }
     }
@@ -500,7 +548,6 @@
         document.getElementById("modal-team-name").value = teamName;
         document.getElementById("modal-project-title").value = projectTitle;
         
-        // Pre-fill existing feedback if available
         const allNotes = JSON.parse(localStorage.getItem("facultyFeedbackNotes")) || {};
         if (allNotes[teamId]) {
             document.getElementById("modal-feedback-note").value = allNotes[teamId].note || "";

@@ -1,6 +1,6 @@
 /* ==========================================
    submit-project.js
-   AI Academic Project Mentor - Idea Submission & Agent Hub Redirection
+   AI Academic Project Mentor - Idea Submission & Per-Project State Management
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const templateCards = document.querySelectorAll('.template-card');
     const projectForm = document.getElementById("project-submit-form");
 
-    // 1. Recommended Projects Template Click Handler (100% functional!)
+    // 1. Recommended Projects Template Click Handler
     templateCards.forEach(card => {
         card.addEventListener('click', () => {
             templateCards.forEach(c => c.classList.remove('active-template'));
@@ -49,25 +49,38 @@ document.addEventListener("DOMContentLoaded", function () {
             const durationVal = document.getElementById("duration") ? document.getElementById("duration").value : "8";
             const weeklyHoursVal = document.getElementById("weeklyHours") ? document.getElementById("weeklyHours").value : "10";
 
-            const projectPayload = {
+            const newProjectId = "PROJ-" + Date.now();
+
+            const newProjectPayload = {
+                id: newProjectId,
                 description: descVal,
                 projectTitle: descVal.substring(0, 45) + "...",
                 teamSize: teamSizeVal,
                 duration: durationVal,
                 weeklyHours: weeklyHoursVal,
+                completedCheckinWeek: 0, // Starts at Milestone 1
+                status: "Active", // Active Project
                 timestamp: new Date().toISOString()
             };
 
-            // 1. Save active project for Agent Hub
-            localStorage.setItem("activeProjectIdea", JSON.stringify(projectPayload));
-            localStorage.setItem("completedCheckinWeek", "0");
+            // Read existing projects history array
+            let history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
 
-            // 2. Save to allSubmittedProjects array for Faculty Dashboard history!
-            const history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
-            if (!history.some(p => p.description === projectPayload.description && p.timestamp === projectPayload.timestamp)) {
-                history.unshift(projectPayload);
-            }
+            // Mark any previous active projects as "On Hold" (preserving their exact completedCheckinWeek!)
+            history = history.map(p => {
+                if (p.status === "Active") {
+                    return { ...p, status: "On Hold" };
+                }
+                return p;
+            });
+
+            // Prepend new project to history
+            history.unshift(newProjectPayload);
             localStorage.setItem("allSubmittedProjects", JSON.stringify(history));
+
+            // Save new project as activeProjectIdea for Agent Hub
+            localStorage.setItem("activeProjectIdea", JSON.stringify(newProjectPayload));
+            localStorage.setItem("completedCheckinWeek", "0");
 
             const submitBtn = document.getElementById("submit-btn");
             if (submitBtn) {
@@ -82,13 +95,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
+                        id: newProjectId,
                         studentName: currentUser.fullName || "Student",
                         studentEmail: currentUser.email || "student@university.edu",
-                        projectTitle: projectPayload.projectTitle,
-                        projectDescription: projectPayload.description,
-                        teamSize: projectPayload.teamSize,
-                        duration: projectPayload.duration + " Weeks",
-                        status: "Processed"
+                        projectTitle: newProjectPayload.projectTitle,
+                        projectDescription: newProjectPayload.description,
+                        teamSize: newProjectPayload.teamSize,
+                        duration: newProjectPayload.duration + " Weeks",
+                        completedCheckinWeek: 0,
+                        status: "Active"
                     })
                 }).catch(err => console.warn("Backend save log:", err));
             } catch (e) {

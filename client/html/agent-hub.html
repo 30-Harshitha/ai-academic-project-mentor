@@ -452,7 +452,7 @@
         const weeks = parseInt(activeProj.duration) || 8;
         const hrsPerWk = parseInt(activeProj.weeklyHours) || 10;
         const teamCount = parseInt(activeProj.teamSize) || 2;
-        const completedWeek = parseInt(localStorage.getItem("completedCheckinWeek") || "0");
+        const completedWeek = parseInt(localStorage.getItem("completedCheckinWeek") || (activeProj.completedCheckinWeek || "0").toString());
 
         const totalStudentHours = weeks * hrsPerWk;
         const totalTeamHours = totalStudentHours * teamCount;
@@ -679,9 +679,24 @@
 
             appendTerminalLog(`[Weekly Check-in] Logging Milestone ${actionVal} completion...`);
 
-            // Shift active milestone state!
+            // Shift active milestone state for current active project!
             localStorage.setItem("completedCheckinWeek", actionVal.toString());
-            
+
+            const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea")) || {};
+            activeProj.completedCheckinWeek = actionVal;
+            if (actionVal >= 4) activeProj.status = "Completed";
+            localStorage.setItem("activeProjectIdea", JSON.stringify(activeProj));
+
+            // Update history array preserving exact milestone week reached for active project!
+            let history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
+            history = history.map(p => {
+                if (p.id === activeProj.id || p.projectTitle === activeProj.projectTitle || p.description === activeProj.description) {
+                    return { ...p, completedCheckinWeek: actionVal, status: actionVal >= 4 ? "Completed" : "Active" };
+                }
+                return p;
+            });
+            localStorage.setItem("allSubmittedProjects", JSON.stringify(history));
+
             // Re-render the 4 Separate Milestone Cards live!
             renderSeparateMilestoneCards();
 
@@ -793,15 +808,11 @@ ${doubtAdvice}
             appendTerminalLog(`[0.9s] API server offline — generating dynamic local agentic blueprint...`);
         }
 
-        // If server API offline, call local dynamic pipeline generator!
         if (!agentData) {
             agentData = generateDynamicClientAgentData(activeProj);
         }
 
-        // Inject Dynamic Markdown Reports directly into 5 Output Cards!
         renderDynamicAgentOutputs(agentData);
-
-        // Render 4 Separate Milestone Cards & Shifting Engine!
         renderSeparateMilestoneCards(activeProj);
 
         appendTerminalLog(`[1.2s] Multi-Agent Pipeline Execution Completed. All 5 Agents Synced!`);
@@ -815,7 +826,6 @@ ${doubtAdvice}
     function renderDynamicAgentOutputs(data) {
         if (!data) return;
 
-        // 1. Feasibility Card Rendering
         const feasibilityCard = document.getElementById("feasibility-body-text");
         const feasibilityScoreTag = document.getElementById("feasibility-score-tag");
 
@@ -828,19 +838,16 @@ ${doubtAdvice}
             }
         }
 
-        // 2. Scope Card Rendering
         const scopeCard = document.getElementById("scope-body-text");
         if (scopeCard && data.scope) {
             scopeCard.innerHTML = typeof marked !== "undefined" ? marked.parse(data.scope) : data.scope;
         }
 
-        // 3. Tech Stack Card Rendering
         const techCard = document.getElementById("tech-body-text");
         if (techCard && data.stack) {
             techCard.innerHTML = typeof marked !== "undefined" ? marked.parse(data.stack) : data.stack;
         }
 
-        // 4. Risk Card Rendering
         const riskCard = document.getElementById("risk-body-content");
         if (riskCard && data.risk) {
             riskCard.innerHTML = typeof marked !== "undefined" ? marked.parse(data.risk) : data.risk;
