@@ -72,6 +72,18 @@
         line-height: 1.5;
     }
 
+    /* Student Reported Blocker Box */
+    .student-blocker-box {
+        background: #FEF2F2;
+        border: 1px solid #FCA5A5;
+        border-radius: 10px;
+        padding: 0.85rem 1rem;
+        font-size: 0.85rem;
+        color: #991B1B;
+        line-height: 1.45;
+        margin-bottom: 0.85rem;
+    }
+
     /* Faculty Feedback Note Box */
     .faculty-feedback-given {
         background: #FFFBEB;
@@ -118,7 +130,7 @@
       <div>
         <h2 class="fw-bold text-dark mb-1" style="font-size: 1.65rem;">Faculty Monitoring Dashboard Page</h2>
         <p class="text-secondary m-0" style="font-size: 0.95rem;">
-          Passive monitoring interface for faculty advisors to review project health, evaluate AI summaries, and give direct guidance feedback.
+          Passive monitoring interface for faculty advisors to review project health, see where students are stuck, evaluate AI summaries, and transmit direct guidance.
         </p>
       </div>
       <span class="badge bg-primary px-3 py-2 fw-bold" style="font-size: 0.85rem;">
@@ -153,6 +165,12 @@
               <strong>Progress: 75%</strong> | Confidence: <strong>92%</strong>
             </p>
 
+            <!-- Student Reported Blocker Box -->
+            <div class="student-blocker-box">
+              <strong>🚨 Student Reported Technical Issue:</strong> <em>"Model inference latency is 600ms on mobile camera frame capture."</em>
+              <div class="text-danger small mt-1"><strong>💡 AI Faculty Suggestion:</strong> Recommend ONNX runtime quantization to trim latency under 250ms.</div>
+            </div>
+
             <div class="ai-summary-box mb-3">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
@@ -160,7 +178,7 @@
               </div>
               <div class="small text-dark mb-1">• <strong>Scope:</strong> CNN plant disease classification model with mobile app camera intake.</div>
               <div class="small text-secondary mb-1">• <strong>Tech Stack:</strong> PyTorch + React Native + FastAPI + Docker.</div>
-              <div class="small text-secondary">• <strong>Milestone Status:</strong> Milestone 3 Active (~75%) — Edge model inference latency optimized to ~280ms.</div>
+              <div class="small text-secondary">• <strong>Milestone Status:</strong> Milestone 3 Active (~75%) — Edge model inference latency optimization active.</div>
             </div>
 
             <div id="feedback-display-STU-101"></div>
@@ -168,7 +186,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
             <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Aarav Sharma & Team', 'AI-Powered Plant Disease Detector', 'STU-101')">
-              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Guidance
             </button>
             <a href="agent-hub.html" class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;">Inspect Project</a>
           </div>
@@ -190,6 +208,12 @@
               <strong>Progress: 45%</strong> | Confidence: <strong>78%</strong>
             </p>
 
+            <!-- Student Reported Blocker Box -->
+            <div class="student-blocker-box">
+              <strong>🚨 Student Reported Technical Issue:</strong> <em>"Remote API rate limits are causing sentiment inference timeouts during chat session."</em>
+              <div class="text-danger small mt-1"><strong>💡 AI Faculty Suggestion:</strong> Switch remote LLM API calls to local DistilBERT lightweight weights.</div>
+            </div>
+
             <div class="ai-summary-box mb-3">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
@@ -205,7 +229,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
             <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Priya Patel & Team', 'Empathetic Conversational Agent', 'STU-102')">
-              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Guidance
             </button>
             <a href="agent-hub.html" class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;">Inspect Project</a>
           </div>
@@ -242,7 +266,7 @@
 
           <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
             <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('Rohan Verma & Team', 'Smart Energy Telemetry Dashboard', 'STU-103')">
-              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+              <i class="fas fa-comment-dots me-1 text-primary"></i> Give Guidance
             </button>
             <a href="agent-hub.html" class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;">Inspect Project</a>
           </div>
@@ -319,23 +343,37 @@
         let score = 88;
         let domain = "Software Systems";
         let stack = "React.js 18 + Node.js REST API + MySQL Database";
+
+        let blockerText = "";
+        let adviceSuggestion = "";
         
         if (text.includes("upi") || text.includes("fraud") || text.includes("finance") || text.includes("bank") || text.includes("payment")) {
             domain = "FinTech & Fraud Analytics";
             score = 91;
             stack = "React.js + Node.js REST API + Python FastAPI + Scikit-Learn (XGBoost/Random Forest)";
+            blockerText = "High transaction insertion latency during bulk CSV batch testing.";
+            adviceSuggestion = "Recommend adding database index on transaction_timestamp and using connection pooling.";
         } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("doctor")) {
             domain = "Biomedical AI & Healthcare";
             score = 89;
             stack = "React.js + PyTorch/TensorFlow + Express API + PostgreSQL";
+            blockerText = "DICOM image format parsing returning missing header field exceptions.";
+            adviceSuggestion = "Recommend using Pydicom library to sanitize header fields prior to model ingestion.";
         } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("cart") || text.includes("recommend")) {
             domain = "E-Commerce & Smart Retail";
             score = 96;
             stack = "React.js + Express API + MySQL + Collaborative Filtering Engine";
+            blockerText = "Cart session state losing sync across browser reloads.";
+            adviceSuggestion = "Recommend storing transient cart state in LocalStorage & syncing via API webhook.";
         } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
             domain = "IoT Hardware Telemetry";
             score = 86;
             stack = "HTML5 Dashboard + MQTT Mosquitto + Node.js + Chart.js";
+            blockerText = "MQTT broker connection dropping during Wi-Fi signal dropouts.";
+            adviceSuggestion = "Implement offline message queue buffering on ESP32 microcontroller.";
+        } else {
+            blockerText = "API endpoint latency reaching 550ms during multi-agent report generation.";
+            adviceSuggestion = "Recommend caching frequent prompt outputs using Redis or local memory pool.";
         }
 
         let milestoneStatusText = "";
@@ -353,7 +391,7 @@
             milestoneStatusText = `Completed Submission (100% complete) — Archived project deliverables verified by faculty evaluation.`;
         }
 
-        return { domain, score, stack, milestoneStatusText };
+        return { domain, score, stack, milestoneStatusText, blockerText, adviceSuggestion };
     }
 
     function renderUserSubmittedProjectCard() {
@@ -406,6 +444,14 @@
                           <strong>Duration: ${duration} Weeks</strong> | Team Size: <strong>${teamSize} Member(s)</strong> | Progress: <strong>${progressPct}</strong>
                         </p>
 
+                        <!-- Student Reported Blocker Box -->
+                        ${idx === 0 ? `
+                        <div class="student-blocker-box">
+                          <strong>🚨 Student Reported Technical Issue:</strong> <em>"${digest.blockerText}"</em>
+                          <div class="text-danger small mt-1"><strong>💡 AI Faculty Suggestion:</strong> ${digest.adviceSuggestion}</div>
+                        </div>
+                        ` : ''}
+
                         <!-- AI Summary Highlight Box -->
                         <div class="ai-summary-box mb-3">
                           <div class="d-flex justify-content-between align-items-center mb-1">
@@ -422,7 +468,7 @@
 
                       <div class="d-flex justify-content-between align-items-center pt-2 border-top mt-3">
                         <button class="btn btn-outline-secondary btn-sm px-3 py-1 text-decoration-none" onclick="openFacultyFeedbackModal('${studentName} & Team', '${safeTitle}', '${teamId}')">
-                          <i class="fas fa-comment-dots me-1 text-primary"></i> Give Feedback
+                          <i class="fas fa-comment-dots me-1 text-primary"></i> Give Guidance
                         </button>
                         <button class="btn btn-primary btn-sm px-3 py-1 fw-bold" style="border-radius: 14px; font-size: 0.8rem;" onclick="inspectProjectInHub(${idx})">
                           Inspect in Agent Hub <i class="fas fa-arrow-right ms-1"></i>
