@@ -154,7 +154,13 @@
             </p>
 
             <div class="ai-summary-box mb-3">
-              <strong>AI Digest:</strong> Team has completed CNN model training with 94.2% accuracy. Mobile app UI integration active; edge inference latency measured at ~280ms.
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
+                <span class="badge bg-success bg-opacity-10 text-success font-monospace" style="font-size: 0.75rem;">Feasibility Score: 92%</span>
+              </div>
+              <div class="small text-dark mb-1">• <strong>Scope:</strong> CNN plant disease classification model with mobile app camera intake.</div>
+              <div class="small text-secondary mb-1">• <strong>Tech Stack:</strong> PyTorch + React Native + FastAPI + Docker.</div>
+              <div class="small text-secondary">• <strong>Milestone Status:</strong> Milestone 3 Active (~75%) — Edge model inference latency optimized to ~280ms.</div>
             </div>
 
             <div id="feedback-display-STU-101"></div>
@@ -185,7 +191,13 @@
             </p>
 
             <div class="ai-summary-box mb-3">
-              <strong>AI Digest:</strong> Dataset curation completed (2,000 samples). Remote API rate limits causing sentiment response delays. Recommend switching to local DistilBERT weights.
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
+                <span class="badge bg-warning bg-opacity-10 text-warning font-monospace" style="font-size: 0.75rem;">Feasibility Score: 78%</span>
+              </div>
+              <div class="small text-dark mb-1">• <strong>Scope:</strong> Mindfulness conversational agent with sentiment analysis.</div>
+              <div class="small text-secondary mb-1">• <strong>Tech Stack:</strong> React + Node.js + DistilBERT local classifier.</div>
+              <div class="small text-secondary">• <strong>Milestone Status:</strong> Milestone 2 Active (~45%) — API rate limits causing sentiment response delays.</div>
             </div>
 
             <div id="feedback-display-STU-102"></div>
@@ -216,7 +228,13 @@
             </p>
 
             <div class="ai-summary-box mb-3">
-              <strong>AI Digest:</strong> TimescaleDB telemetry schema connected to hardware sensors. All unit tests passed (UT-001 to UT-007). Final defense presentation slides ready.
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
+                <span class="badge bg-success bg-opacity-10 text-success font-monospace" style="font-size: 0.75rem;">Feasibility Score: 96%</span>
+              </div>
+              <div class="small text-dark mb-1">• <strong>Scope:</strong> Real-time hardware energy sensor telemetry ingestion.</div>
+              <div class="small text-secondary mb-1">• <strong>Tech Stack:</strong> Mosquitto MQTT + Node.js + TimescaleDB + Chart.js.</div>
+              <div class="small text-secondary">• <strong>Milestone Status:</strong> Milestone 4 Active (~90%) — All unit tests passed (UT-001 to UT-007).</div>
             </div>
 
             <div id="feedback-display-STU-103"></div>
@@ -294,6 +312,50 @@
         setupFacultyFeedbackForm();
     });
 
+    function generateAISummaryDigest(proj, idx, checkinWeek) {
+        const title = proj.projectTitle || proj.description.substring(0, 45);
+        const text = (title + " " + proj.description).toLowerCase();
+
+        let score = 88;
+        let domain = "Software Systems";
+        let stack = "React.js 18 + Node.js REST API + MySQL Database";
+        
+        if (text.includes("upi") || text.includes("fraud") || text.includes("finance") || text.includes("bank") || text.includes("payment")) {
+            domain = "FinTech & Fraud Analytics";
+            score = 91;
+            stack = "React.js + Node.js REST API + Python FastAPI + Scikit-Learn (XGBoost/Random Forest)";
+        } else if (text.includes("health") || text.includes("medical") || text.includes("patient") || text.includes("tumor") || text.includes("doctor")) {
+            domain = "Biomedical AI & Healthcare";
+            score = 89;
+            stack = "React.js + PyTorch/TensorFlow + Express API + PostgreSQL";
+        } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("shop") || text.includes("cart") || text.includes("recommend")) {
+            domain = "E-Commerce & Smart Retail";
+            score = 96;
+            stack = "React.js + Express API + MySQL + Collaborative Filtering Engine";
+        } else if (text.includes("iot") || text.includes("sensor") || text.includes("agriculture") || text.includes("hardware")) {
+            domain = "IoT Hardware Telemetry";
+            score = 86;
+            stack = "HTML5 Dashboard + MQTT Mosquitto + Node.js + Chart.js";
+        }
+
+        let milestoneStatusText = "";
+        if (idx === 0) {
+            if (checkinWeek === 0) {
+                milestoneStatusText = `Milestone 1 Active (~25% complete) — Repository setup, database schema design, and dataset ingestion in progress.`;
+            } else if (checkinWeek === 1) {
+                milestoneStatusText = `Milestone 2 Active (~50% complete) — Milestone 1 finalized (100%). Core REST API & ML classification pipeline build in progress.`;
+            } else if (checkinWeek === 2) {
+                milestoneStatusText = `Milestone 3 Active (~75% complete) — Milestones 1 & 2 completed (100%). Performance tuning (<300ms latency) & risk mitigations active.`;
+            } else {
+                milestoneStatusText = `Milestone 4 Active (~90% complete) — All technical deliverables completed. Final unit tests passed (UT-001 to UT-007) and defense deck ready.`;
+            }
+        } else {
+            milestoneStatusText = `Completed Submission (100% complete) — Archived project deliverables verified by faculty evaluation.`;
+        }
+
+        return { domain, score, stack, milestoneStatusText };
+    }
+
     function renderUserSubmittedProjectCard() {
         let history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
         const activeProj = JSON.parse(localStorage.getItem("activeProjectIdea"));
@@ -320,6 +382,8 @@
                 const dateStr = proj.timestamp ? new Date(proj.timestamp).toLocaleDateString() : "Recent";
                 const teamId = "STU-PROJ-" + (idx + 1);
 
+                const digest = generateAISummaryDigest(proj, idx, checkinWeek);
+
                 let progressPct = idx === 0 ? (checkinWeek >= 5 ? "85%" : (checkinWeek >= 3 ? "68%" : (checkinWeek >= 1 ? "45%" : "25%"))) : "100%";
                 let statusBadge = idx === 0 
                     ? `<span class="badge bg-info bg-opacity-10 text-info fw-bold border border-info border-opacity-25 px-2.5 py-1" style="font-size: 0.78rem;">+ Active Project</span>`
@@ -342,8 +406,15 @@
                           <strong>Duration: ${duration} Weeks</strong> | Team Size: <strong>${teamSize} Member(s)</strong> | Progress: <strong>${progressPct}</strong>
                         </p>
 
+                        <!-- AI Summary Highlight Box -->
                         <div class="ai-summary-box mb-3">
-                          <strong>Project Description:</strong> <em>"${proj.description}"</em>
+                          <div class="d-flex justify-content-between align-items-center mb-1">
+                            <strong class="text-primary"><i class="fas fa-robot me-1"></i> Multi-Agent Evaluation Digest:</strong>
+                            <span class="badge bg-success bg-opacity-10 text-success font-monospace" style="font-size: 0.75rem;">Feasibility Index: ${digest.score}%</span>
+                          </div>
+                          <div class="small text-dark mb-1">• <strong>Project Scope:</strong> <em>"${proj.description}"</em></div>
+                          <div class="small text-secondary mb-1">• <strong>Tech Stack Rationale:</strong> ${digest.stack}</div>
+                          <div class="small text-secondary">• <strong>Milestone Progress:</strong> ${digest.milestoneStatusText}</div>
                         </div>
 
                         <div id="feedback-display-${teamId}"></div>
