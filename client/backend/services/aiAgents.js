@@ -1,5 +1,5 @@
 // ==========================================
-// services/aiAgents.js (Dynamic Multi-Agent & Chat Engine)
+// services/aiAgents.js (Dynamic Multi-Agent & Dynamic Feasibility Scoring)
 // ==========================================
 const { GoogleGenAI } = require("@google/genai");
 
@@ -9,13 +9,55 @@ const ai = new GoogleGenAI(apiKey ? { apiKey } : {});
 const MODEL_NAME = 'gemini-2.5-flash';
 
 /**
- * Domain Analyzer for Dynamic Fallback Generation
+ * Dynamic Feasibility Calculator Engine
+ */
+function calculateDynamicFeasibilityScore(meta, text) {
+    let score = 84; // Baseline standard score
+    
+    // Domain & Tech Complexity Adjustments
+    if (text.includes("blockchain") || text.includes("quantum") || text.includes("robotics") || text.includes("satellite") || text.includes("crypto")) {
+        score -= 14; // High-complexity hardware/crypto challenge (e.g., ~70%)
+    } else if (text.includes("e-commerce") || text.includes("ecommerce") || text.includes("crud") || text.includes("management") || text.includes("portal") || text.includes("catalog")) {
+        score += 8; // Highly feasible web/mobile system (e.g., ~92%)
+    } else if (text.includes("health") || text.includes("medical") || text.includes("iot") || text.includes("sensor")) {
+        score += 4; // Moderate-high feasibility (e.g., ~88%)
+    } else if (text.includes("ai") || text.includes("nlp") || text.includes("vision") || text.includes("detect")) {
+        score += 2; // AI/ML project with manageable scope (e.g., ~86%)
+    }
+
+    // Team Size Adjustments
+    const teamSize = parseInt(meta.teamSize) || 2;
+    if (teamSize >= 4) score += 4;
+    else if (teamSize === 3) score += 2;
+    else if (teamSize === 1) score -= 6; // Single-student project penalizes buffer time
+
+    // Duration Adjustments
+    const weeks = parseInt(meta.duration) || 8;
+    if (weeks >= 12) score += 4;
+    else if (weeks >= 8) score += 1;
+    else if (weeks <= 4) score -= 8; // Very short timeline increases execution risk
+
+    // Clamp score strictly between 62% and 96%
+    score = Math.max(62, Math.min(96, score));
+    
+    let rating = "HIGH ACADEMIC VIABILITY";
+    if (score < 75) rating = "MODERATE VIABILITY (Requires Scope Trimming)";
+    else if (score >= 91) rating = "EXCEPTIONAL ACADEMIC VIABILITY";
+
+    return { score, rating };
+}
+
+/**
+ * Domain Analyzer for Dynamic Multi-Agent Generation
  */
 function analyzeProjectContext(meta) {
     const title = meta.projectTitle || (meta.projectDescription ? (meta.projectDescription.substring(0, 50) + "...") : "Academic Project");
     const desc = meta.projectDescription || meta.description || "Comprehensive academic project build.";
     const text = (title + " " + desc + " " + (meta.techStack || "")).toLowerCase();
     
+    // Dynamic Feasibility Calculation
+    const { score: feasibilityScore, rating: feasibilityRating } = calculateDynamicFeasibilityScore(meta, text);
+
     let domain = "Software Engineering & Web Architecture";
     let category = "Full-Stack System";
     let mvpFeatures = [];
@@ -75,6 +117,32 @@ function analyzeProjectContext(meta) {
             "Cold-Start Problem for Newly Added Products in Recommendation Models",
             "Third-Party Payment Gateway Webhook Latency & Timeout Risks"
         ];
+    } else if (text.includes("blockchain") || text.includes("quantum") || text.includes("crypto")) {
+        domain = "Blockchain & Distributed Ledger Security";
+        category = "Decentralized Smart Contract Architecture";
+        mvpFeatures = [
+            "Decentralized User Wallet Authentication & Identity Verification",
+            "Solidity Smart Contract Execution & Immutable Ledger Audit Engine",
+            "Transaction Gas Fee Calculator & Receipt Generation Module",
+            "Decentralized File Storage Integration (IPFS)"
+        ];
+        stretchFeatures = [
+            "Zero-Knowledge Proof (zk-SNARKs) Transaction Anonymization",
+            "Cross-Chain Token Bridge Middleware",
+            "Automated Smart Contract Vulnerability Scanner"
+        ];
+        techStack = {
+            frontend: "React.js + Ethers.js / Web3.js Wallet Integration",
+            backend: "Node.js (Express) + Ethereum JSON-RPC Provider",
+            database: "IPFS Distributed File System + PostgreSQL Cache Index",
+            ai: "Solidity Hardhat / Foundry Smart Contract Compiler",
+            devops: "Alchemy / Infura Node Gateway Deployment"
+        };
+        risks = [
+            "High Gas Fees and Network Latency during Blockchain Transactions",
+            "Smart Contract Security Reentrancy & Vulnerability Exploits",
+            "Complexity of Testing Decentralized Nodes in Local Environment"
+        ];
     } else if (text.includes("iot") || text.includes("sensor") || text.includes("smart") || text.includes("agriculture") || text.includes("hardware") || text.includes("arduino") || text.includes("raspberry")) {
         domain = "IoT & Embedded Hardware Engineering";
         category = "Smart Telemetry & Hardware Control Platform";
@@ -101,7 +169,7 @@ function analyzeProjectContext(meta) {
             "Unstable Network Connectivity causing Telemetry Packet Loss",
             "Power Outages Affecting Continuous Sensor Data Logging"
         ];
-    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("fraud") || text.includes("phishing") || text.includes("auth") || text.includes("crypto") || text.includes("blockchain")) {
+    } else if (text.includes("security") || text.includes("cyber") || text.includes("detect") || text.includes("fraud") || text.includes("phishing") || text.includes("auth")) {
         domain = "Cybersecurity & Information Assurance";
         category = "Intelligent Threat Detection & Security Engine";
         mvpFeatures = [
@@ -127,34 +195,8 @@ function analyzeProjectContext(meta) {
             "Processing Overhead when Parsing High-Volume Network Packet Logs",
             "Model Evasion Attacks via Adversarial Security Prompts"
         ];
-    } else if (text.includes("chat") || text.includes("nlp") || text.includes("sentiment") || text.includes("bot") || text.includes("language") || text.includes("mentor") || text.includes("student")) {
-        domain = "Conversational AI & Natural Language Processing";
-        category = "Agentic Language Processing & Guidance Platform";
-        mvpFeatures = [
-            "User Chat & Query Prompt Interaction Interface",
-            "NLP Intent Classifier & Sentiment Score Analyzer",
-            "Contextual AI Response Generation Engine with Prompt Chips",
-            "Conversation History & Progress Summary PDF Exporter"
-        ];
-        stretchFeatures = [
-            "Voice-to-Text Speech Recognition (Web Speech API)",
-            "RAG Vector Database Integration for Custom Document Querying",
-            "Multi-Agent Collaborative Task Delegation Framework"
-        ];
-        techStack = {
-            frontend: "HTML5 / CSS3 Responsive Chat Interface with Typing Animations",
-            backend: "Node.js (Express) REST API + Google Gemini API SDK",
-            database: "MySQL / MongoDB for Chat Logs & User Context Storage",
-            ai: "Google Gemini 2.5 Flash / DistilBERT Local Fallback Classifiers",
-            devops: "Render / Vercel Cloud Server with WebSocket Communication"
-        };
-        risks = [
-            "API Key Quota Rate Limits during High-Volume Prompt Submissions",
-            "LLM Hallucination or Out-of-Context Response Drift",
-            "Inference Latency Exceeding 1.5 Seconds under Heavy Server Load"
-        ];
     } else {
-        domain = "Full-Stack Software Engineering & Intelligent Web Architecture";
+        domain = "Full-Stack Software Engineering & Web Architecture";
         category = "Intelligent Academic Software Platform";
         mvpFeatures = [
             `User Authentication & Profile Onboarding Portal for ${title}`,
@@ -181,7 +223,7 @@ function analyzeProjectContext(meta) {
         ];
     }
 
-    return { title, desc, domain, category, mvpFeatures, stretchFeatures, techStack, risks };
+    return { title, desc, domain, category, mvpFeatures, stretchFeatures, techStack, risks, feasibilityScore, feasibilityRating };
 }
 
 /**
@@ -193,6 +235,8 @@ async function feasibilityAnalysisAgent(metadata) {
     You are the Feasibility & Risk Analysis Agent for an academic project platform.
     Analyze the following project parameters and return a highly detailed, comprehensive markdown report tailored SPECIFICALLY to this submitted project.
 
+    CRITICAL INSTRUCTION: Calculate a dynamic Feasibility Index Score (out of 100) specifically for "${ctx.title}" based on technical complexity, team size (${metadata.teamSize}), target duration (${metadata.duration}), and domain (${ctx.domain}). Do NOT use a hardcoded score.
+
     PROJECT METADATA:
     Title: ${ctx.title}
     Description: ${ctx.desc}
@@ -202,7 +246,7 @@ async function feasibilityAnalysisAgent(metadata) {
     Team Size: ${metadata.teamSize || '2'}
 
     Include:
-    1. ### 🛡️ Overall Feasibility Index (Score out of 100 with High/Medium/Low rating for "${ctx.title}")
+    1. ### 🛡️ Overall Feasibility Index (Numerical Score out of 100 with Rating for "${ctx.title}")
     2. ### 📊 Key Technical & Domain Strengths (3-5 granular points specific to ${ctx.domain})
     3. ### ⚠️ Architectural, Resource & Data Risks (Identify 3 execution bottlenecks specific to ${ctx.title})
     4. ### 📈 Complexity Matrix (Score out of 100 for: Frontend, Backend, Database, AI/ML, Hardware/DevOps)
@@ -393,13 +437,13 @@ async function interactiveMentorAgent({ studentName, message, projectContext }) 
     }
 }
 
-// Dynamic Project-Specific Fallback Generators (100% Tailored to User's Submitted Project Idea)
+// Dynamic Project-Specific Fallback Generators with DYNAMIC FEASIBILITY SCORE
 
 function generateFallbackFeasibility(meta) {
     const ctx = analyzeProjectContext(meta);
     return `### 🛡️ Feasibility & Risk Analysis Report
 * **Project Analyzed**: **"${ctx.title}"** (${ctx.domain})
-* **Overall Feasibility Rating**: **88/100 (HIGH ACADEMIC VIABILITY)**
+* **Overall Feasibility Index**: **${ctx.feasibilityScore}/100 (${ctx.feasibilityRating})**
 * **Key Technical & Domain Strengths**:
   * **Targeted Domain Alignment**: Aligns with core principles of **${ctx.domain}**.
   * **Scope Manageability**: Detailed features can be built incrementally within semester limits.
@@ -409,7 +453,7 @@ function generateFallbackFeasibility(meta) {
   * **Risk 2**: ${ctx.risks[1]}
   * **Risk 3**: ${ctx.risks[2]}
 * **Complexity Metrics**:
-  * Frontend UI: 72/100 | Backend API: 78/100 | Database Schema: 70/100 | AI/ML Engine: 75/100 | Overall Complexity: Moderate
+  * Frontend UI: ${Math.round(ctx.feasibilityScore * 0.85)}/100 | Backend API: ${Math.round(ctx.feasibilityScore * 0.9)}/100 | Database Schema: ${Math.round(ctx.feasibilityScore * 0.8)}/100 | AI/ML Engine: ${Math.round(ctx.feasibilityScore * 0.85)}/100 | Overall Complexity: Moderate
 * **💡 Mentor Insight**: Focus on completing Milestone 1 tasks early. Keep core features modular so testing remains stress-free!`;
 }
 
