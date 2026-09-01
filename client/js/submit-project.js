@@ -58,9 +58,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 timestamp: new Date().toISOString()
             };
 
-            // Save to localStorage so Agent Hub reads this exact active project
+            // 1. Save active project for Agent Hub
             localStorage.setItem("activeProjectIdea", JSON.stringify(projectPayload));
             localStorage.setItem("completedCheckinWeek", "0");
+
+            // 2. Save to allSubmittedProjects array for Faculty Dashboard history!
+            const history = JSON.parse(localStorage.getItem("allSubmittedProjects")) || [];
+            if (!history.some(p => p.description === projectPayload.description && p.timestamp === projectPayload.timestamp)) {
+                history.unshift(projectPayload);
+            }
+            localStorage.setItem("allSubmittedProjects", JSON.stringify(history));
 
             const submitBtn = document.getElementById("submit-btn");
             if (submitBtn) {
